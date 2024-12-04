@@ -1,12 +1,10 @@
 #include "scenario_service.h"
+#include "filereader.h"
+#include <filesystem>
 #include <iostream>
 
 
 ScenarioService::ScenarioService(){};
-
-ScenarioService::ScenarioService(std::string filename)
-    : filename(filename), scenarios(read_scenarios(filename + ".scen")),
-      citymap(read_map(filename, 4)) {}
 
 Scenario ScenarioService::get_scenario(int bucket, int index) {
   if (bucket < 0 || index < 0) {
@@ -30,4 +28,22 @@ std::vector<std::string> ScenarioService::get_map(){
 
 std::vector<Scenario> ScenarioService::get_all_scenarios() {
   return scenarios;
+}
+
+bool ScenarioService::setMapFile(std::filesystem::path i_map_file) {
+  if (i_map_file.empty() || !std::filesystem::is_regular_file(i_map_file)) {
+    return false;
+  }
+  map_file = i_map_file;
+  citymap = read_map(i_map_file, 4);
+  return true;
+}
+
+bool ScenarioService::setScenarioFile(std::filesystem::path i_scenario_file) {
+  if(i_scenario_file.empty() || !std::filesystem::is_regular_file(i_scenario_file)) {
+    return false;
+  }
+  scenario_file = i_scenario_file;
+  scenarios = read_scenarios(i_scenario_file);
+  return true;
 }
