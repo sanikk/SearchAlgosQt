@@ -1,13 +1,6 @@
-set(TARGET_NAME scenario_service)
-
-add_library(${TARGET_NAME}
-    scenario_service.cpp
-    filereader.cpp
+add_library(scenario_service STATIC
+    scenario.h
+    scenario_service.cpp scenario_service.h
+    filereader.cpp filereader.h
 )
-
-target_include_directories(${TARGET_NAME}
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR} # Includes scenario_service.h, filereader.h, and scenario.h
-)
-
-target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)
+target_include_directories(scenario_service PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
