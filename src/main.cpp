@@ -6,14 +6,13 @@
 
 
 int main(int argc, char *argv[]) {
+   QApplication app = QApplication(argc, argv);
+  
   ScenarioService scenario_service = ScenarioService();
   
   SearchService search_service(scenario_service);
 
-  
-  QApplication app = QApplication(argc, argv);
-
-  Ui ui;
+  Ui ui(scenario_service);
   ui.show();
 
   return app.exec();
