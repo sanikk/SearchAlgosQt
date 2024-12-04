@@ -1,6 +1,6 @@
 #pragma once
 #include "searches/common/searches_common.h"
-#include "scenario_service/scenario_service.h"
+#include "scenario_service.h"
 #include "searches/astar_search.h"
 #include "searches/fringe_search.h"
 #include "searches/fringe_unopt.h"

@@ -1,4 +1,5 @@
 #pragma once
+#include "scenario.h"
 #include "filereader.h"
 #include <string>
 #include <vector>
