@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QFileDialog>
+#include <filesystem>
 
 
 class ScenarioControls : public QGroupBox {
@@ -12,8 +13,10 @@ class ScenarioControls : public QGroupBox {
 public:
     ScenarioControls(ScenarioService& i_scenario_service);
 private slots:
-    void setScenarioFile();
-    void setMapFile();
+    void chooseScenarioFile();
+    void setScenarioFile(std::filesystem::path filepath);
+    void chooseMapFile();
+    void setMapFile(std::filesystem::path filepath);
 private:
     QLabel *scenario_file_label;
     QPushButton *scenario_file_button;
