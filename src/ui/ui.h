@@ -1,5 +1,6 @@
 #pragma once
 #include "scenario_service.h"
+#include "search_tabs.h"
 #include "bucket_tab.h"
 #include "scenario_controls.h"
 #include <QTabWidget>
@@ -15,6 +16,8 @@ public:
 private:
     ScenarioControls *scenario_controls_tab;
     BucketTab *bucket_tab;
+    AstarTab *astar_tab;
+    FringeTab *fringe_tab;
 };
 
 

@@ -19,4 +19,8 @@ TabWindow::TabWindow(ScenarioService& scenario_service) {
   addTab(scenario_controls_tab, "Scenario Controls");
   bucket_tab = new BucketTab{scenario_service};
   addTab(bucket_tab, "BucketTab");
+  astar_tab = new AstarTab{scenario_service};
+  addTab(astar_tab, "A* Tab");
+  fringe_tab = new FringeTab{scenario_service};
+  addTab(fringe_tab, "Fringe Tab");
 }
