@@ -1,8 +1,21 @@
 #pragma once
-#include "tabwindow.h"
 #include "scenario_service.h"
-// #include "scenario_controls.h"
+#include "bucket_tab.h"
+#include "scenario_controls.h"
+#include <QTabWidget>
+#include <qtmetamacros.h>
 #include <QWidget>
+
+
+class TabWindow : public QTabWidget {
+    Q_OBJECT;
+
+public:
+    TabWindow(ScenarioService& scenario_service);
+private:
+    ScenarioControls *scenario_controls_tab;
+    BucketTab *bucket_tab;
+};
 
 
 class Ui: public QWidget {
