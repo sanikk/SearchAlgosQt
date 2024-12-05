@@ -1,3 +1,4 @@
+#pragma once
 #include "scenario_service.h"
 #include <QWidget>
 #include <QGroupBox>

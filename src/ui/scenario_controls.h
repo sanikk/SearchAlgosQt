@@ -1,7 +1,7 @@
 #pragma once
 #include "scenario_service.h"
 #include <QBoxLayout>
-#include <QGroupBox>
+#include <QWidget>
 #include <QPushButton>
 #include <QLabel>
 #include <QFileDialog>
@@ -9,7 +9,7 @@
 #include <qtmetamacros.h>
 
 
-class ScenarioControls : public QGroupBox {
+class ScenarioControls : public QWidget {
     Q_OBJECT
 public:
     ScenarioControls(ScenarioService& i_scenario_service);

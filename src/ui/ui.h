@@ -1,6 +1,7 @@
 #pragma once
+#include "tabwindow.h"
 #include "scenario_service.h"
-#include "scenario_controls.h"
+// #include "scenario_controls.h"
 #include <QWidget>
 
 
@@ -11,6 +12,7 @@ public:
     Ui(ScenarioService scenario_service);
 
 private:
-    ScenarioControls *scenario_controls;
+    TabWindow *tab_window;
+    // ScenarioControls *scenario_controls;
 };
 
