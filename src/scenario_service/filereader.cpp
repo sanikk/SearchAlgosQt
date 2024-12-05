@@ -1,19 +1,26 @@
 #include "filereader.h"
 #include <iostream>
 
-std::ifstream read_file(const std::string &filename) {
+std::ifstream read_file(const std::filesystem::path &filename) {
   std::ifstream f(filename);
   if (!f) {
-    std::cout << "error reading " << filename << '\n';
-    throw std::invalid_argument("error reading file");
+    std::ostringstream oss;
+    oss << "error reading file " << filename;
+    throw std::invalid_argument(oss.str());
   }
   return f;
 }
 
-std::vector<std::string> read_map(const std::string &filename,
+std::vector<std::string> read_map(const std::filesystem::path& filename,
                                   int skip_count = 4) {
   int width;
-  std::ifstream f = read_file(filename);
+  std::ifstream f;
+  try {
+    f = read_file(filename);
+  } catch (const std::invalid_argument& e) {
+    std::cout << e.what() << std::endl;
+    return std::vector<std::string>();
+  }
   std::string str;
 
   while (skip_count > 0 && getline(f, str)) {
@@ -34,8 +41,15 @@ std::vector<std::string> read_map(const std::string &filename,
   return citymap;
 }
 
-std::vector<Scenario> read_scenarios(const std::string &filename) {
-  std::ifstream f = read_file(filename);
+std::vector<Scenario> read_scenarios(const std::filesystem::path& filename) {
+
+  std::ifstream f;
+  try {
+  f = read_file(filename);
+  } catch (const std::invalid_argument& e) {
+    std::cout << e.what() << std::endl;
+    return std::vector<Scenario>();
+  }
 
   std::vector<Scenario> scenarios;
 

@@ -9,7 +9,6 @@
 
 
 class ScenarioControls : public QGroupBox {
-    // ScenarioService scenario_service;
 public:
     ScenarioControls(ScenarioService& i_scenario_service);
 private slots:
