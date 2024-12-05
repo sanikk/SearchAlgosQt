@@ -6,9 +6,11 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <filesystem>
+#include <qtmetamacros.h>
 
 
 class ScenarioControls : public QGroupBox {
+    Q_OBJECT
 public:
     ScenarioControls(ScenarioService& i_scenario_service);
 private slots:
