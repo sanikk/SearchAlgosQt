@@ -1,24 +1,21 @@
 #pragma once
+#include "scenario_controls.h"
 #include "scenario_service.h"
 #include <QWidget>
-#include <QGroupBox>
 #include <QBoxLayout>
-#include <QComboBox>
 #include <QTableWidget>
 
 class BucketTab : public QWidget {
     Q_OBJECT;
 
 public:
-    BucketTab(const ScenarioService& scenario_service);
+    BucketTab(ScenarioService& scenario_service);
 private slots:
 
 
 private:
-    const ScenarioService& scenario_service;
-    QGroupBox *scenario_box;
-    void create_scenario_box();
-    QComboBox *bucket_box;
+    ScenarioService& scenario_service;
+    ScenarioControls *scenario_controls;
     QTableWidget *result_table;
     QTableWidget* get_result_table();
 
