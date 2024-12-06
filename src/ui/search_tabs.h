@@ -1,21 +1,9 @@
 #pragma once
+#include "scenario_controls.h"
 #include "scenario_service.h"
-#include <QComboBox>
 #include <QtLogging>
 #include <QWidget>
-#include <qtmetamacros.h>
-#include <qwidget.h>
 
-
-class ScenarioControls : public QWidget {
-    Q_OBJECT;
-public:
-    ScenarioControls(ScenarioService& i_scenario_service);
-private:
-    ScenarioService& scenario_service;
-    QComboBox *bucket_box;
-    QComboBox *scenario_box;
-};
 
 class SearchTab : public QWidget {
     Q_OBJECT;
