@@ -4,7 +4,6 @@
 #include "bucket_tab.h"
 #include "scenario_controls.h"
 #include <QTabWidget>
-#include <qtmetamacros.h>
 #include <QWidget>
 
 

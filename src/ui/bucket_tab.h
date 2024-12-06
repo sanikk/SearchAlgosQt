@@ -7,7 +7,7 @@
 #include <QTableWidget>
 
 class BucketTab : public QWidget {
-    Q_OBJECT
+    Q_OBJECT;
 
 public:
     BucketTab(const ScenarioService& scenario_service);
