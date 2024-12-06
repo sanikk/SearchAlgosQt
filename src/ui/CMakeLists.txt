@@ -1,6 +1,6 @@
 add_library(ui STATIC
     ui.cpp ui.h
-    scenario_controls.cpp scenario_controls.h
+    file_selection.cpp file_selection.h
     bucket_tab.cpp bucket_tab.h
     search_tabs.cpp search_tabs.h
 )

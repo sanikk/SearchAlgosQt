@@ -2,7 +2,7 @@
 #include "scenario_service.h"
 #include "search_tabs.h"
 #include "bucket_tab.h"
-#include "scenario_controls.h"
+#include "file_selection.h"
 #include <QTabWidget>
 #include <QWidget>
 
@@ -13,7 +13,7 @@ class TabWindow : public QTabWidget {
 public:
     TabWindow(ScenarioService& scenario_service);
 private:
-    ScenarioControls *scenario_controls_tab;
+    FileSelection *file_selection_tab;
     BucketTab *bucket_tab;
     AstarTab *astar_tab;
     FringeTab *fringe_tab;

@@ -1,24 +1,24 @@
-#include "scenario_controls.h"
+#include "file_selection.h"
 
-ScenarioControls::ScenarioControls(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
+FileSelection::FileSelection(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
     QVBoxLayout *controls_layout = new QVBoxLayout;
 
     scenario_file_label = new QLabel{tr("No Scenario File Chosen")};
     controls_layout->addWidget(scenario_file_label);
     scenario_file_button = new QPushButton{"Choose a &Scenario file"};
     controls_layout->addWidget(scenario_file_button);
-    connect(scenario_file_button, &QPushButton::clicked, this, &ScenarioControls::chooseScenarioFile);
+    connect(scenario_file_button, &QPushButton::clicked, this, &FileSelection::chooseScenarioFile);
 
     map_file_label = new QLabel{"No Map File Chosen"};
     controls_layout->addWidget(map_file_label);
     map_file_button = new QPushButton{"Choose a &Map file"};
     controls_layout->addWidget(map_file_button);
-    connect(map_file_button, &QPushButton::clicked, this, &ScenarioControls::chooseMapFile);
+    connect(map_file_button, &QPushButton::clicked, this, &FileSelection::chooseMapFile);
 
     setLayout(controls_layout);
 }
 
-void ScenarioControls::chooseScenarioFile() {
+void FileSelection::chooseScenarioFile() {
   QString ret = QFileDialog::getOpenFileName(this,
           tr("Choose a Scenario File"), 
           QString::fromStdString(std::filesystem::current_path().parent_path().string()), // cha-cha-chain of FOO-OOLS
@@ -29,7 +29,7 @@ void ScenarioControls::chooseScenarioFile() {
   }
 }
 
-void ScenarioControls::setScenarioFile(std::filesystem::path filepath) {
+void FileSelection::setScenarioFile(std::filesystem::path filepath) {
   if (scenario_service.setScenarioFile(filepath)) {
     scenario_file_label->setText(filepath.filename().c_str());
     std::filesystem::path candidate = filepath.replace_extension();
@@ -39,7 +39,7 @@ void ScenarioControls::setScenarioFile(std::filesystem::path filepath) {
   }
 }
 
-void ScenarioControls::chooseMapFile() {
+void FileSelection::chooseMapFile() {
   QString ret = QFileDialog::getOpenFileName(this,
           tr("Choose a Map File"), 
           QString::fromStdString(std::filesystem::current_path().parent_path().string()), // cha-cha-chain of FOO-OOLS
@@ -50,7 +50,7 @@ void ScenarioControls::chooseMapFile() {
   }
 }
 
-void ScenarioControls::setMapFile(std::filesystem::path filepath) {
+void FileSelection::setMapFile(std::filesystem::path filepath) {
   if (scenario_service.setMapFile(filepath)) {
     map_file_label->setText(filepath.filename().c_str());
   }

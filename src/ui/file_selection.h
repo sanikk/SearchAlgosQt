@@ -8,7 +8,7 @@
 #include <QFileDialog>
 
 
-class ScenarioControls : public QWidget {
+class FileSelection : public QWidget {
     Q_OBJECT;
 private:
     ScenarioService& scenario_service;
@@ -19,7 +19,7 @@ private:
     QLabel *map_file_label;
     QPushButton *map_file_button;
 public:
-    ScenarioControls(ScenarioService& i_scenario_service);
+    FileSelection(ScenarioService& i_scenario_service);
 private slots:
     void chooseScenarioFile();
     void chooseMapFile();
