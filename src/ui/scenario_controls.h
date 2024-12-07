@@ -7,10 +7,12 @@ class ScenarioControls : public QWidget {
     Q_OBJECT;
 public:
     ScenarioControls(ScenarioService& i_scenario_service);
-private:
-    ScenarioService& scenario_service;
     QComboBox *bucket_box;
     QComboBox *scenario_box;
+private:
+    ScenarioService& scenario_service;
+    // QComboBox *bucket_box;
+    // QComboBox *scenario_box;
 public slots:
     void updateBucketBox();
     void updateScenarioBox(int index);

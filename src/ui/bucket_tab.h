@@ -9,8 +9,8 @@ class BucketTab : public QWidget {
 
 public:
     BucketTab(ScenarioService& scenario_service);
-private slots:
-
+public slots:
+    void updateTableScenarios(int index);
 
 private:
     ScenarioService& scenario_service;

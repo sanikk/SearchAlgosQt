@@ -1,4 +1,5 @@
 #include "filereader.h"
+#include <iostream>
 
 
 long MAX = std::numeric_limits<std::streamsize>::max();
@@ -65,6 +66,7 @@ std::tuple<std::vector<Scenario>, std::vector<int>> read_scenarios(const std::fi
       std::get<1>(returnable).push_back(bucket);
       previous_bucket = bucket;
     }
+    iss.ignore(MAX, '\t');
     iss.ignore(MAX, '\t');
     iss.ignore(MAX, '\t');
     iss.ignore(MAX, '\t');

@@ -22,5 +22,6 @@ Ui::Ui(ScenarioService scenario_service) {
   setWindowTitle("QT STARTER");
 
   connect(file_selection_tab, &FileSelection::scenarioFileChanged, scenario_controls, &ScenarioControls::updateBucketBox);
+  connect(scenario_controls->bucket_box, &QComboBox::currentIndexChanged, bucket_tab, &BucketTab::updateTableScenarios);
 }
 
