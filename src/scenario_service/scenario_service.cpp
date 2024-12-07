@@ -1,14 +1,10 @@
 #include "scenario_service.h"
-#include "filereader.h"
-#include <filesystem>
-#include <iostream>
-
 
 ScenarioService::ScenarioService(){};
 
 Scenario ScenarioService::get_scenario(const int bucket, const int index) {
   if (bucket < 0 || index < 0) {
-    std::cerr << "bucket and index have to be positive ints." << std::endl;
+    // std::cerr << "bucket and index have to be positive ints." << std::endl;
     throw std::invalid_argument("invalid scenario argument.");
   }
   return get_scenario(10 * bucket + index);
@@ -47,11 +43,18 @@ bool ScenarioService::setScenarioFile(const std::filesystem::path& i_scenario_fi
   if(i_scenario_file.empty() || !std::filesystem::is_regular_file(i_scenario_file)) {
     return false;
   }
-  std::vector<Scenario> scenarios_candidate = read_scenarios(i_scenario_file);
-  if (scenarios_candidate.empty()) {
-    return false;
-  }
+  auto ret_value = read_scenarios(i_scenario_file);
+  scenarios = std::get<0>(ret_value);
+  bucket_list = std::get<1>(ret_value);
   scenario_file = i_scenario_file;
-  scenarios = scenarios_candidate;
   return true;
+}
+
+
+std::vector<int> ScenarioService::get_bucket_list() {
+  return bucket_list;
+}
+
+std::vector<Scenario> ScenarioService::get_bucket_scenarios(int bucket) {
+  return std::vector<Scenario>{scenarios.begin() + bucket * 10, scenarios.begin() + (bucket + 1) * 10};
 }

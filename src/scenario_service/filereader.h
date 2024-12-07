@@ -9,4 +9,4 @@
 
 
 std::vector<std::string> read_map(const std::filesystem::path &filename, int skip_count);
-std::vector<Scenario> read_scenarios(const std::filesystem::path &filename);
+std::tuple<std::vector<Scenario>, std::vector<int>> read_scenarios(const std::filesystem::path &filename);

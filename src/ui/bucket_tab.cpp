@@ -1,8 +1,7 @@
 #include "bucket_tab.h"
 
-BucketTab::BucketTab(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service), scenario_controls(new ScenarioControls{i_scenario_service}) {
+BucketTab::BucketTab(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
   QVBoxLayout *layout = new QVBoxLayout{};
-  layout->addWidget(scenario_controls);
   result_table = get_result_table();
   layout->addWidget(result_table);
   setLayout(layout);
@@ -23,4 +22,20 @@ QTableWidget* BucketTab::get_result_table() {
   table->setHorizontalHeaderLabels(labels);
   return table; 
 }
+
+
+
+//  for (int i=0; i < bucket_scenarios.size() ; i++) {
+//    auto fields = bucket_scenarios[i].get_fields();
+//    for (int j=0; j < 6; j++) {
+//      QTableWidgetItem *item = new QTableWidgetItem{};
+//    }
+//  }
+//  for (Scenario &scen : bucket_scenarios) {
+//    auto fields = scen.get_fields();
+//    QTableWidgetItem *id = new QTableWidgetItem{std::get<0>(fields)};
+//    QTableWidgetItem *start_x = new QTableWidgetItem{std::get<1>(fields)};
+//    }
+//  }
+
 

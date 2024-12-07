@@ -1,5 +1,4 @@
 #pragma once
-#include "scenario_controls.h"
 #include "scenario_service.h"
 #include <QWidget>
 #include <QBoxLayout>
@@ -15,7 +14,6 @@ private slots:
 
 private:
     ScenarioService& scenario_service;
-    ScenarioControls *scenario_controls;
     QTableWidget *result_table;
     QTableWidget* get_result_table();
 

@@ -30,12 +30,19 @@ void FileSelection::chooseScenarioFile() {
 }
 
 void FileSelection::setScenarioFile(std::filesystem::path filepath) {
-  if (scenario_service.setScenarioFile(filepath)) {
-    scenario_file_label->setText(filepath.filename().c_str());
-    std::filesystem::path candidate = filepath.replace_extension();
-    if (!candidate.empty() && std::filesystem::is_regular_file(candidate)) {
-      setMapFile(candidate);
+  try {
+    // TODO: ok this logic is in the wrong place. ask scenario_service for strings to display.
+    if (scenario_service.setScenarioFile(filepath)) {
+      scenario_file_label->setText(filepath.filename().c_str());
+      std::filesystem::path candidate = filepath.replace_extension();
+      emit scenarioFileChanged();
+      if (!candidate.empty() && std::filesystem::is_regular_file(candidate)) {
+        setMapFile(candidate);
+      }
     }
+  } catch (const std::invalid_argument& e) {
+    qDebug() << e.what();
+    // TODO:show error message pop-up
   }
 }
 
@@ -51,8 +58,14 @@ void FileSelection::chooseMapFile() {
 }
 
 void FileSelection::setMapFile(std::filesystem::path filepath) {
-  if (scenario_service.setMapFile(filepath)) {
-    map_file_label->setText(filepath.filename().c_str());
+  try {
+    if (scenario_service.setMapFile(filepath)) {
+      // TODO: logic does not belong here. ask service for string to display.
+      map_file_label->setText(filepath.filename().c_str());
+      emit mapFileChanged();
+    }
+  } catch (const std::invalid_argument& e) {
+    qDebug() << e.what();
   }
 }
 

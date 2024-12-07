@@ -1,7 +1,5 @@
 #pragma once
-#include "scenario_controls.h"
 #include "scenario_service.h"
-#include <QtLogging>
 #include <QWidget>
 
 
@@ -13,10 +11,6 @@ public:
 private:
     virtual void performSearch(const int scenario_index) {}
     virtual QString buttonText() const { return "Perform X Search"; }
-
-    // QWidget *common_area;
-    ScenarioControls *scenario_controls;
-    // d create_common_area();
 
     const ScenarioService& scenario_service;
     

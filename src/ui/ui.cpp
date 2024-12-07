@@ -1,22 +1,26 @@
 #include "ui.h"
+#include "scenario_controls.h"
 
 Ui::Ui(ScenarioService scenario_service) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
 
-  tab_window = new TabWindow{scenario_service};
+  scenario_controls = new ScenarioControls{scenario_service};
+  mainLayout->addWidget(scenario_controls);
+  tab_window = new QTabWidget{};
   mainLayout->addWidget(tab_window);
+
+  file_selection_tab = new FileSelection{scenario_service};
+  tab_window->addTab(file_selection_tab, "File Selection Tab");
+  bucket_tab = new BucketTab{scenario_service};
+  tab_window->addTab(bucket_tab, "Bucket Tab");
+  astar_tab = new AstarTab{scenario_service};
+  tab_window->addTab(astar_tab, "A* Tab");
+  fringe_tab = new FringeTab{scenario_service};
+  tab_window->addTab(fringe_tab, "Fringe Tab");
+  
   setLayout(mainLayout);
   setWindowTitle("QT STARTER");
+
+  connect(file_selection_tab, &FileSelection::scenarioFileChanged, scenario_controls, &ScenarioControls::updateBucketBox);
 }
 
-
-TabWindow::TabWindow(ScenarioService& scenario_service) {
-  file_selection_tab = new FileSelection{scenario_service};
-  addTab(file_selection_tab, "Scenario Controls");
-  bucket_tab = new BucketTab{scenario_service};
-  addTab(bucket_tab, "BucketTab");
-  astar_tab = new AstarTab{scenario_service};
-  addTab(astar_tab, "A* Tab");
-  fringe_tab = new FringeTab{scenario_service};
-  addTab(fringe_tab, "Fringe Tab");
-}

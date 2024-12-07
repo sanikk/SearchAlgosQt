@@ -11,5 +11,8 @@ private:
     ScenarioService& scenario_service;
     QComboBox *bucket_box;
     QComboBox *scenario_box;
+public slots:
+    void updateBucketBox();
+    void updateScenarioBox(int index);
 };
 

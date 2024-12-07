@@ -1,12 +1,12 @@
 #pragma once
 #include "scenario_service.h"
 #include <filesystem>
-#include <QBoxLayout>
+#include <stdexcept>
+#include <QVBoxLayout>
 #include <QWidget>
 #include <QPushButton>
 #include <QLabel>
 #include <QFileDialog>
-
 
 class FileSelection : public QWidget {
     Q_OBJECT;
@@ -23,4 +23,9 @@ public:
 private slots:
     void chooseScenarioFile();
     void chooseMapFile();
+signals:
+    void scenarioFileChanged();
+    void mapFileChanged();
+
+
 };
