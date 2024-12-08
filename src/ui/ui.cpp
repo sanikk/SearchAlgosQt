@@ -10,11 +10,11 @@ Ui::Ui(ScenarioService& scenario_service, SearchService& search_service) {
 
   file_selection_tab = new FileSelection{scenario_service};
   tab_window->addTab(file_selection_tab, "File Selection Tab");
-  bucket_tab = new BucketTab{scenario_service, search_service};
+  bucket_tab = new BucketTab{scenario_service, search_service, *scenario_controls};
   tab_window->addTab(bucket_tab, "Bucket Tab");
-  astar_tab = new AstarTab{scenario_service, search_service};
+  astar_tab = new AstarTab{scenario_service, search_service, *scenario_controls};
   tab_window->addTab(astar_tab, "A* Tab");
-  fringe_tab = new FringeTab{scenario_service, search_service};
+  fringe_tab = new FringeTab{scenario_service, search_service, *scenario_controls};
   tab_window->addTab(fringe_tab, "Fringe Tab");
   
   setLayout(mainLayout);

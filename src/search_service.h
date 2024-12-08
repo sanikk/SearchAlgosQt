@@ -1,4 +1,5 @@
 #pragma once
+#include "models.h"
 #include "searches/common/searches_common.h"
 #include "scenario_service.h"
 #include "searches/astar_search.h"
@@ -18,8 +19,9 @@ public:
   void astar_full_run();
   void fringe_full_run();
   int full_comparison_run();
-  void fringe_unopt(int scenario_id);
   void fringe_dll(int scenario_id);
+  std::vector<RetVal> run_astar_for_bucket(int bucket);
+  std::vector<RetVal> run_fringe_for_bucket(int bucket);
 private:
   ScenarioService scenario_service;
   Scenario load_scenario(int index);

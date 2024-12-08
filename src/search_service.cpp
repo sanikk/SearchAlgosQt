@@ -29,7 +29,7 @@ void SearchService::run_astar(int index) {
   const std::vector<std::string>& citymap = scenario_service.get_map();
   RetVal retval = astar_search(scen.start_x, scen.start_y, scen.goal_x, scen.goal_y, citymap);
   if (retval.found) {
-    std::cout << retval.cost << std::endl;
+    std::cout << retval.cost.value() << std::endl;
     print_route(retval.route);
   }
 }
@@ -44,7 +44,7 @@ void SearchService::run_fringe(int index) {
   RetVal retval = fringe_search(scen.start_x, scen.start_y, scen.goal_x, scen.goal_y, citymap);
 
   if (retval.found) {
-    std::cout << retval.cost << std::endl;
+    std::cout << retval.cost.value() << std::endl;
     print_route(retval.route);
   }
 }
@@ -62,7 +62,7 @@ int SearchService::full_comparison_run() {
     RetVal retAstar = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
     RetVal retFringe = fringe_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
     if (retAstar.cost != retFringe.cost) {
-      std::cout << retAstar.cost << " != " << retFringe.cost << std::endl; 
+      std::cout << retAstar.cost.value() << " != " << retFringe.cost.value() << std::endl; 
     }
   }     
   return 0;
@@ -74,13 +74,28 @@ void SearchService::astar_full_run() {
 void SearchService::fringe_full_run() {
 }
 
-void SearchService::fringe_unopt(int scenario_id) {
-  //Scenario scen = scenario_service.get_scenario(scenario_id);
-  //std::cout << scen << std::endl;
-  //fringe_search_unopt(scen.start_x, scen.start_y, scen.goal_x, scen.goal_y, scenario_service.get_map());
-}
-
 void SearchService::fringe_dll(int scenario_id) {
   Scenario scen = load_scenario(scenario_id);
   fringe_with_dll(scen.start_x, scen.start_y, scen.goal_x, scen.goal_y, scenario_service.get_map());
+}
+
+
+std::vector<RetVal> SearchService::run_astar_for_bucket(int bucket) {
+  std::vector<RetVal> retvals;
+  auto scenario_list = scenario_service.get_bucket_scenarios(bucket);
+  for (Scenario& scenario : scenario_list) {
+    auto ret = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenario_service.get_map());
+    retvals.push_back(ret);
+  }
+  return retvals;
+}
+
+std::vector<RetVal> SearchService::run_fringe_for_bucket(int bucket) {
+  std::vector<RetVal> retvals;
+  auto scenario_list = scenario_service.get_bucket_scenarios(bucket);
+  for (Scenario& scenario : scenario_list) {
+    auto ret = fringe_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenario_service.get_map());
+    retvals.push_back(ret);
+  }
+  return retvals;
 }

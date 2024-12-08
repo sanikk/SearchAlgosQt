@@ -1,8 +1,10 @@
 #include "bucket_tab.h"
-#include "search_service.h"
+#include <iostream>
+#include <ostream>
 
-BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service) 
-  : scenario_service(i_scenario_service), search_service(i_search_service) {
+
+BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls) 
+  : scenario_service(i_scenario_service), search_service(i_search_service), scenario_controls(i_scenario_controls) {
   QVBoxLayout *layout = new QVBoxLayout{};
   run_box = get_run_box();
   layout->addWidget(run_box);
@@ -32,11 +34,17 @@ QTableWidget* BucketTab::get_result_table() {
 
 void BucketTab::run_astar() {
   qDebug() << "running astar";
-  
+  int bucket = scenario_controls.get_bucket_index(); 
+  std::vector<RetVal> retvals = search_service.run_astar_for_bucket(bucket);
 }
 
 void BucketTab::run_fringe() {
   qDebug() << "running fringe";
+  int bucket = scenario_controls.get_bucket_index();
+  std::vector<RetVal> retvals = search_service.run_fringe_for_bucket(bucket);
+  for (auto retval : retvals) {
+    std::cout << retval.cost.value() << std::endl;
+  }
 }
 
 QWidget* BucketTab::get_run_box() {

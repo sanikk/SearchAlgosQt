@@ -56,7 +56,7 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
                     route.push_back(current);
                     current = std::get<1>(cache[current]);
                 }
-                return RetVal(g_score, route, map_size);
+                return RetVal(g_score, pair_route(route, map_size));
                 // break;
             }
 

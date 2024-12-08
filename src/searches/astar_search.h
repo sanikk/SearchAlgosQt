@@ -1,3 +1,5 @@
+#include "models.h"
+#include "tools.h"
 #include "common/searches_common.h"
 #include <vector>
 #include <string>
