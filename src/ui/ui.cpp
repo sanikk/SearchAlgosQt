@@ -1,7 +1,6 @@
 #include "ui.h"
-#include "scenario_controls.h"
 
-Ui::Ui(ScenarioService scenario_service) {
+Ui::Ui(ScenarioService& scenario_service, SearchService& search_service) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
 
   scenario_controls = new ScenarioControls{scenario_service};
@@ -11,11 +10,11 @@ Ui::Ui(ScenarioService scenario_service) {
 
   file_selection_tab = new FileSelection{scenario_service};
   tab_window->addTab(file_selection_tab, "File Selection Tab");
-  bucket_tab = new BucketTab{scenario_service};
+  bucket_tab = new BucketTab{scenario_service, search_service};
   tab_window->addTab(bucket_tab, "Bucket Tab");
-  astar_tab = new AstarTab{scenario_service};
+  astar_tab = new AstarTab{scenario_service, search_service};
   tab_window->addTab(astar_tab, "A* Tab");
-  fringe_tab = new FringeTab{scenario_service};
+  fringe_tab = new FringeTab{scenario_service, search_service};
   tab_window->addTab(fringe_tab, "Fringe Tab");
   
   setLayout(mainLayout);

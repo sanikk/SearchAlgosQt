@@ -7,5 +7,5 @@ add_library(ui STATIC
 )
 
 target_include_directories(ui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(ui PUBLIC Qt6::Core Qt6::Widgets scenario_service)
+target_link_libraries(ui PUBLIC Qt6::Core Qt6::Widgets scenario_service search_service)
 

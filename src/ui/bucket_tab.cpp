@@ -1,6 +1,8 @@
 #include "bucket_tab.h"
+#include "search_service.h"
 
-BucketTab::BucketTab(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
+BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service) 
+  : scenario_service(i_scenario_service), search_service(i_search_service) {
   QVBoxLayout *layout = new QVBoxLayout{};
   run_box = get_run_box();
   layout->addWidget(run_box);

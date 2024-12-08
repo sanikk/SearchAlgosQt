@@ -1,6 +1,7 @@
 #pragma once
 #include "scenario_controls.h"
 #include "scenario_service.h"
+#include "search_service.h"
 #include "search_tabs.h"
 #include "bucket_tab.h"
 #include "file_selection.h"
@@ -12,7 +13,7 @@ class Ui: public QWidget {
     Q_OBJECT
 
 public:
-    Ui(ScenarioService scenario_service);
+    Ui(ScenarioService& scenario_service, SearchService& search_service);
 
 private:
     ScenarioControls *scenario_controls;

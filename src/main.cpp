@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
   
   SearchService search_service(scenario_service);
 
-  Ui ui(scenario_service);
+  Ui ui(scenario_service, search_service);
   ui.show();
 
   return app.exec();
