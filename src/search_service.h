@@ -10,8 +10,8 @@
 
 class SearchService {
 public:
-  SearchService();
-  SearchService(const ScenarioService &scenario_service);
+  // SearchService();
+  SearchService(ScenarioService& scenario_service);
   void run_astar(int index);
   void run_astar(int bucket, int index);
   void run_fringe(int index);
@@ -23,6 +23,6 @@ public:
   std::vector<RetVal> run_astar_for_bucket(int bucket);
   std::vector<RetVal> run_fringe_for_bucket(int bucket);
 private:
-  ScenarioService scenario_service;
+  ScenarioService& scenario_service;
   Scenario load_scenario(int index);
 };

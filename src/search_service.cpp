@@ -1,10 +1,10 @@
 #include "search_service.h"
 #include <iostream>
 
-SearchService::SearchService() {}
+// SearchService::SearchService() {}
 
 SearchService::SearchService(
-    const ScenarioService &scenario_service)
+    ScenarioService& scenario_service)
     : scenario_service(scenario_service) {};
 
 Scenario SearchService::load_scenario(int index) {
@@ -67,23 +67,12 @@ int SearchService::full_comparison_run() {
   }     
   return 0;
 } 
-void SearchService::astar_full_run() {
-
-}
-
-void SearchService::fringe_full_run() {
-}
-
-void SearchService::fringe_dll(int scenario_id) {
-  Scenario scen = load_scenario(scenario_id);
-  fringe_with_dll(scen.start_x, scen.start_y, scen.goal_x, scen.goal_y, scenario_service.get_map());
-}
-
 
 std::vector<RetVal> SearchService::run_astar_for_bucket(int bucket) {
   std::vector<RetVal> retvals;
   auto scenario_list = scenario_service.get_bucket_scenarios(bucket);
   for (Scenario& scenario : scenario_list) {
+    std::cout << scenario << std::endl;
     auto ret = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenario_service.get_map());
     retvals.push_back(ret);
   }

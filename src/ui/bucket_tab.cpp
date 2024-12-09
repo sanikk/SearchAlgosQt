@@ -34,7 +34,11 @@ QTableWidget* BucketTab::get_result_table() {
 
 void BucketTab::run_astar() {
   qDebug() << "running astar";
-  int bucket = scenario_controls.get_bucket_index(); 
+  int bucket = scenario_controls.get_bucket_index();
+  if (bucket == -1) {
+    return;
+  }
+  std::cout << "bucket " << bucket << std::endl;;
   std::vector<RetVal> retvals = search_service.run_astar_for_bucket(bucket);
 }
 

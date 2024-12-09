@@ -1,4 +1,4 @@
-#include "tools.h"
+#include "conversions.h"
 
 int xy2int(int x, int y, int map_size) {
   return y*map_size + x;
