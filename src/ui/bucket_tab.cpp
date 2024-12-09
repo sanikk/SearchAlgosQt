@@ -1,6 +1,5 @@
 #include "bucket_tab.h"
-#include <iostream>
-#include <ostream>
+#include <stdexcept>
 
 
 BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls) 
@@ -33,21 +32,30 @@ QTableWidget* BucketTab::get_result_table() {
 }
 
 void BucketTab::run_astar() {
-  qDebug() << "running astar";
-  int bucket = scenario_controls.get_bucket_index();
-  if (bucket == -1) {
-    return;
+  // qDebug() << "running astar";
+  try {
+    int bucket = scenario_controls.get_bucket_index();
+    if (bucket == -1) {
+      return;
+    }
+    std::vector<RetVal> retvals = search_service.run_astar_for_bucket(bucket);
+    load_retvals_to_table(retvals, 4);
+  } catch (std::runtime_error &e) {
+    qDebug() << e.what();
   }
-  std::cout << "bucket " << bucket << std::endl;;
-  std::vector<RetVal> retvals = search_service.run_astar_for_bucket(bucket);
 }
 
 void BucketTab::run_fringe() {
-  qDebug() << "running fringe";
-  int bucket = scenario_controls.get_bucket_index();
-  std::vector<RetVal> retvals = search_service.run_fringe_for_bucket(bucket);
-  for (auto retval : retvals) {
-    std::cout << retval.cost.value() << std::endl;
+  // qDebug() << "running fringe";
+  try {
+    int bucket = scenario_controls.get_bucket_index();
+    if (bucket == -1) {
+      return;
+    }
+    std::vector<RetVal> retvals = search_service.run_fringe_for_bucket(bucket);
+    load_retvals_to_table(retvals, 6);
+  } catch (std::runtime_error &e) {
+    qDebug() << e.what();
   }
 }
 
@@ -67,6 +75,7 @@ void BucketTab::updateTableScenarios(int index) {
   if (index==-1) {
     return;
   }
+  result_table->clear();
   try {
     auto scenario_list = scenario_service.get_bucket_scenarios(index);
     for (int i=0; i < scenario_list.size(); i++) {
@@ -82,6 +91,20 @@ void BucketTab::updateTableScenarios(int index) {
     }
   } catch (std::invalid_argument &e) {
     qDebug() << e.what();
+  }
+}
+
+void BucketTab::load_retvals_to_table(std::vector<RetVal> retvals, int start_column) {
+  // for (RetVal ret : retvals) {
+  for (int i=0; i < retvals.size(); i++) {
+    if (retvals[i].cost.has_value()) {
+      QTableWidgetItem *cost = new QTableWidgetItem{QString("%1").arg(retvals[i].cost.value())};
+      result_table->setItem(i, start_column , cost);
+    }
+    if (retvals[i].timing.has_value()) {
+      QTableWidgetItem *timing = new QTableWidgetItem{QString("%1").arg(retvals[i].timing.value())};
+      result_table->setItem(i, start_column + 1, timing);
+    }
   }
 }
 

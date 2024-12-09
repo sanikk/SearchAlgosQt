@@ -7,7 +7,6 @@ ScenarioService::ScenarioService(){};
 
 Scenario ScenarioService::get_scenario(const int bucket, const int index) {
   if (bucket < 0 || index < 0) {
-    // std::cerr << "bucket and index have to be positive ints." << std::endl;
     throw std::invalid_argument("invalid scenario argument.");
   }
   return get_scenario(10 * bucket + index);

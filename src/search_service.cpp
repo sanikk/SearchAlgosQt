@@ -1,8 +1,6 @@
 #include "search_service.h"
 #include <iostream>
 
-// SearchService::SearchService() {}
-
 SearchService::SearchService(
     ScenarioService& scenario_service)
     : scenario_service(scenario_service) {};
@@ -29,7 +27,6 @@ void SearchService::run_astar(int index) {
   const std::vector<std::string>& citymap = scenario_service.get_map();
   RetVal retval = astar_search(scen.start_x, scen.start_y, scen.goal_x, scen.goal_y, citymap);
   if (retval.found) {
-    std::cout << retval.cost.value() << std::endl;
     print_route(retval.route);
   }
 }
