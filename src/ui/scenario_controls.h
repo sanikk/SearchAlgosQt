@@ -9,6 +9,8 @@ public:
     ScenarioControls(ScenarioService& i_scenario_service);
     QComboBox *bucket_box;
     QComboBox *scenario_box;
+    int get_bucket_index();
+    int get_scenario_index();
 private:
     ScenarioService& scenario_service;
     // QComboBox *bucket_box;

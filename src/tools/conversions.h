@@ -3,7 +3,6 @@
 #include <utility>
 #include <vector>
 
-
 // x,y to a single int
 int xy2int(int x, int y, int map_size);
 int xy2int(Node node, int map_size);

@@ -40,7 +40,7 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
         current_index = camefrom[current_index];
       }
       std::reverse(route.begin(), route.end());
-      return RetVal(current_gscore, route, map_size);
+      return RetVal(current_gscore, pair_route(route, map_size));
     }
 
     std::vector<Node> children_list;

@@ -34,3 +34,10 @@ void ScenarioControls::updateScenarioBox(int index) {
   scenario_box->addItems(scenario_list);
 }
 
+int ScenarioControls::get_bucket_index() {
+  return bucket_box->currentIndex();
+}
+
+int ScenarioControls::get_scenario_index() {
+  return scenario_box->currentIndex();
+}

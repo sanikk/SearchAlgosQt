@@ -1,3 +1,6 @@
+#pragma once
+#include "models.h"
+#include "tools.h"
 #include "common/searches_common.h"
 #include <string>
 #include <unordered_map>

@@ -1,5 +1,5 @@
 #pragma once
-#include "node.h"
+#include "models.h"
 #include <cmath>
 
 const double DIFF = std::sqrt(2.0) - 2.0;

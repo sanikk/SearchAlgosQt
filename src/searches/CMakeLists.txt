@@ -6,4 +6,4 @@ add_library(searches
 )
 
 target_include_directories(searches PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(searches PRIVATE searches_common)
+target_link_libraries(searches PRIVATE models tools searches_common)

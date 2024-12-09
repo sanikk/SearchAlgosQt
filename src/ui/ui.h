@@ -10,7 +10,7 @@
 
 
 class Ui: public QWidget {
-    Q_OBJECT
+    Q_OBJECT;
 
 public:
     Ui(ScenarioService& scenario_service, SearchService& search_service);

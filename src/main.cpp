@@ -6,9 +6,9 @@
 
 
 int main(int argc, char *argv[]) {
-   QApplication app = QApplication(argc, argv);
+  QApplication app = QApplication(argc, argv);
   
-  ScenarioService scenario_service = ScenarioService();
+  ScenarioService scenario_service;
   
   SearchService search_service(scenario_service);
 

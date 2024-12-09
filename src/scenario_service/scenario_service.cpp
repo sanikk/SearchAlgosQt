@@ -1,10 +1,12 @@
 #include "scenario_service.h"
+#include "tools.h"
+#include <sstream>
+#include <stdexcept>
 
 ScenarioService::ScenarioService(){};
 
 Scenario ScenarioService::get_scenario(const int bucket, const int index) {
   if (bucket < 0 || index < 0) {
-    // std::cerr << "bucket and index have to be positive ints." << std::endl;
     throw std::invalid_argument("invalid scenario argument.");
   }
   return get_scenario(10 * bucket + index);
@@ -56,5 +58,12 @@ std::vector<int> ScenarioService::get_bucket_list() {
 }
 
 std::vector<Scenario> ScenarioService::get_bucket_scenarios(int bucket) {
-  return std::vector<Scenario>{scenarios.begin() + bucket * 10, scenarios.begin() + (bucket + 1) * 10};
+  int start_index = bucket * 10;
+  int end_index = bucket * 10 + 9;
+  if (start_index < 0 || end_index >= scenarios.size()) {
+    std::ostringstream oss;
+    oss << "parameter bucket was " << bucket << ", start_index " << start_index << ", end_index " << end_index << std::endl;
+    throw std::invalid_argument(oss.str()); 
+  }
+  return std::vector<Scenario>(scenarios.begin() + start_index, scenarios.begin() + end_index);
 }
