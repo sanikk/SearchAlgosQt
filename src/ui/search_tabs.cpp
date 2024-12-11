@@ -13,6 +13,8 @@ SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_searc
   
   map_scene = new MapScene{};
   view = new QGraphicsView{ map_scene };
+  view->setDragMode(QGraphicsView::ScrollHandDrag);
+  view->scale(10,10);
   tabLayout->addWidget(view);
 
   setLayout(tabLayout);

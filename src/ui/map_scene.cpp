@@ -27,7 +27,7 @@ QBitmap MapScene::get_bitmap(const std::vector<std::string>& citymap) {
   QImage map_image(map_size, map_size, QImage::Format_Mono);
   for (int row=0; row < citymap.size(); row++) {
     for (int col=0; col < citymap[0].size();col++) {
-      if (citymap[row][col] != '.') {
+      if (citymap[row][col] == '.') {
         map_image.setPixel(row, col, 1);
       }
     }
