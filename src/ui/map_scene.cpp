@@ -1,19 +1,15 @@
 #include "map_scene.h"
-#include <qgraphicsscene.h>
-
+#include <iostream>
 
 MapScene::MapScene() : QGraphicsScene(), basemap(nullptr)
-//astar_layer(nullptr), fringe_layer(nullptr) 
 {
 
 }
 
 MapScene::MapScene(const std::vector<std::string>& citymap, const Scenario& scenario)
   : QGraphicsScene(),basemap(get_bitmap(citymap))
-  //, astar_layer(get_layer(citymap.size())), fringe_layer(get_layer(citymap.size())) 
 {
   addPixmap(basemap);
-  // addItem(astar_layer);
 }
 
 void MapScene::setMap(const std::vector<std::string>& citymap) {
@@ -23,8 +19,7 @@ void MapScene::setMap(const std::vector<std::string>& citymap) {
 }
 
 void MapScene::setScenario(const Scenario& scenario) {
-  // astar_layer.
-  
+  std::cout << "scenario changed to " << scenario << std::endl;
 }
 
 QBitmap MapScene::get_bitmap(const std::vector<std::string>& citymap) {
@@ -39,10 +34,6 @@ QBitmap MapScene::get_bitmap(const std::vector<std::string>& citymap) {
   }
   return QBitmap::fromImage(map_image);
 }
-
-
-
-
 
 QImage* MapScene::get_layer(int map_size) {
   QImage* layer = new QImage{map_size, map_size, QImage::Format_RGB32};

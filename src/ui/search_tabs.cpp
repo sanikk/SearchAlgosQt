@@ -1,8 +1,8 @@
 #include "search_tabs.h"
 #include <iostream>
 
-SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls)
-  : scenario_service(i_scenario_service), search_service(i_search_service), scenario_controls(i_scenario_controls) {
+SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service)
+  : scenario_service(i_scenario_service), search_service(i_search_service) {
   
   QVBoxLayout *tabLayout = new QVBoxLayout{};
 
@@ -19,7 +19,9 @@ SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_searc
 }
 
 void SearchTab::mapChanged() {
-  // std::vector<std::string> citymap = scenario_service.get_map();
-  std::cout << "setting map!" << std::endl;
   map_scene->setMap(scenario_service.get_map());
+}
+
+void SearchTab::scenarioChanged(int index) {
+  map_scene->setScenario(scenario_service.get_scenario(index));
 }
