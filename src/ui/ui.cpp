@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "search_tabs.h"
 
 Ui::Ui(ScenarioService& scenario_service, SearchService& search_service) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -12,15 +13,18 @@ Ui::Ui(ScenarioService& scenario_service, SearchService& search_service) {
   tab_window->addTab(file_selection_tab, "File Selection Tab");
   bucket_tab = new BucketTab{scenario_service, search_service, *scenario_controls};
   tab_window->addTab(bucket_tab, "Bucket Tab");
-  astar_tab = new AstarTab{scenario_service, search_service, *scenario_controls};
-  tab_window->addTab(astar_tab, "A* Tab");
-  fringe_tab = new FringeTab{scenario_service, search_service, *scenario_controls};
-  tab_window->addTab(fringe_tab, "Fringe Tab");
+  search_tab = new SearchTab{scenario_service, search_service, *scenario_controls};
+  tab_window->addTab(search_tab, "Search Tab");
+  // astar_tab = new AstarTab{scenario_service, search_service, *scenario_controls};
+  // tab_window->addTab(astar_tab, "A* Tab");
+  // fringe_tab = new FringeTab{scenario_service, search_service, *scenario_controls};
+  // tab_window->addTab(fringe_tab, "Fringe Tab");
   
   setLayout(mainLayout);
   setWindowTitle("QT STARTER");
 
   connect(file_selection_tab, &FileSelection::scenarioFileChanged, scenario_controls, &ScenarioControls::updateBucketBox);
   connect(scenario_controls->bucket_box, &QComboBox::currentIndexChanged, bucket_tab, &BucketTab::updateTableScenarios);
+  connect(file_selection_tab, &FileSelection::mapFileChanged, search_tab, &SearchTab::mapChanged);
 }
 
