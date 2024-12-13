@@ -21,9 +21,15 @@ SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_searc
 }
 
 void SearchTab::mapChanged() {
+  // view->setUpdatesEnabled(false);  // Disable updates temporarily
   map_scene->setMap(scenario_service.get_map());
+  // view->setUpdatesEnabled(true);  // Disable updates temporarily
+  // view->update();
 }
 
 void SearchTab::scenarioChanged(int index) {
+  // view->setUpdatesEnabled(false);  // Disable updates temporarily
   map_scene->setScenario(scenario_service.get_scenario(index));
+  // view->setUpdatesEnabled(true);  // Disable updates temporarily
+  // view->update();
 }

@@ -35,10 +35,10 @@ void FileSelection::setScenarioFile(std::filesystem::path filepath) {
     if (scenario_service.setScenarioFile(filepath)) {
       scenario_file_label->setText(filepath.filename().c_str());
       std::filesystem::path candidate = filepath.replace_extension();
-      emit scenarioFileChanged();
       if (!candidate.empty() && std::filesystem::is_regular_file(candidate)) {
         setMapFile(candidate);
       }
+      emit scenarioFileChanged();
     }
   } catch (const std::invalid_argument& e) {
     qDebug() << e.what();
