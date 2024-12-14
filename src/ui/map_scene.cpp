@@ -1,8 +1,5 @@
 #include "map_scene.h"
 #include <iostream>
-#include <qlogging.h>
-#include <qnamespace.h>
-#include <stdexcept>
 
 MapScene::MapScene() : QGraphicsScene(), basemapItem(nullptr), start_goal_item(nullptr), map_size(0), astar_layer(nullptr), fringe_layer(nullptr)
 {
@@ -29,6 +26,7 @@ void MapScene::setScenario(const Scenario& scenario) {
     return;
   }
   std::cout << "scenario changed to " << scenario << std::endl;
+  // qDebug() << scenario;
   setStartGoalLayer(scenario);
   if (astar_layer) {
     astar_layer->clear();
@@ -43,24 +41,16 @@ void MapScene::setScenario(const Scenario& scenario) {
     addItem(fringe_layer);
   }
   // testing drawing on layers here:
-  QVector<QPoint> vec1;
-  QVector<QPoint> vec2;
-  for (int i=1; i < 10; i++) {
-    vec1.push_back(QPoint(i, 1));
-    vec2.push_back(QPoint(1, i));
-    fringe_layer->expand(QPoint(i, 2));
-    astar_layer->expand(QPoint(2,i));
-  }
-  fringe_layer->visit(vec1);
-  astar_layer->visit(vec2);
-  qDebug() << "basemapItem bounding rect: " << basemapItem->boundingRect();
-  qDebug() << "start_goal_layer_item bounding rect: " << start_goal_item->boundingRect();
-  qDebug() << "astar_layer bounding rect: " << astar_layer->boundingRect();
-  qDebug() << "fringe_layer bounding rect: " << fringe_layer->boundingRect();
-
-  for (auto item: this->items()) {
-    qDebug() << item;
-  }
+  // QVector<QPoint> vec1;
+  // QVector<QPoint> vec2;
+  // for (int i=1; i < 10; i++) {
+  //   vec1.push_back(QPoint(i, 1));
+  //   vec2.push_back(QPoint(1, i));
+  //   fringe_layer->expand(QPoint(i, 2));
+  //   astar_layer->expand(QPoint(2,i));
+  // }
+  // fringe_layer->visit(vec1);
+  // astar_layer->visit(vec2);
 }
 
 QBitmap MapScene::get_bitmap(const std::vector<std::string>& citymap) {
@@ -79,33 +69,31 @@ QBitmap MapScene::get_bitmap(const std::vector<std::string>& citymap) {
   return QBitmap::fromImage(map_image);
 }
 
-void MapScene::setStartGoalLayer(Scenario scenario) {
+void MapScene::setStartGoalLayer(const Scenario& scenario) {
   if (map_size==0) {
     qDebug() << "basemap not set";
     return;
   }
   start_goal_pixmap = QPixmap(map_size, map_size);
-  start_goal_pixmap.fill(Qt::red);
-  // drawCross(start_goal_pixmap, scenario.start_x, scenario.start_y, qRgb(56, 194, 180));
-  // drawCross(start_goal_pixmap, scenario.goal_x,scenario.goal_y, qRgb(245, 34, 213));
+  // start_goal_pixmap.fill(Qt::red);
+  drawCross(scenario.start_x, scenario.start_y, start_color);
+  drawCross(scenario.goal_x,scenario.goal_y, goal_color);
   if (!start_goal_item) {
     start_goal_item = new QGraphicsPixmapItem{start_goal_pixmap};
     start_goal_item->setZValue(2);
-    start_goal_item->setOpacity(0.5);
+    // start_goal_item->setOpacity(0.5);
     addItem(start_goal_item);
-    qDebug() << "setStartGoalLayer: start_goal_item set!";
   } else {
     start_goal_item->setPixmap(start_goal_pixmap);
-    qDebug() << "setStartGoalLayer: setPixmap done";
   }
-  start_goal_item->setVisible(true);
+  // start_goal_item->setVisible(true);
 }
 
-void MapScene::drawCross(QPixmap pixmap, int x, int y, uint index_or_rgb) {
-  if (!basemapItem) {
+void MapScene::drawCross(const int& x, const int& y, const uint& index_or_rgb) {
+  if (!basemapItem || !start_goal_pixmap || map_size < 2) {
     return;
   }
-  QPainter painter(&pixmap);
+  QPainter painter(&start_goal_pixmap);
   
   painter.setPen(QColor(index_or_rgb));
   painter.drawLine(std::max(0, x-2), y, std::min(map_size - 1, x + 2), y);
@@ -139,7 +127,6 @@ int MapScene::showHideAstar() {
     return 1;
   }
 }
-
 
 //
 

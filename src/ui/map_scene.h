@@ -5,7 +5,6 @@
 #include <QImage>
 #include <QPixmap>
 #include <QGraphicsItem>
-#include <qtmetamacros.h>
 #include <string>
 #include <QPainter>
 #include <QGraphicsPixmapItem>
@@ -51,8 +50,10 @@ public slots:
     void expandFringe(QPoint);
 private:
     QGraphicsPixmapItem *basemapItem;
-    void setStartGoalLayer(Scenario scenario);
-    void drawCross(QPixmap pixmap, int x, int y, uint index_or_rgb);
+    void setStartGoalLayer(const Scenario& scenario);
+    void drawCross(const int& x, const int& y, const uint& index_or_rgb);
     void setFringeLayer();
     void setAstarLayer();
+    const uint start_color = qRgb(56, 194, 180);
+    const uint goal_color = qRgb(245, 34, 213);
 };
