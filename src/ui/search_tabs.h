@@ -24,11 +24,17 @@ private:
     ScenarioService& scenario_service;
     SearchService& search_service;
     
-    QPushButton *run_astar_button;
-    QPushButton *run_fringe_button;
+    QPushButton *runAstarButton;
+    QPushButton *runFringeButton;
+    QPushButton *showHideAstarButton;
+    QPushButton *showHideFringeButton;
+    QPushButton *fullscreenButton;
 
     MapScene *map_scene;
     QGraphicsView *view;
+
+    void showHideFringe();
+    void showHideAstar();
 };
 
 

@@ -40,6 +40,17 @@ void MapScene::setScenario(const Scenario& scenario) {
     fringe_layer = new PaintableLayer{map_size, 3};
     addItem(fringe_layer);
   }
+  // testing drawing on layers here:
+  QVector<QPoint> vec1;
+  QVector<QPoint> vec2;
+  for (int i=1; i < 10; i++) {
+    vec1.push_back(QPoint(i, 1));
+    vec2.push_back(QPoint(1, i));
+    fringe_layer->expand(QPoint(i, 2));
+    astar_layer->expand(QPoint(2,i));
+  }
+  fringe_layer->visit(vec1);
+  astar_layer->visit(vec2);
 }
 
 QBitmap MapScene::get_bitmap(const std::vector<std::string>& citymap) {
@@ -70,8 +81,10 @@ void MapScene::setStartGoalLayer(Scenario scenario) {
     start_goal_item = new QGraphicsPixmapItem{start_goal_pixmap};
     start_goal_item->setZValue(1);
     addItem(start_goal_item);
+    qDebug() << "setStartGoalLayer: start_goal_item set!";
   } else {
     start_goal_item->setPixmap(start_goal_pixmap);
+    qDebug() << "setStartGoalLayer: setPixmap done";
   }
 }
 
@@ -87,6 +100,36 @@ void MapScene::drawCross(QPixmap pixmap, int x, int y, uint index_or_rgb) {
 }
 
 // SLOTS:
+
+int MapScene::showHideFringe() {
+  if (!fringe_layer) {
+    return 0;
+  }
+  if (fringe_layer->isVisible()) {
+    fringe_layer->setVisible(false);
+    return 2;
+  } else {
+    fringe_layer->setVisible(true);
+    return 1;
+  }
+}
+
+int MapScene::showHideAstar() {
+  if (!astar_layer) {
+    return 0;
+  }
+  if (astar_layer->isVisible()) {
+    astar_layer->setVisible(false);
+    return 2;
+  } else {
+    astar_layer->setVisible(true);
+    return 1;
+  }
+}
+
+
+//
+
 void MapScene::visitAstar(QVector<QPoint> vec) {
   if (!astar_layer) {
     return;

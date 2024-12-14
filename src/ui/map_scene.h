@@ -42,6 +42,8 @@ public:
     PaintableLayer *astar_layer;
     PaintableLayer *fringe_layer;
 public slots:
+    int showHideFringe();
+    int showHideAstar();
     void visitAstar(QVector<QPoint>);
     void expandAstar(QPoint);
     void visitFringe(QVector<QPoint>);
