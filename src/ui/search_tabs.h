@@ -2,6 +2,7 @@
 #include "scenario_service.h"
 #include "search_service.h"
 #include "map_scene.h"
+#include "fullscreenDialog.h"
 
 #include <QBoxLayout>
 #include <QComboBox>
@@ -9,7 +10,6 @@
 #include <QGraphicsItem>
 #include <QGraphicsView>
 #include <QPushButton>
-#include <qtmetamacros.h>
 
 
 class SearchTab : public QWidget {
@@ -29,12 +29,16 @@ private:
     QPushButton *showHideAstarButton;
     QPushButton *showHideFringeButton;
     QPushButton *fullscreenButton;
+    QWidget *controlsBox;
 
     MapScene *map_scene;
     QGraphicsView *view;
 
+    QVBoxLayout *tabLayout;
     void showHideFringe();
     void showHideAstar();
+    void launchFullscreenDialog();
+    void endFullScreenDialog();
 };
 
 

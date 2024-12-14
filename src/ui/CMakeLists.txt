@@ -5,6 +5,7 @@ add_library(ui STATIC
     bucket_tab.cpp bucket_tab.h
     search_tabs.cpp search_tabs.h
     map_scene.cpp map_scene.h
+    fullscreenDialog.cpp fullscreenDialog.h
     # graphics_image_item.cpp graphics_image_item.h
 )
 

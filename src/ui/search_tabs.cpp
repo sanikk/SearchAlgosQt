@@ -1,14 +1,10 @@
 #include "search_tabs.h"
-#include "map_scene.h"
-#include <qboxlayout.h>
-#include <qpushbutton.h>
-#include <qwidget.h>
 
 SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service)
   : scenario_service(i_scenario_service), search_service(i_search_service) {
   
-  QVBoxLayout *tabLayout = new QVBoxLayout{};
-  QWidget *controlsBox =new QWidget{};
+  tabLayout = new QVBoxLayout{};
+  controlsBox =new QWidget{};
   QHBoxLayout *controlsLayout = new QHBoxLayout{};
   runFringeButton = new QPushButton{ "Run Fringe" };
   controlsLayout->addWidget(runFringeButton);
@@ -32,25 +28,35 @@ SearchTab::SearchTab(ScenarioService& i_scenario_service, SearchService& i_searc
 
   setLayout(tabLayout);
 
-  connect(fullscreenButton, &QPushButton::clicked, view, &QGraphicsView::showFullScreen);
+  connect(fullscreenButton, &QPushButton::clicked, this, &SearchTab::launchFullscreenDialog);
   connect(showHideFringeButton, &QPushButton::clicked, this, &SearchTab::showHideFringe);
   connect(showHideAstarButton, &QPushButton::clicked, this, &SearchTab::showHideAstar);
 }
 
+
+void SearchTab::launchFullscreenDialog() {
+  FullscreenDialog* fsd = new FullscreenDialog{view};
+  connect(fsd->runAstarButton, &QPushButton::clicked, runAstarButton, &QPushButton::clicked);
+  connect(fsd->runFringeButton, &QPushButton::clicked, runFringeButton, &QPushButton::clicked);
+  connect(fsd->showHideAstarButton, &QPushButton::clicked, showHideAstarButton, &QPushButton::clicked);
+  connect(fsd->showHideFringeButton, &QPushButton::clicked, showHideFringeButton, &QPushButton::clicked);
+
+  connect(fsd, &QDialog::finished, this, &SearchTab::endFullScreenDialog);
+  fsd->showFullScreen();
+}
+
+void SearchTab::endFullScreenDialog() {
+  view->setParent(this);
+  tabLayout->addWidget(view);
+}
+
 void SearchTab::mapChanged() {
-  // view->setUpdatesEnabled(false);  // Disable updates temporarily
   map_scene->setMap(scenario_service.get_map());
-  // view->setUpdatesEnabled(true);  // Disable updates temporarily
-  // view->update();
 }
 
 void SearchTab::scenarioChanged(int index) {
-  // view->setUpdatesEnabled(false);  // Disable updates temporarily
   map_scene->setScenario(scenario_service.get_scenario(index));
-  // view->setUpdatesEnabled(true);  // Disable updates temporarily
-  // view->update();
 }
-
 
 void SearchTab::showHideFringe() {
   int ret = map_scene->showHideFringe();
