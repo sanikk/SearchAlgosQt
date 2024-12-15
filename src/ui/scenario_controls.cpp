@@ -9,6 +9,7 @@ ScenarioControls::ScenarioControls(ScenarioService& i_scenario_service) : scenar
   setLayout(controlsLayout);
 
   connect(bucket_box, &QComboBox::currentIndexChanged, this, &ScenarioControls::updateScenarioBox);
+  connect(scenario_box, &QComboBox::currentIndexChanged, this, &ScenarioControls::scenarioSelected);
 }
 
 void ScenarioControls::updateBucketBox() {
@@ -35,9 +36,18 @@ void ScenarioControls::updateScenarioBox(int index) {
 }
 
 int ScenarioControls::get_bucket_index() {
+  // TODO: make this obsolete and remove it
   return bucket_box->currentIndex();
 }
 
 int ScenarioControls::get_scenario_index() {
+  // TODO: make this obsolete and remove it
   return scenario_box->currentIndex();
+}
+
+void ScenarioControls::scenarioSelected(int index) {
+  if (index == -1) {
+    return;
+  }
+  scenarioChanged(bucket_box->currentIndex() * 10 + index);
 }

@@ -22,7 +22,6 @@ private:
 
     FileSelection *file_selection_tab;
     BucketTab *bucket_tab;
-    AstarTab *astar_tab;
-    FringeTab *fringe_tab;
+    SearchTab *search_tab;
 };
 

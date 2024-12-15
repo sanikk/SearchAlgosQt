@@ -1,45 +1,44 @@
 #pragma once
-#include "scenario_controls.h"
 #include "scenario_service.h"
 #include "search_service.h"
+#include "map_scene.h"
+#include "fullscreenDialog.h"
+
 #include <QBoxLayout>
 #include <QComboBox>
 #include <QWidget>
+#include <QGraphicsItem>
+#include <QGraphicsView>
+#include <QPushButton>
 
 
 class SearchTab : public QWidget {
     Q_OBJECT;
 
 public:
-    SearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
+    SearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service);
+public slots:
+    void mapChanged();
+    void scenarioChanged(int scenario_index);
 private:
-    virtual void performSearch(const int scenario_index) {}
-    virtual QString buttonText() const { return "Perform X Search"; }
-
-    const ScenarioService& scenario_service;
+    ScenarioService& scenario_service;
     SearchService& search_service;
-    ScenarioControls& scenario_controls;
     
-    int expanded=0,visited=0;
-    double flimit=0.0;
+    QPushButton *runAstarButton;
+    QPushButton *runFringeButton;
+    QPushButton *showHideAstarButton;
+    QPushButton *showHideFringeButton;
+    QPushButton *fullscreenButton;
+    QWidget *controlsBox;
 
+    MapScene *map_scene;
+    QGraphicsView *view;
+
+    QVBoxLayout *tabLayout;
+    void showHideFringe();
+    void showHideAstar();
+    void launchFullscreenDialog();
+    void endFullScreenDialog();
 };
 
-class AstarTab : public SearchTab {
-public:
-    AstarTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
-private:
-    void performSearch(const int scenario_index) override {
-        qDebug() << "performing Astar search for scenario " << scenario_index;
-    }
-};
-
-class FringeTab : public SearchTab {
-public:
-    FringeTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
-private:
-    void performSearch(const int scenario_index) override {
-        qDebug() << "performing Fringe search for scenario " << scenario_index;
-    }
-};
 
