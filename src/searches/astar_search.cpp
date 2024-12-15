@@ -2,7 +2,14 @@
 #include <iostream>
 
 
-void reconstruct_route() {
+std::vector<std::pair<int, int>> reconstruct_route(std::unordered_map<int, int>& cameFrom, int current_index, const int& map_size) {
+  std::vector<std::pair<int, int>> route;
+  while (current_index != -1) {
+    route.push_back(int2xy(current_index, map_size));
+    current_index = cameFrom[current_index];
+  }
+  std::reverse(route.begin(), route.end());
+  return route;
 }
 
 
@@ -28,32 +35,20 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
     
     int current_index = xy2int(current, map_size);
     double current_gscore = gscores[current_index];
-    // std::cout << "current gscore " << current_gscore << std::endl;
-
-    // std::cout << "current is " << current.x << "," << current.y << " with estimated cost: " << current.cost << "and gscores "<< current_gscore << std::endl;
 
     if (current == goal_node) {
       std::cout << "goal found with cost " << current_gscore << std::endl;
-      std::vector<int> route;
-      while (current_index != -1) {
-        route.push_back(current_index);
-        current_index = camefrom[current_index];
-      }
-      std::reverse(route.begin(), route.end());
-      return RetVal(current_gscore, pair_route(route, map_size));
+      return RetVal(current_gscore, reconstruct_route(camefrom, current_index, map_size));
     }
 
     std::vector<Node> children_list;
     children(current, citymap, children_list);
 
     for (auto child: children_list) {
-      // std::cout << "child " << child.x << "," << child.y << "with cost " << child.cost << std::endl;
       double tentative_gscore = current_gscore + child.cost;
       int child_index = xy2int(child, map_size);
       
       if (gscores.find(child_index) == gscores.end() || tentative_gscore < gscores[child_index]) {
-        
-      
         gscores[child_index] = tentative_gscore;
         camefrom[child_index] = current_index;
         child.cost = tentative_gscore + heuristics(child, goal_node);
