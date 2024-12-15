@@ -1,21 +1,21 @@
 #include "file_selection.h"
 
-FileSelection::FileSelection(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
-    QVBoxLayout *controls_layout = new QVBoxLayout;
+FileSelection::FileSelection(ScenarioService& i_scenario_service) : scenarioService(i_scenario_service) {
+    QVBoxLayout *controlsLayout = new QVBoxLayout;
 
-    scenario_file_label = new QLabel{tr("No Scenario File Chosen")};
-    controls_layout->addWidget(scenario_file_label);
-    scenario_file_button = new QPushButton{"Choose a &Scenario file"};
-    controls_layout->addWidget(scenario_file_button);
-    connect(scenario_file_button, &QPushButton::clicked, this, &FileSelection::chooseScenarioFile);
+    scenarioFileLabel = new QLabel{tr("No Scenario File Chosen")};
+    controlsLayout->addWidget(scenarioFileLabel);
+    scenarioFileButton = new QPushButton{"Choose a &Scenario file"};
+    controlsLayout->addWidget(scenarioFileButton);
+    connect(scenarioFileButton, &QPushButton::clicked, this, &FileSelection::chooseScenarioFile);
 
-    map_file_label = new QLabel{"No Map File Chosen"};
-    controls_layout->addWidget(map_file_label);
-    map_file_button = new QPushButton{"Choose a &Map file"};
-    controls_layout->addWidget(map_file_button);
-    connect(map_file_button, &QPushButton::clicked, this, &FileSelection::chooseMapFile);
+    mapFileLabel = new QLabel{"No Map File Chosen"};
+    controlsLayout->addWidget(mapFileLabel);
+    mapFileButton = new QPushButton{"Choose a &Map file"};
+    controlsLayout->addWidget(mapFileButton);
+    connect(mapFileButton, &QPushButton::clicked, this, &FileSelection::chooseMapFile);
 
-    setLayout(controls_layout);
+    setLayout(controlsLayout);
 }
 
 void FileSelection::chooseScenarioFile() {
@@ -29,11 +29,11 @@ void FileSelection::chooseScenarioFile() {
   }
 }
 
-void FileSelection::setScenarioFile(std::filesystem::path filepath) {
+void FileSelection::setScenarioFile(std::filesystem::path& filepath) {
   try {
-    // TODO: ok this logic is in the wrong place. ask scenario_service for strings to display.
-    if (scenario_service.setScenarioFile(filepath)) {
-      scenario_file_label->setText(filepath.filename().c_str());
+    // TODO: ok this logic is in the wrong place. ask scenarioService for strings to display.
+    if (scenarioService.setScenarioFile(filepath)) {
+      scenarioFileLabel->setText(filepath.filename().c_str());
       std::filesystem::path candidate = filepath.replace_extension();
       if (!candidate.empty() && std::filesystem::is_regular_file(candidate)) {
         setMapFile(candidate);
@@ -57,11 +57,11 @@ void FileSelection::chooseMapFile() {
   }
 }
 
-void FileSelection::setMapFile(std::filesystem::path filepath) {
+void FileSelection::setMapFile(std::filesystem::path& filepath) {
   try {
-    if (scenario_service.setMapFile(filepath)) {
+    if (scenarioService.setMapFile(filepath)) {
       // TODO: logic does not belong here. ask service for string to display.
-      map_file_label->setText(filepath.filename().c_str());
+      mapFileLabel->setText(filepath.filename().c_str());
       emit mapFileChanged();
     }
   } catch (const std::invalid_argument& e) {

@@ -4,7 +4,9 @@
 #include "map_scene.h"
 #include "fullscreenDialog.h"
 
-#include <QBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+// #include <QBoxLayout>
 #include <QComboBox>
 #include <QWidget>
 #include <QGraphicsItem>
@@ -12,17 +14,17 @@
 #include <QPushButton>
 
 
-class SearchTab : public QWidget {
+class VisualSearchTab : public QWidget {
     Q_OBJECT;
 
 public:
-    SearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service);
+    VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service);
 public slots:
     void mapChanged();
     void scenarioChanged(int scenario_index);
 private:
-    ScenarioService& scenario_service;
-    SearchService& search_service;
+    ScenarioService& scenarioService;
+    SearchService& searchService;
     
     QPushButton *runAstarButton;
     QPushButton *runFringeButton;
@@ -31,7 +33,7 @@ private:
     QPushButton *fullscreenButton;
     QWidget *controlsBox;
 
-    MapScene *map_scene;
+    MapScene *mapScene;
     QGraphicsView *view;
 
     QVBoxLayout *tabLayout;

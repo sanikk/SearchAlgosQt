@@ -2,9 +2,10 @@
 #include "scenario_controls.h"
 #include "scenario_service.h"
 #include "search_service.h"
-#include "search_tabs.h"
+#include "visual_search_tab.h"
 #include "bucket_tab.h"
 #include "file_selection.h"
+#include "testbed_tab.h"
 #include <QTabWidget>
 #include <QWidget>
 
@@ -13,15 +14,16 @@ class Ui: public QWidget {
     Q_OBJECT;
 
 public:
-    Ui(ScenarioService& scenario_service, SearchService& search_service);
+    Ui(ScenarioService& i_scenario_service, SearchService& i_searchService);
 
 private:
-    ScenarioControls *scenario_controls;
+    ScenarioControls *scenarioControls;
 
-    QTabWidget *tab_window;
+    QTabWidget *tabWindow;
 
-    FileSelection *file_selection_tab;
-    BucketTab *bucket_tab;
-    SearchTab *search_tab;
+    FileSelection *fileSelectionTab;
+    BucketTab *bucketTab;
+    VisualSearchTab *visualSearchTab;
+    TestBedTab *testBedTab;
 };
 

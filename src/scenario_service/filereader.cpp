@@ -5,7 +5,7 @@
 long MAX = std::numeric_limits<std::streamsize>::max();
 
 
-std::ifstream read_file(const std::filesystem::path &filename) {
+std::ifstream readFile(const std::filesystem::path &filename) {
   std::ifstream f(filename);
   if (!f) {
     std::ostringstream oss;
@@ -15,12 +15,12 @@ std::ifstream read_file(const std::filesystem::path &filename) {
   return f;
 }
 
-std::vector<std::string> read_map(const std::filesystem::path& filename,
+std::vector<std::string> readMap(const std::filesystem::path& filename,
                                   int skip_count = 4) {
   int width;
   std::ifstream f;
   
-  f = read_file(filename);
+  f = readFile(filename);
   std::string str;
 
   while (skip_count > 0 && getline(f, str)) {
@@ -41,12 +41,12 @@ std::vector<std::string> read_map(const std::filesystem::path& filename,
   return citymap;
 }
 
-std::tuple<std::vector<Scenario>, std::vector<int>> read_scenarios(const std::filesystem::path& filename) {
+std::tuple<std::vector<Scenario>, std::vector<int>> readScenarios(const std::filesystem::path& filename) {
 
   std::ifstream f;
   std::tuple<std::vector<Scenario>, std::vector<int>> returnable;
 
-  f = read_file(filename);
+  f = readFile(filename);
   std::string str;
   getline(f, str);
   if (f.peek() == 'v')

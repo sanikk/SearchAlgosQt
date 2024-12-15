@@ -1,4 +1,5 @@
-#include "searches_common.h"
+#include "shared_search_tools.h"
+//#include "searches_common.h"
 #include <gtest/gtest.h>
 #include <vector>
 #include <string>

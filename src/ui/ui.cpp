@@ -1,27 +1,29 @@
 #include "ui.h"
-#include "search_tabs.h"
+#include "scenario_controls.h"
+#include "testbed_tab.h"
 
-Ui::Ui(ScenarioService& scenario_service, SearchService& search_service) {
+Ui::Ui(ScenarioService& i_scenario_service, SearchService& i_search_service) : scenarioControls(new ScenarioControls{i_scenario_service}) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
 
-  scenario_controls = new ScenarioControls{scenario_service};
-  mainLayout->addWidget(scenario_controls);
-  tab_window = new QTabWidget{};
-  mainLayout->addWidget(tab_window);
+  mainLayout->addWidget(scenarioControls);
+  tabWindow = new QTabWidget{};
+  mainLayout->addWidget(tabWindow);
 
-  file_selection_tab = new FileSelection{scenario_service};
-  tab_window->addTab(file_selection_tab, "File Selection Tab");
-  bucket_tab = new BucketTab{scenario_service, search_service, *scenario_controls};
-  tab_window->addTab(bucket_tab, "Bucket Tab");
-  search_tab = new SearchTab{scenario_service, search_service};
-  tab_window->addTab(search_tab, "Search Tab");
-  
+  fileSelectionTab = new FileSelection{i_scenario_service};
+  tabWindow->addTab(fileSelectionTab, "File Selection Tab");
+  bucketTab = new BucketTab{i_scenario_service, i_search_service, *scenarioControls};
+  tabWindow->addTab(bucketTab, "Bucket Tab");
+  visualSearchTab = new VisualSearchTab{i_scenario_service, i_search_service};
+  tabWindow->addTab(visualSearchTab, "Search Tab");
+  testBedTab = new TestBedTab{i_scenario_service, i_search_service, *scenarioControls};
+  tabWindow->addTab(testBedTab, "TestBed Tab");
   setLayout(mainLayout);
   setWindowTitle("QT STARTER");
 
-  connect(file_selection_tab, &FileSelection::scenarioFileChanged, scenario_controls, &ScenarioControls::updateBucketBox);
-  connect(scenario_controls->bucket_box, &QComboBox::currentIndexChanged, bucket_tab, &BucketTab::updateTableScenarios);
-  connect(file_selection_tab, &FileSelection::mapFileChanged, search_tab, &SearchTab::mapChanged);
-  connect(scenario_controls, &ScenarioControls::scenarioChanged, search_tab, &SearchTab::scenarioChanged);
+  connect(fileSelectionTab, &FileSelection::scenarioFileChanged, scenarioControls, &ScenarioControls::updateBucketBox);
+  connect(scenarioControls->bucketBox, &QComboBox::currentIndexChanged, bucketTab, &BucketTab::updateTableScenarios);
+  connect(scenarioControls->bucketBox, &QComboBox::currentIndexChanged, testBedTab, &TestBedTab::updateTableScenarios);
+  connect(fileSelectionTab, &FileSelection::mapFileChanged, visualSearchTab, &VisualSearchTab::mapChanged);
+  connect(scenarioControls, &ScenarioControls::scenarioChanged, visualSearchTab, &VisualSearchTab::scenarioChanged);
 }
 
