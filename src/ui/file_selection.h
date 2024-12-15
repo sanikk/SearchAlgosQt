@@ -11,13 +11,13 @@
 class FileSelection : public QWidget {
     Q_OBJECT;
 private:
-    ScenarioService& scenario_service;
-    void setMapFile(std::filesystem::path filepath);
-    void setScenarioFile(std::filesystem::path filepath);
-    QLabel *scenario_file_label;
-    QPushButton *scenario_file_button;
-    QLabel *map_file_label;
-    QPushButton *map_file_button;
+    ScenarioService& scenarioService;
+    void setMapFile(std::filesystem::path& filepath);
+    void setScenarioFile(std::filesystem::path& filepath);
+    QLabel *scenarioFileLabel;
+    QPushButton *scenarioFileButton;
+    QLabel *mapFileLabel;
+    QPushButton *mapFileButton;
 public:
     FileSelection(ScenarioService& i_scenario_service);
 private slots:

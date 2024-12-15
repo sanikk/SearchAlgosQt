@@ -1,11 +1,13 @@
 #pragma once
 #include "models.h"
+
+#include <string>
+
 #include <QGraphicsScene>
 #include <QBitmap>
 #include <QImage>
 #include <QPixmap>
 #include <QGraphicsItem>
-#include <string>
 #include <QPainter>
 #include <QGraphicsPixmapItem>
 #include <QPoint>
@@ -37,10 +39,10 @@ public:
     QBitmap get_bitmap(const std::vector<std::string>& citymap);
     int map_size;
 
-    QPixmap start_goal_pixmap;
-    QGraphicsPixmapItem *start_goal_item;
-    PaintableLayer *astar_layer;
-    PaintableLayer *fringe_layer;
+    QPixmap startGoalPixmap;
+    QGraphicsPixmapItem *startGoalItem;
+    PaintableLayer *astarLayer;
+    PaintableLayer *fringeLayer;
 public slots:
     int showHideFringe();
     int showHideAstar();

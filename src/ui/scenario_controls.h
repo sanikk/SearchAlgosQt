@@ -8,13 +8,13 @@ class ScenarioControls : public QWidget {
 public:
     ScenarioControls(ScenarioService& i_scenario_service);
     // TODO: move these to private:
-    QComboBox *bucket_box;
-    QComboBox *scenario_box;
+    QComboBox *bucketBox;
+    QComboBox *scenarioBox;
     // TODO: remove these functions, handle with signals:
-    int get_bucket_index();
-    int get_scenario_index();
+    int get_bucketIndex();
+    int get_scenarioIndex();
 private:
-    ScenarioService& scenario_service;
+    ScenarioService& scenarioService;
     // QComboBox *bucket_box;
     // QComboBox *scenario_box;
 public slots:

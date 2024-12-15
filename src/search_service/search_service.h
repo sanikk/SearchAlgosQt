@@ -3,11 +3,11 @@
 #include "shared_search_tools.h"
 #include "scenario_service.h"
 // TODO: these are all kinds of fucked up:
-#include "searches/astar_search.h"
-#include "searches/fringe_search.h"
-#include "searches/fringe_unopt.h"
-#include "searches/fringe_with_dll.h"
-
+// #include "searches/astar_search.h"
+// #include "searches/fringe_search.h"
+// #include "searches/fringe_unopt.h"
+// #include "searches/fringe_with_dll.h"
+#include "searches.h"
 
 class SearchService {
 public:

@@ -7,11 +7,11 @@
 #include <QTableWidget>
 #include <QPushButton>
 
-class BucketTab : public QWidget {
+class TestBedTab : public QWidget {
     Q_OBJECT;
 
 public:
-    BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
+    TestBedTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
 public slots:
     void updateTableScenarios(int index);
     void runAstar();
@@ -28,5 +28,5 @@ private:
     QWidget *runBox;
     QPushButton *astarButton;
     QPushButton *fringeButton;
-    void load_retvals_to_resultTable(std::vector<RetVal> retvals, int startColumn);
+    void load_retvals_to_resultTable(std::vector<RetVal> retvals, int start_column);
 };

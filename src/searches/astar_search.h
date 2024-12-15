@@ -1,3 +1,4 @@
+#pragma once
 #include "models.h"
 #include "tools.h"
 #include "shared_search_tools.h"

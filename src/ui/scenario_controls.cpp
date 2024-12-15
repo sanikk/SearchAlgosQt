@@ -1,53 +1,53 @@
 #include "scenario_controls.h"
 
-ScenarioControls::ScenarioControls(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
+ScenarioControls::ScenarioControls(ScenarioService& i_scenario_service) : scenarioService(i_scenario_service) {
   QVBoxLayout *controlsLayout = new QVBoxLayout{};
-  bucket_box = new QComboBox{};
-  controlsLayout->addWidget(bucket_box);
-  scenario_box = new QComboBox{};
-  controlsLayout->addWidget(scenario_box);
+  bucketBox = new QComboBox{};
+  controlsLayout->addWidget(bucketBox);
+  scenarioBox = new QComboBox{};
+  controlsLayout->addWidget(scenarioBox);
   setLayout(controlsLayout);
 
-  connect(bucket_box, &QComboBox::currentIndexChanged, this, &ScenarioControls::updateScenarioBox);
-  connect(scenario_box, &QComboBox::currentIndexChanged, this, &ScenarioControls::scenarioSelected);
+  connect(bucketBox, &QComboBox::currentIndexChanged, this, &ScenarioControls::updateScenarioBox);
+  connect(scenarioBox, &QComboBox::currentIndexChanged, this, &ScenarioControls::scenarioSelected);
 }
 
 void ScenarioControls::updateBucketBox() {
-  bucket_box->clear();
+  bucketBox->clear();
   QStringList bucket_list;
-  auto ret_value = scenario_service.get_bucket_list();
-  for (int &bucket : scenario_service.get_bucket_list()) {
+  auto ret_value = scenarioService.get_bucketList();
+  for (int &bucket : scenarioService.get_bucketList()) {
     bucket_list.append(QString("%1: %2-%3").arg(bucket).arg((bucket)*10).arg((bucket + 1) * 10 - 1));
   }
-  bucket_box->addItems(bucket_list);
+  bucketBox->addItems(bucket_list);
 }
 
 void ScenarioControls::updateScenarioBox(int index) {
-  scenario_box->clear();
+  scenarioBox->clear();
   if (index == -1) {
     return;
   }
   QStringList scenario_list;
-  auto bucket_scenarios = scenario_service.get_bucket_scenarios(index);
+  auto bucket_scenarios = scenarioService.get_bucketScenarios(index);
   for (Scenario &scen : bucket_scenarios) {
     scenario_list.append(QString("%1: ideal_cost %2, (%3,%4) => (%5,%6)").arg(scen.id).arg(scen.cost).arg(scen.start_x).arg(scen.start_y).arg(scen.goal_x).arg(scen.goal_y));
   }
-  scenario_box->addItems(scenario_list);
+  scenarioBox->addItems(scenario_list);
 }
 
-int ScenarioControls::get_bucket_index() {
+int ScenarioControls::get_bucketIndex() {
   // TODO: make this obsolete and remove it
-  return bucket_box->currentIndex();
+  return bucketBox->currentIndex();
 }
 
-int ScenarioControls::get_scenario_index() {
+int ScenarioControls::get_scenarioIndex() {
   // TODO: make this obsolete and remove it
-  return scenario_box->currentIndex();
+  return scenarioBox->currentIndex();
 }
 
 void ScenarioControls::scenarioSelected(int index) {
   if (index == -1) {
     return;
   }
-  scenarioChanged(bucket_box->currentIndex() * 10 + index);
+  scenarioChanged(bucketBox->currentIndex() * 10 + index);
 }

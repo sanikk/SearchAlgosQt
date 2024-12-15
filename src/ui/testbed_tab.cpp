@@ -1,7 +1,7 @@
-#include "bucket_tab.h"
+#include "testbed_tab.h"
 
 
-BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls) 
+TestBedTab::TestBedTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls) 
   : scenarioService(i_scenario_service), searchService(i_search_service), scenarioControls(i_scenario_controls) {
   QVBoxLayout *layout = new QVBoxLayout{};
   runBox = get_runBox();
@@ -10,11 +10,11 @@ BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_searc
   layout->addWidget(resultTable);
   setLayout(layout);
 
-  connect(astarButton, &QPushButton::clicked, this, &BucketTab::runAstar);
-  connect(fringeButton, &QPushButton::clicked, this, &BucketTab::runFringe);
+  connect(astarButton, &QPushButton::clicked, this, &TestBedTab::runAstar);
+  connect(fringeButton, &QPushButton::clicked, this, &TestBedTab::runFringe);
 }
 
-QTableWidget* BucketTab::get_resultTable() {
+QTableWidget* TestBedTab::get_resultTable() {
   QTableWidget *table = new QTableWidget{this};
   table->setRowCount(10);
   QStringList labels({
@@ -30,7 +30,7 @@ QTableWidget* BucketTab::get_resultTable() {
   return table; 
 }
 
-void BucketTab::runAstar() {
+void TestBedTab::runAstar() {
   // qDebug() << "running astar";
   try {
     int bucket = scenarioControls.get_bucketIndex();
@@ -44,8 +44,7 @@ void BucketTab::runAstar() {
   }
 }
 
-void BucketTab::runFringe() {
-  // qDebug() << "running fringe";
+void TestBedTab::runFringe() {
   try {
     int bucket = scenarioControls.get_bucketIndex();
     if (bucket == -1) {
@@ -58,7 +57,7 @@ void BucketTab::runFringe() {
   }
 }
 
-QWidget* BucketTab::get_runBox() {
+QWidget* TestBedTab::get_runBox() {
   QWidget *box = new QWidget{this};
   QHBoxLayout *boxLayout = new QHBoxLayout{};
   astarButton = new QPushButton{"Run A*"};
@@ -70,15 +69,15 @@ QWidget* BucketTab::get_runBox() {
 }
 
 
-void BucketTab::updateTableScenarios(int index) {
+void TestBedTab::updateTableScenarios(int index) {
   if (index==-1) {
     return;
   }
   resultTable->clear();
   try {
-    auto scenario_list = scenarioService.get_bucketScenarios(index);
-    for (int i=0; i < scenario_list.size(); i++) {
-      Scenario scenario = scenario_list[i];
+    std::vector<Scenario> scenarioList = scenarioService.get_bucketScenarios(index);
+    for (int i=0; i < scenarioList.size(); i++) {
+      Scenario scenario = scenarioList[i];
         QTableWidgetItem *id = new QTableWidgetItem{QString("%1").arg(scenario.id)};
         QTableWidgetItem *start = new QTableWidgetItem{QString("(%1 , %2)").arg(scenario.start_x).arg(scenario.start_y)};
         QTableWidgetItem *goal = new QTableWidgetItem{QString("(%1, %2)").arg(scenario.goal_x).arg(scenario.goal_y)};
@@ -93,7 +92,7 @@ void BucketTab::updateTableScenarios(int index) {
   }
 }
 
-void BucketTab::load_retvals_to_resultTable(std::vector<RetVal> retvals, int startColumn) {
+void TestBedTab::load_retvals_to_resultTable(std::vector<RetVal> retvals, int startColumn) {
   // for (RetVal ret : retvals) {
   for (int i=0; i < retvals.size(); i++) {
     if (retvals[i].cost.has_value()) {
