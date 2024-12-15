@@ -1,5 +1,6 @@
-#include "heuristics.h"
-#include "children.h"
+#include "shared_search_tools.h"
+//#include "heuristics.h"
+//#include "children.h"
 #include <gtest/gtest.h>
 
 namespace {

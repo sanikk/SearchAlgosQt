@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+
 struct Link {
   int value;
   Link* prev;

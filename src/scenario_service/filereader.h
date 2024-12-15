@@ -8,5 +8,5 @@
 #include <limits>
 
 
-std::vector<std::string> read_map(const std::filesystem::path &filename, int skip_count);
-std::tuple<std::vector<Scenario>, std::vector<int>> read_scenarios(const std::filesystem::path &filename);
+std::vector<std::string> readMap(const std::filesystem::path& filename, int skip_count);
+std::tuple<std::vector<Scenario>, std::vector<int>> readScenarios(const std::filesystem::path& filename);

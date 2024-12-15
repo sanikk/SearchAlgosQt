@@ -1,6 +1,6 @@
 #include "models.h"
 #include "tools.h"
-#include "common/searches_common.h"
+#include "shared_search_tools.h"
 #include <vector>
 #include <string>
 #include <queue>
