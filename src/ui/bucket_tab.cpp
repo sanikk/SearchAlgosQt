@@ -101,7 +101,7 @@ void BucketTab::load_retvals_to_resultTable(std::vector<RetVal> retvals, int sta
       resultTable->setItem(i, startColumn , cost);
     }
     if (retvals[i].timing.has_value()) {
-      QTableWidgetItem *timing = new QTableWidgetItem{QString("%1").arg(retvals[i].timing.value())};
+      QTableWidgetItem *timing = new QTableWidgetItem{QString("%1").arg(retvals[i].timing.value().count())};
       resultTable->setItem(i, startColumn + 1, timing);
     }
   }

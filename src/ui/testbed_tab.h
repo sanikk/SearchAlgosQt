@@ -14,8 +14,8 @@ public:
     TestBedTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
 public slots:
     void updateTableScenarios(int index);
-    void runAstar();
-    void runFringe();
+    void runTest();
+    void runBase();
 
 private:
     ScenarioService& scenarioService;
@@ -26,7 +26,7 @@ private:
     QTableWidget* get_resultTable();
     QWidget* get_runBox();
     QWidget *runBox;
-    QPushButton *astarButton;
-    QPushButton *fringeButton;
+    QPushButton *testButton;
+    QPushButton *baseButton;
     void load_retvals_to_resultTable(std::vector<RetVal> retvals, int start_column);
 };

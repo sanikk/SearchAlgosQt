@@ -1,4 +1,6 @@
 #include "search_service.h"
+#include "fringe_with_dll.h"
+#include <chrono>
 #include <iostream>
 
 SearchService::SearchService(
@@ -25,9 +27,12 @@ void printRoute(const std::vector<int>& route, const int map_size) {
 void SearchService::runAstar(int index) {
   Scenario scenario = loadScenario(index);
   const std::vector<std::string>& citymap = scenarioService.get_map();
-  RetVal retval = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
-  if (retval.found) {
-    printRoute(retval.route);
+  auto start = std::chrono::high_resolution_clock::now();
+  RetVal ret = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
+  auto end = std::chrono::high_resolution_clock::now();
+  ret.timing = end - start; 
+  if (ret.found) {
+    printRoute(ret.route);
   }
 }
 
@@ -38,11 +43,14 @@ void SearchService::runAstar(int bucket, int index) {
 void SearchService::runFringe(int index) {
   Scenario scenario = loadScenario(index);
   const std::vector<std::string>& citymap = scenarioService.get_map();
-  RetVal retval = fringe_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
+  auto start = std::chrono::high_resolution_clock::now();
+  RetVal ret = fringe_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
+    auto end = std::chrono::high_resolution_clock::now();
+    ret.timing = end - start; 
 
-  if (retval.cost.has_value()) {
-    std::cout << retval.cost.value() << std::endl;
-    printRoute(retval.route);
+  if (ret.cost.has_value()) {
+    std::cout << ret.cost.value() << std::endl;
+    printRoute(ret.route);
   }
 }
 
@@ -69,7 +77,10 @@ std::vector<RetVal> SearchService::runAstarForBucket(int bucket) {
   std::vector<RetVal> retvals;
   std::vector<Scenario> scenario_list = scenarioService.get_bucketScenarios(bucket);
   for (Scenario& scenario : scenario_list) {
+    auto start = std::chrono::high_resolution_clock::now();
     RetVal ret = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map());
+    auto end = std::chrono::high_resolution_clock::now();
+    ret.timing = end - start; 
     retvals.push_back(ret);
   }
   return retvals;
@@ -79,7 +90,23 @@ std::vector<RetVal> SearchService::runFringeForBucket(int bucket) {
   std::vector<RetVal> retvals;
   std::vector<Scenario> scenario_list = scenarioService.get_bucketScenarios(bucket);
   for (Scenario& scenario : scenario_list) {
+    auto start = std::chrono::high_resolution_clock::now();
     RetVal ret = fringe_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map());
+    auto end = std::chrono::high_resolution_clock::now();
+    ret.timing = end - start; 
+    retvals.push_back(ret);
+  }
+  return retvals;
+}
+
+std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
+  std::vector<RetVal> retvals;
+  std::vector<Scenario> scenario_list = scenarioService.get_bucketScenarios(bucket);
+  for (Scenario& scenario : scenario_list) {
+    auto start = std::chrono::high_resolution_clock::now();
+    RetVal ret = fringe_with_dll(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map());
+    auto end = std::chrono::high_resolution_clock::now();
+    ret.timing = end - start; 
     retvals.push_back(ret);
   }
   return retvals;

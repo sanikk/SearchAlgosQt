@@ -10,8 +10,8 @@ TestBedTab::TestBedTab(ScenarioService& i_scenario_service, SearchService& i_sea
   layout->addWidget(resultTable);
   setLayout(layout);
 
-  connect(astarButton, &QPushButton::clicked, this, &TestBedTab::runAstar);
-  connect(fringeButton, &QPushButton::clicked, this, &TestBedTab::runFringe);
+  connect(testButton, &QPushButton::clicked, this, &TestBedTab::runTest);
+  connect(baseButton, &QPushButton::clicked, this, &TestBedTab::runBase);
 }
 
 QTableWidget* TestBedTab::get_resultTable() {
@@ -21,33 +21,34 @@ QTableWidget* TestBedTab::get_resultTable() {
     // scenario columns
     "id", "start", "goal", "cost",
     // A* columns
-    "A* cost", "time",
+    "Test cost", "time",
     // fringe columns
-    "Fringe cost", "time"
+    "Base cost", "time"
   });
   table->setColumnCount(labels.size());
   table->setHorizontalHeaderLabels(labels);
   return table; 
 }
 
-void TestBedTab::runAstar() {
+void TestBedTab::runTest() {
   // qDebug() << "running astar";
   try {
     int bucket = scenarioControls.get_bucketIndex();
     if (bucket == -1) {
       return;
     }
-    std::vector<RetVal> retvals = searchService.runAstarForBucket(bucket);
+    std::vector<RetVal> retvals = searchService.runTestVersionForBucket(bucket);
     load_retvals_to_resultTable(retvals, 4);
   } catch (std::runtime_error &e) {
     qDebug() << e.what();
   }
 }
 
-void TestBedTab::runFringe() {
+void TestBedTab::runBase() {
   try {
     int bucket = scenarioControls.get_bucketIndex();
     if (bucket == -1) {
+      qDebug() << "scenarioControl.get_bucketIndex return -1";
       return;
     }
     std::vector<RetVal> retvals = searchService.runFringeForBucket(bucket);
@@ -60,10 +61,10 @@ void TestBedTab::runFringe() {
 QWidget* TestBedTab::get_runBox() {
   QWidget *box = new QWidget{this};
   QHBoxLayout *boxLayout = new QHBoxLayout{};
-  astarButton = new QPushButton{"Run A*"};
-  boxLayout->addWidget(astarButton);
-  fringeButton = new QPushButton{"Run Fringe"};
-  boxLayout->addWidget(fringeButton);
+  testButton = new QPushButton{"Run Test Version"};
+  boxLayout->addWidget(testButton);
+  baseButton = new QPushButton{"Run Base Version"};
+  boxLayout->addWidget(baseButton);
   box->setLayout(boxLayout);
   return box;
 }
@@ -100,7 +101,7 @@ void TestBedTab::load_retvals_to_resultTable(std::vector<RetVal> retvals, int st
       resultTable->setItem(i, startColumn , cost);
     }
     if (retvals[i].timing.has_value()) {
-      QTableWidgetItem *timing = new QTableWidgetItem{QString("%1").arg(retvals[i].timing.value())};
+      QTableWidgetItem *timing = new QTableWidgetItem{QString("%1").arg(retvals[i].timing.value().count())};
       resultTable->setItem(i, startColumn + 1, timing);
     }
   }

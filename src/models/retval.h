@@ -2,11 +2,13 @@
 #include <vector>
 #include <sstream> 
 #include <optional>
+#include <chrono>
 
 struct RetVal {
   bool found;
   std::optional<double> cost;
-  std::optional<double> timing;
+  std::optional<std::chrono::duration<double>> timing;
+  //std::optional<double> timing;
   std::vector<std::pair<int, int>> route;
 
   RetVal(bool i_found=false) : found(i_found), route(std::vector<std::pair<int, int>>()) {}
@@ -21,7 +23,7 @@ struct RetVal {
       oss << ", cost:" << obj.cost.value();
     }
     if (obj.timing.has_value()) {
-      oss << ", timing:" << obj.timing.value();
+      oss << ", timing:" << obj.timing.value().count();
     }
     if (!obj.route.empty()) {
       oss << "\nRoute: ";
