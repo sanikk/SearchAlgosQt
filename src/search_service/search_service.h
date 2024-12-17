@@ -3,6 +3,7 @@
 #include "shared_search_tools.h"
 #include "scenario_service.h"
 #include "searches.h"
+#include <chrono>
 
 class SearchService {
 public:

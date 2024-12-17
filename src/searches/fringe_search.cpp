@@ -17,6 +17,8 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
     
     std::unordered_map<int, std::tuple<double, int>> cache;
     //                              cost_here, parent
+    //
+    // std::unordered_map<int, std::tuple<double, double, int>> cache;
     cache[xy2int(startx, starty, map_size)] = {0.0, -1};
       
     bool found = false;
