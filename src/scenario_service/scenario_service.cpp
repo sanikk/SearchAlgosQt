@@ -56,7 +56,7 @@ std::vector<int> ScenarioService::get_bucketList() {
 
 std::vector<Scenario> ScenarioService::get_bucketScenarios(int bucket) {
   int start_index = bucket * 10;
-  int end_index = bucket * 10 + 9;
+  int end_index = bucket * 10 + 10;
   if (start_index < 0 || end_index >= scenarios.size()) {
     std::ostringstream oss;
     oss << "parameter bucket was " << bucket << ", start_index " << start_index << ", end_index " << end_index << std::endl;
