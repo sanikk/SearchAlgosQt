@@ -3,13 +3,15 @@
 
 
 
-LinkedMapPairs::LinkedMapPairs(int start) 
+LinkedMapPairs::LinkedMapPairs(int start, int map_size) 
 {
     LinkNode* start_node = new LinkNode{start};
     fringe = {{start, new LinkNode{start}}};
+    fringe.reserve(map_size * map_size);
     auto it = fringe.begin();
-    head = fringe.begin();
-    tail = fringe.begin();
+    head = it;
+    tail = it;;
+    end = fringe.end();
 }
 
 
@@ -26,10 +28,12 @@ void LinkedMapPairs::add_tail(int value) {
 
 }
 
-void LinkedMapPairs::remove_current(std::unordered_map<int, LinkNode*>::iterator it) {
-    cut_links(it);
-    delete it->second;
-    fringe.erase(it);
+void LinkedMapPairs::remove_current(std::unordered_map<int, LinkNode*>::iterator& fringe_it) {
+    std::unordered_map<int, LinkNode*>::iterator next_it = fringe_it->second->right;
+    cut_links(fringe_it);
+    delete fringe_it->second;
+    fringe.erase(fringe_it);
+    fringe_it = next_it;
 }
 
 void LinkedMapPairs::cut_links(int value) {
