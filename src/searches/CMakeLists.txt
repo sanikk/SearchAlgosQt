@@ -5,6 +5,7 @@ add_library(searches STATIC
     # dll.cpp dll.h
     # fringe_with_dll.cpp fringe_with_dll.h
     fringe_dll_version.cpp fringe_dll_version.h
+    linked_map_pairs.cpp linked_map_pairs.h
 )
 # from my experiments limiting the visibility of searches to search_service.
 # see also the src/search_service/CMakeLists.txt on how to make this work.
