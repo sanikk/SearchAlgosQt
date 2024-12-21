@@ -4,7 +4,10 @@ project(SearchAlgoProject)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
+# debug
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3"
+)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
@@ -23,5 +26,6 @@ target_link_libraries(searchalgos PRIVATE models tools shared_search_tools Qt6::
 set(CMAKE_AUTOMOC ON)
 
 enable_testing()
+add_subdirectory(tests/utils)
 add_subdirectory(tests)
 
