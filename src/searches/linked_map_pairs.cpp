@@ -1,31 +1,44 @@
 #include "linked_map_pairs.h"
 #include <iostream>
+#include <stdexcept>
 
+// LinkedMapPairs::LinkedMapPairs(int start, int map_size) {
+//     LinkNode* start_node = new LinkNode{start};
+//     fringe = {{start, new LinkNode{start}}};
+//     fringe.reserve(map_size * map_size);
+//     auto it = fringe.begin();
+//     it->second->left = fringe.end();
+//     it->second->right = fringe.end();
+//     head = it;
+//     tail = it;
+// }
 
-
-LinkedMapPairs::LinkedMapPairs(int start, int map_size) 
-{
-    LinkNode* start_node = new LinkNode{start};
-    fringe = {{start, new LinkNode{start}}};
+LinkedMapPairs::LinkedMapPairs(int start, int map_size) {
+    fringe = {};
     fringe.reserve(map_size * map_size);
+    add_first(start);
+
     auto it = fringe.begin();
     head = it;
-    tail = it;;
-    end = fringe.end();
+    tail = it;
 }
 
+void LinkedMapPairs::add_first(int value) {
+    if (fringe.begin() != fringe.end()) {
+        throw std::runtime_error("LinkedMapPairs.add_first: fringe was not empty!");
+    }
+    fringe.emplace(value, new LinkNode(value, fringe.end(), fringe.end()));
+}
 
 void LinkedMapPairs::add_tail(int value) {
     auto it = fringe.find(value);
     if (it != fringe.end()) {
         cut_links(it);
-        delete it->second;
-        fringe.erase(it);
+    } else {
+        it = fringe.emplace(value, new LinkNode{value, tail, fringe.end()}).first;
     }
-    auto new_it = fringe.emplace(value, new LinkNode{value, tail});
-    tail->second->right = new_it.first;
-    tail = new_it.first;
-
+    tail->second->right = it;
+    tail = it;
 }
 
 void LinkedMapPairs::remove_current(std::unordered_map<int, LinkNode*>::iterator& fringe_it) {
@@ -34,10 +47,6 @@ void LinkedMapPairs::remove_current(std::unordered_map<int, LinkNode*>::iterator
     delete fringe_it->second;
     fringe.erase(fringe_it);
     fringe_it = next_it;
-}
-
-void LinkedMapPairs::cut_links(int value) {
-    
 }
 
 void LinkedMapPairs::cut_links(std::unordered_map<int, LinkNode*>::iterator it) {
@@ -61,4 +70,6 @@ void LinkedMapPairs::cut_links(std::unordered_map<int, LinkNode*>::iterator it) 
     }
 }
 
+std::unordered_map<int, LinkNode*>::iterator LinkedMapPairs::begin() { return fringe.begin(); }
 
+std::unordered_map<int, LinkNode*>::iterator LinkedMapPairs::end() { return fringe.end(); }
