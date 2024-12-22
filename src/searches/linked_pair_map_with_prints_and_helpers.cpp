@@ -29,7 +29,7 @@ void LinkedPairMap::add_tail(const int& value) {
         std::cout << "tail is now iterator with value: " << tail->first << std::endl;
         std::cout << "iterator to the left of tail has value: " << tail->second->left->first << std::endl;
         std::cout << "and that iterators right points at node with value: " << tail->second->left->second->right->first << std::endl;
-    } else if (work_it != tail) {
+    } else {
         std::cout << "trying to replace old node with value " << value << std::endl;
         std::unordered_map<int, LinkNode*>::iterator& left = work_it->second->left;
         std::unordered_map<int, LinkNode*>::iterator& right = work_it->second->right;
@@ -42,6 +42,10 @@ void LinkedPairMap::add_tail(const int& value) {
             std::cout << "right " << work_it->second->right->first
                       << " has left link pointing to node with value: " << work_it->second->right->second->left->first << std::endl;
 
+            tail->second->right = work_it;
+            left = tail;
+            right = fringe.end();
+            tail = work_it;
             std::cout << "tail has value: " << tail->first << std::endl;
             std::cout << "tail left points at node with value: " << tail->second->left->first << std::endl;
             std::cout << "that node has right pointing at node with value: " << tail->second->left->second->right->first << std::endl;
@@ -53,75 +57,36 @@ void LinkedPairMap::add_tail(const int& value) {
             std::cout << "new head left points now at fringe.end(): " << bool(head->second->left == fringe.end()) << std::endl;
             std::cout << "new head has value: " << head->first << std::endl;
 
+            tail->second->right = work_it;
+            left = tail;
+            right = fringe.end();
+            tail = work_it;
+
             std::cout << "tail has value: " << tail->first << std::endl;
             std::cout << "tail left points at node with value: " << tail->second->left->first << std::endl;
             std::cout << "that node has right pointing at node with value: " << tail->second->left->second->right->first << std::endl;
             std::cout << "tail right points at fringe.end(): " << (tail->second->right == fringe.end()) << std::endl;
+        } else if (work_it->second->left != fringe.end()) {
+            std::cout << "only left exists so this is tail. no ops needed." << std::endl;
+            if (tail != work_it) {
+                throw std::runtime_error("tail was not set right!");
+            }
         } else {
-            throw std::runtime_error("work_it should be tail, but it's not?");
-        }
-        tail->second->right = work_it;
-        left = tail;
-        right = fringe.end();
-        tail = work_it;
-    }
-    std::cout << std::endl << std::endl;
-}
-
-void LinkedPairMap::remove_current(std::unordered_map<int, LinkNode*>::iterator& fringe_it) {
-    if (fringe_it == fringe.end()) {
-        throw std::runtime_error("fringe_it equals fringe.end(). this should not happen");
-    }
-    auto* current_node = fringe_it->second;
-    auto right = current_node->right;
-
-    // std::unordered_map<int, LinkNode*>::iterator& left = fringe_it->second->left;
-    // std::unordered_map<int, LinkNode*>::iterator& right = fringe_it->second->right;
-    if (current_node->left != fringe.end() && current_node->right != fringe.end()) {
-        std::cout << "fringe_it was in the middle! removing that." << std::endl;
-
-    } else if (current_node->right != fringe.end()) {
-        std::cout << "fringe_it was head! removing that." << std::endl;
-        current_node->right->second->left = fringe.end();
-        head = current_node->right;
-    } else if (current_node->left != fringe.end()) {
-        std::cout << "fringe_it was tail! removing that." << std::endl;
-        current_node->left->second->right = fringe.end();
-        tail = current_node->left;
-        std::cout << "tail value is now: " << tail->first << std::endl;
-        std::cout << "tail right equals fringe.end(): " << (tail->second->right == fringe.end()) << std::endl;
-    } else {
-        if (fringe.size() != 1) {
-            throw std::runtime_error("remove current: node was already loose?");
+            std::cout << "neither exists" << std::endl;
+            throw std::runtime_error("add_tail: trying to readd the only node");
         }
     }
-    fringe.erase(fringe_it);
-    std::cout << "before delete." << std::endl;
-    delete current_node;
-    std::cout << "after delete." << std::endl;
-    fringe_it = right;
-    std::cout << "after resetting fringe_it." << std::endl;
+    std::cout << "fringe size: " << fringe.size() << std::endl << std::endl;
 }
 
+void LinkedPairMap::remove_current(std::unordered_map<int, LinkNode*>::iterator& fringe_it) {}
 int main(int argc, char* argv[]) {
     auto fringe = LinkedPairMap(111, 512);
-    // std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.begin();
-    // fringe.add_tail(222);
-    // fringe.add_tail(222);
-    // fringe.add_tail(333);
-    // fringe.add_tail(222);
-    // fringe.add_tail(111);
-    for (int i = 2; i < 6; i++) {
-        fringe.add_tail(i * 111);
-    }
-    std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.fringe.find(555);
-    fringe.remove_current(fringe_it);
-    if (fringe_it != fringe.end()) {
-        std::cout << "after removal fringe_it.value: " << fringe_it->first << std::endl;
-    } else {
-        std::cout << "fringe it equal to fringe.end(): " << (fringe_it == fringe.end()) << std::endl;
-    }
-    std::cout << "fringe head.value: " << fringe.head->first << ", tail.value: " << fringe.tail->first << ", size: " << fringe.fringe.size() << std::endl;
-    // fringe.remove_current(fringe.fringe.find(111));
+    std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.begin();
+    fringe.add_tail(222);
+    fringe.add_tail(222);
+    fringe.add_tail(333);
+    fringe.add_tail(222);
+    fringe.add_tail(111);
     return 0;
 }
