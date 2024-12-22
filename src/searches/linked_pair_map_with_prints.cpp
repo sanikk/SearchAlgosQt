@@ -94,6 +94,8 @@ void LinkedPairMap::remove_current(std::unordered_map<int, LinkNode*>::iterator&
         if (fringe.size() != 1) {
             throw std::runtime_error("remove current: node was already loose?");
         }
+        head = current_node->right;
+        tail = current_node->left;
     }
     fringe.erase(fringe_it);
     std::cout << "before delete." << std::endl;
@@ -111,17 +113,20 @@ int main(int argc, char* argv[]) {
     // fringe.add_tail(333);
     // fringe.add_tail(222);
     // fringe.add_tail(111);
-    for (int i = 2; i < 6; i++) {
-        fringe.add_tail(i * 111);
-    }
-    std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.fringe.find(555);
+    // for (int i = 2; i < 6; i++) {
+    //     fringe.add_tail(i * 111);
+    // }
+    std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.fringe.find(111);
     fringe.remove_current(fringe_it);
     if (fringe_it != fringe.end()) {
         std::cout << "after removal fringe_it.value: " << fringe_it->first << std::endl;
     } else {
         std::cout << "fringe it equal to fringe.end(): " << (fringe_it == fringe.end()) << std::endl;
     }
-    std::cout << "fringe head.value: " << fringe.head->first << ", tail.value: " << fringe.tail->first << ", size: " << fringe.fringe.size() << std::endl;
+    // std::cout << "fringe head.value: " << fringe.head->first << ", tail.value: " << fringe.tail->first << ", size: " << fringe.fringe.size() << std::endl;
     // fringe.remove_current(fringe.fringe.find(111));
+    std::cout << "fringe head equals fringe.end(): " << (fringe.head == fringe.end()) << std::endl;
+    std::cout << "fringe.tail equals fringe.end(): " << (fringe.tail == fringe.end()) << std::endl;
+    std::cout << "fringe size: " << fringe.fringe.size() << std::endl;
     return 0;
 }

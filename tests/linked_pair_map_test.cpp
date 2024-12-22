@@ -20,37 +20,47 @@ TEST(LinkedPairMap, AddTailNewValueWorks) {
     ASSERT_EQ(fringe.fringe.size(), 3);
 }
 
-TEST(LinkedPairMap, AddTailSameValueWorks) {
+TEST(LinkedPairMap, ReAddOnlyValueWorks) {
     auto fringe = LinkedPairMap(111, 512);
     // readd only value
     fringe.add_tail(111);
     ASSERT_EQ(fringe.head->first, 111);
     ASSERT_EQ(fringe.tail->first, 111);
     ASSERT_EQ(fringe.fringe.size(), 1);
-
-    // this is adding new value, not same
+}
+TEST(LinkedPairMap, ReAddHeadValueWorks) {
+    auto fringe = LinkedPairMap(111, 512);
     fringe.add_tail(222);
-    ASSERT_EQ(fringe.head->first, 111);
-    ASSERT_EQ(fringe.tail->first, 222);
-    ASSERT_EQ(fringe.fringe.size(), 2);
-    // readd head
     fringe.add_tail(111);
     ASSERT_EQ(fringe.head->first, 222);
     ASSERT_EQ(fringe.tail->first, 111);
     ASSERT_EQ(fringe.fringe.size(), 2);
+    fringe.add_tail(222);
+    ASSERT_EQ(fringe.head->first, 111);
+    ASSERT_EQ(fringe.tail->first, 222);
+    ASSERT_EQ(fringe.fringe.size(), 2);
+}
+TEST(LinkedPairMap, ReAddMiddleValuesWorks) {
+    auto fringe = LinkedPairMap(111, 512);
+    fringe.add_tail(222);
+    fringe.add_tail(333);
+    fringe.add_tail(444);
+    ASSERT_EQ(fringe.head->first, 111);
+    ASSERT_EQ(fringe.tail->first, 444);
+    ASSERT_EQ(fringe.fringe.size(), 4);
     // readd tail when it's not head too
-    fringe.add_tail(111);
-    ASSERT_EQ(fringe.head->first, 222);
-    ASSERT_EQ(fringe.tail->first, 111);
-    ASSERT_EQ(fringe.fringe.size(), 2);
-    // readd current head
     fringe.add_tail(222);
     ASSERT_EQ(fringe.head->first, 111);
     ASSERT_EQ(fringe.tail->first, 222);
-    ASSERT_EQ(fringe.fringe.size(), 2);
-    // add a new value
+    ASSERT_EQ(fringe.fringe.size(), 4);
+    // readd current head
     fringe.add_tail(333);
     ASSERT_EQ(fringe.head->first, 111);
     ASSERT_EQ(fringe.tail->first, 333);
-    ASSERT_EQ(fringe.fringe.size(), 3);
+    ASSERT_EQ(fringe.fringe.size(), 4);
+    // add a new value
+    fringe.add_tail(444);
+    ASSERT_EQ(fringe.head->first, 111);
+    ASSERT_EQ(fringe.tail->first, 444);
+    ASSERT_EQ(fringe.fringe.size(), 4);
 }
