@@ -47,6 +47,7 @@ void LinkedPairMap::add_tail(const int& value) {
             std::cout << "tail has value: " << tail->first << std::endl;
             std::cout << "tail left points at node with value: " << tail->second->left->first << std::endl;
             std::cout << "that node has right pointing at node with value: " << tail->second->left->second->right->first << std::endl;
+            std::cout << "tail right points at fringe.end(): " << (tail->second->right == fringe.end()) << std::endl;
         } else if (work_it->second->right != fringe.end()) {
             std::cout << "only right exists so this is head. moving to tail." << std::endl;
             work_it->second->right->second->left = fringe.end();
@@ -61,6 +62,7 @@ void LinkedPairMap::add_tail(const int& value) {
             std::cout << "tail has value: " << tail->first << std::endl;
             std::cout << "tail left points at node with value: " << tail->second->left->first << std::endl;
             std::cout << "that node has right pointing at node with value: " << tail->second->left->second->right->first << std::endl;
+            std::cout << "tail right points at fringe.end(): " << (tail->second->right == fringe.end()) << std::endl;
         } else if (work_it->second->left != fringe.end()) {
             std::cout << "only left exists so this is tail. no ops needed." << std::endl;
             if (tail != work_it) {
@@ -74,6 +76,7 @@ void LinkedPairMap::add_tail(const int& value) {
     std::cout << "fringe size: " << fringe.size() << std::endl << std::endl;
 }
 
+void LinkedPairMap::remove_current(std::unordered_map<int, LinkNode*>::iterator& fringe_it) {}
 int main(int argc, char* argv[]) {
     auto fringe = LinkedPairMap(111, 512);
     std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.begin();
