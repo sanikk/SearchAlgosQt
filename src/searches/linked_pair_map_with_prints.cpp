@@ -79,7 +79,8 @@ void LinkedPairMap::remove_current(std::unordered_map<int, LinkNode*>::iterator&
     // std::unordered_map<int, LinkNode*>::iterator& right = fringe_it->second->right;
     if (current_node->left != fringe.end() && current_node->right != fringe.end()) {
         std::cout << "fringe_it was in the middle! removing that." << std::endl;
-
+        current_node->right->second->left = current_node->left;
+        current_node->left->second->right = current_node->right;
     } else if (current_node->right != fringe.end()) {
         std::cout << "fringe_it was head! removing that." << std::endl;
         current_node->right->second->left = fringe.end();

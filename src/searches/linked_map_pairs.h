@@ -7,8 +7,8 @@ struct LinkNode {
     std::unordered_map<int, LinkNode*>::iterator right;
     int value;
 
-    explicit LinkNode(int i_value, std::unordered_map<int, LinkNode*>::iterator left, std::unordered_map<int, LinkNode*>::iterator right)
-        : value(i_value), left(left), right(right) {}
+    explicit LinkNode(int i_value, std::unordered_map<int, LinkNode*>::iterator i_left, std::unordered_map<int, LinkNode*>::iterator i_right)
+        : value(i_value), left(i_left), right(i_right) {}
 };
 
 class LinkedMapPairs {

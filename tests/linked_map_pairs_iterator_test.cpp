@@ -7,6 +7,9 @@ TEST(LinkedMapPairs_Iterator, ConstructorSetsThingsRight) {
     LinkedMapPairs fringe(111, 512);
 
     std::unordered_map<int, LinkNode*>::iterator fringe_it = fringe.begin();
+    ASSERT_EQ(fringe.head, fringe.begin());
+    ASSERT_EQ(fringe.tail, fringe.begin());
+    ASSERT_NE(fringe.head, fringe.tail);
 }
 
 TEST(LinkedMapPairs_Iterator, SettingInitialFringeItWorks) {
