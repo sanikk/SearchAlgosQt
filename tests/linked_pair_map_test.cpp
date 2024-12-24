@@ -27,6 +27,10 @@ TEST(LinkedPairMap, ReAddOnlyValueWorks) {
     ASSERT_EQ(fringe.head->first, 111);
     ASSERT_EQ(fringe.tail->first, 111);
     ASSERT_EQ(fringe.fringe.size(), 1);
+    fringe.add_tail(111);
+    ASSERT_EQ(fringe.head->first, 111);
+    ASSERT_EQ(fringe.tail->first, 111);
+    ASSERT_EQ(fringe.fringe.size(), 1);
 }
 TEST(LinkedPairMap, ReAddHeadValueWorks) {
     auto fringe = LinkedPairMap(111, 512);
@@ -64,3 +68,30 @@ TEST(LinkedPairMap, ReAddMiddleValuesWorks) {
     ASSERT_EQ(fringe.tail->first, 444);
     ASSERT_EQ(fringe.fringe.size(), 4);
 }
+
+TEST(LinkedPairMap, ReAddTailValuesWorks) {
+    auto fringe = LinkedPairMap(111, 512);
+    fringe.add_tail(222);
+    ASSERT_EQ(fringe.tail->first, 222);
+    ASSERT_EQ(fringe.fringe.size(), 2);
+    fringe.add_tail(222);
+    ASSERT_EQ(fringe.tail->first, 222);
+    ASSERT_EQ(fringe.fringe.size(), 2);
+    fringe.add_tail(333);
+    ASSERT_EQ(fringe.tail->first, 333);
+    ASSERT_EQ(fringe.fringe.size(), 3);
+    fringe.add_tail(333);
+    ASSERT_EQ(fringe.tail->first, 333);
+    ASSERT_EQ(fringe.fringe.size(), 3);
+    fringe.add_tail(444);
+    fringe.add_tail(555);
+    ASSERT_EQ(fringe.head->first, 111);
+    ASSERT_EQ(fringe.tail->first, 555);
+    ASSERT_EQ(fringe.fringe.size(), 5);
+    fringe.add_tail(555);
+    ASSERT_EQ(fringe.head->first, 111);
+    ASSERT_EQ(fringe.tail->first, 555);
+    ASSERT_EQ(fringe.fringe.size(), 5);
+}
+
+// TEST(LinkedPairMap,

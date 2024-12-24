@@ -16,12 +16,12 @@ LinkedPairMap::LinkedPairMap(const int& start_value, const int& map_size) {
 void LinkedPairMap::add_tail(const int& value) {
     work_it = fringe.find(value);
     if (work_it == fringe.end()) {
-        auto [work_it, success] = fringe.emplace(value, new LinkNode(value, tail, fringe.end()));
-        if (success == false) {
-            throw std::runtime_error("adding node failed for some reason");
-        }
+        work_it = fringe.emplace(value, new LinkNode(value, tail, fringe.end())).first;
         tail->second->right = work_it;
         tail = work_it;
+        if (value != work_it->second->value) {
+            throw std::runtime_error("there is something wrong with the container. value and LinkNode.value do not match.");
+        }
     } else if (work_it != tail) {
         std::unordered_map<int, LinkNode*>::iterator& left = work_it->second->left;
         std::unordered_map<int, LinkNode*>::iterator& right = work_it->second->right;
@@ -38,6 +38,9 @@ void LinkedPairMap::add_tail(const int& value) {
         left = tail;
         right = fringe.end();
         tail = work_it;
+    }
+    if (value != work_it->second->value) {
+        throw std::runtime_error("there is something wrong with the container. value and LinkNode.value do not match.");
     }
 }
 
