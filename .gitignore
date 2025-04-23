@@ -1,0 +1,7 @@
+.cache/
+build/
+examples/
+sandbox/
+map_changer.py
+small_map.map
+
