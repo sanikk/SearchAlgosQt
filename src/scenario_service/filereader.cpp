@@ -52,6 +52,7 @@ std::tuple<std::vector<Scenario>, std::vector<int>> readScenarios(const std::fil
   if (f.peek() == 'v')
     f.ignore(MAX, '\n');
 
+  std::string trash;
   int i = 0;
   int bucket;
   int previous_bucket = -1;
@@ -66,10 +67,7 @@ std::tuple<std::vector<Scenario>, std::vector<int>> readScenarios(const std::fil
       std::get<1>(returnable).push_back(bucket);
       previous_bucket = bucket;
     }
-    iss.ignore(MAX, '\t');
-    iss.ignore(MAX, '\t');
-    iss.ignore(MAX, '\t');
-    iss.ignore(MAX, '\t');
+    iss >> trash >> trash >> trash;
     iss >> scenario.start_x >> scenario.start_y >> scenario.goal_x >>
         scenario.goal_y >> scenario.cost;
     scenario.id = i;

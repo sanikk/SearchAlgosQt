@@ -33,7 +33,8 @@ void FileSelection::setScenarioFile(std::filesystem::path& filepath) {
   try {
     // TODO: ok this logic is in the wrong place. ask scenarioService for strings to display.
     if (scenarioService.setScenarioFile(filepath)) {
-      scenarioFileLabel->setText(filepath.filename().c_str());
+      // scenarioFileLabel->setText(filepath.filename().c_str());
+      scenarioFileLabel->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
       std::filesystem::path candidate = filepath.replace_extension();
       if (!candidate.empty() && std::filesystem::is_regular_file(candidate)) {
         setMapFile(candidate);
@@ -61,7 +62,7 @@ void FileSelection::setMapFile(std::filesystem::path& filepath) {
   try {
     if (scenarioService.setMapFile(filepath)) {
       // TODO: logic does not belong here. ask service for string to display.
-      mapFileLabel->setText(filepath.filename().c_str());
+      mapFileLabel->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
       emit mapFileChanged();
     }
   } catch (const std::invalid_argument& e) {
