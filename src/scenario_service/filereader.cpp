@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-long MAX = std::numeric_limits<std::streamsize>::max();
+std::streamsize MAX = std::numeric_limits<std::streamsize>::max();
 
 
 std::ifstream readFile(const std::filesystem::path &filename) {
