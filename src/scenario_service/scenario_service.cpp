@@ -30,7 +30,6 @@ bool ScenarioService::setMapFile(const std::filesystem::path& i_map_file) {
   }
   mapFile = i_map_file;
   citymap = citymap_candidate;
-  std::cout << "ScenarioService: citymap set as " << citymap.size() << "*" << citymap[0].size() << std::endl;
   return true;
 }
 
@@ -39,7 +38,6 @@ bool ScenarioService::setScenarioFile(const std::filesystem::path& i_scenario_fi
     return false;
   }
   scenarios = readScenarios(i_scenario_file);
-  std::cout << "ScenarioService:setScenarioFile: scenarios read: " << scenarios.size() << std::endl;
   bucketList.clear();
   int previous_bucket = -1;
   for (Scenario scenario: scenarios) {
@@ -48,7 +46,6 @@ bool ScenarioService::setScenarioFile(const std::filesystem::path& i_scenario_fi
       previous_bucket = scenario.bucket;
     }
   }
-  std::cout << "bucketList now has " << bucketList.size() << std::endl;
   scenarioFile = i_scenario_file;
   return true;
 }

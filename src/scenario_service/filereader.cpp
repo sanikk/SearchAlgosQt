@@ -5,7 +5,6 @@
 std::ifstream readFile(const std::filesystem::path &filename) {
   std::ifstream f(filename);
   if (!f) {
-    std::ostringstream oss;
     throw std::invalid_argument(filename.string());
   }
   return f;
@@ -35,9 +34,8 @@ std::vector<std::string> readMap(const std::filesystem::path& filename) {
 }
 
 std::vector<Scenario> readScenarios(const std::filesystem::path& filename) {
-  std::ifstream f;
   std::vector<Scenario> scenarios;
-  f = readFile(filename);
+  std::ifstream f = readFile(filename);
   std::string str;
   std::string trash;
   int i = 0;
