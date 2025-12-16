@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <sstream>
 #include <limits>
 
+constexpr std::streamsize MAX = std::numeric_limits<std::streamsize>::max();
 
-std::vector<std::string> readMap(const std::filesystem::path& filename, int skip_count);
-std::tuple<std::vector<Scenario>, std::vector<int>> readScenarios(const std::filesystem::path& filename);
+std::vector<std::string> readMap(const std::filesystem::path& filename);
+std::vector<Scenario> readScenarios(const std::filesystem::path& filename);
