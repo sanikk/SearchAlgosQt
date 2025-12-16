@@ -2,37 +2,29 @@
 #include <iostream>
 
 
-long MAX = std::numeric_limits<std::streamsize>::max();
-
-
 std::ifstream readFile(const std::filesystem::path &filename) {
   std::ifstream f(filename);
   if (!f) {
-    std::ostringstream oss;
-    oss << "error reading file " << filename;
-    throw std::invalid_argument(oss.str());
+    throw std::invalid_argument(filename.string());
   }
   return f;
 }
 
-std::vector<std::string> readMap(const std::filesystem::path& filename,
-                                  int skip_count = 4) {
+std::vector<std::string> readMap(const std::filesystem::path& filename) {
   int width;
-  std::ifstream f;
-  
-  f = readFile(filename);
+  std::ifstream f = readFile(filename);
   std::string str;
 
-  while (skip_count > 0 && getline(f, str)) {
+  //first loop skips over the map headers
+  while (getline(f, str)) {
     if (str.compare(0, 6, "width ") == 0) {
       width = std::stoi(str.substr(6, std::string::npos));
+      break;
     }
-    skip_count--;
     continue;
   }
 
   std::vector<std::string> citymap;
-
   while (getline(f, str)) {
     if (str.empty() || str.size() < width)
       continue;
@@ -41,39 +33,25 @@ std::vector<std::string> readMap(const std::filesystem::path& filename,
   return citymap;
 }
 
-std::tuple<std::vector<Scenario>, std::vector<int>> readScenarios(const std::filesystem::path& filename) {
-
-  std::ifstream f;
-  std::tuple<std::vector<Scenario>, std::vector<int>> returnable;
-
-  f = readFile(filename);
+std::vector<Scenario> readScenarios(const std::filesystem::path& filename) {
+  std::vector<Scenario> scenarios;
+  std::ifstream f = readFile(filename);
   std::string str;
-  getline(f, str);
-  if (f.peek() == 'v')
-    f.ignore(MAX, '\n');
-
   std::string trash;
   int i = 0;
   int bucket;
-  int previous_bucket = -1;
   while (getline(f, str)) {
-    if (str.empty()) {
+    if (str[0] == 'v' || str.empty()) {
       continue;
     }
     std::istringstream iss(str);
     Scenario scenario;
-    iss >> bucket;
-    if (bucket != previous_bucket) {
-      std::get<1>(returnable).push_back(bucket);
-      previous_bucket = bucket;
-    }
-    iss >> trash >> trash >> trash;
-    iss >> scenario.start_x >> scenario.start_y >> scenario.goal_x >>
+    iss >> scenario.bucket >> trash >> trash >> trash >> scenario.start_x >> scenario.start_y >> scenario.goal_x >>
         scenario.goal_y >> scenario.cost;
     scenario.id = i;
-    std::get<0>(returnable).push_back(scenario);
+    scenarios.push_back(scenario);
     i++;
   }
-  return returnable;
+  return scenarios;
 }
 

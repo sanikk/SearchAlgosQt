@@ -3,6 +3,7 @@
 #include <ostream>
 struct Scenario {
   int id;
+  int bucket;
   int start_x;
   int start_y;
   int goal_x;
