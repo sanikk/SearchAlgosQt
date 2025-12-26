@@ -20,11 +20,19 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   controlsBox->setLayout(controlsLayout);
   tabLayout->addWidget(controlsBox);
 
-  mapScene = new MapScene{};
-  view = new QGraphicsView{ mapScene };
-  view->setDragMode(QGraphicsView::ScrollHandDrag);
-  view->scale(5, 5);
-  tabLayout->addWidget(view);
+  mapScene = new MapWidget{};
+  auto* scroll = new QScrollArea;
+  scroll->setWidget(mapScene);
+  scroll->setWidgetResizable(false);
+  tabLayout->addWidget(scroll);
+  // mapScene = new MapScene{};
+  // view = new QGraphicsView{ mapScene };
+  // view->setDragMode(QGraphicsView::ScrollHandDrag);
+  // view->scale(5, 5);
+  // view->setRenderHint(QPainter::SmoothPixmapTransform, false);
+  // view->setRenderHint(QPainter::Antialiasing, false);
+  // view->setRenderHint(QPainter::LosslessImageRendering, false);
+  // tabLayout->addWidget(view);
 
   setLayout(tabLayout);
 
