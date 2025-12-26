@@ -1,5 +1,4 @@
 #include "filereader.h"
-#include <iostream>
 
 
 std::ifstream readFile(const std::filesystem::path &filename) {
