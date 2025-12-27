@@ -63,31 +63,19 @@ void VisualSearchTab::scenarioChanged(int index) {
 }
 
 void VisualSearchTab::showHideFringe() {
-  int ret = mapScene->showHideFringe();
-  if (ret == 0) {
-    return;
-  }
-  if (ret==1) {
+  mapScene->showHideFringe();
+  if (mapScene->showFringe) {
     showHideFringeButton->setText("Hide Fringe");
-    return;
-  }
-  if (ret==2) {
+  } else {
     showHideFringeButton->setText("Show Fringe");
-    return;
   }
 }
 
 void VisualSearchTab::showHideAstar() {
-  int ret = mapScene->showHideAstar();
-  if (ret==0) {
-    return;
-  }
-  if (ret==1) {
+  mapScene->showHideAstar();
+  if (mapScene->showAstar) {
     showHideAstarButton->setText("Hide A*");
-    return;
-  }
-  if (ret==2) {
+  } else {
     showHideAstarButton->setText("Show A*");
-    return;
   }
 }

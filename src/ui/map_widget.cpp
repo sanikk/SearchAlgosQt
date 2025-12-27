@@ -22,7 +22,20 @@ void MapWidget::setMap(std::vector<std::string>  citymap) {
 }
 
 
-void MapWidget::setScenario(Scenario scenario) {
+void MapWidget::setScenario(Scenario i_scenario) {
+  scenario = i_scenario;
+  clear_scenario();
+  if (!scenario.has_value()) {
+    return;
+  }
+  for (int i=-2; i<3; i++) {
+    storage[xy2int(std::max(0, std::min(scenario->start_x + i, size - 1)), scenario->start_y, size)] |= START;
+    storage[xy2int(scenario->start_x, std::max(0, std::min(scenario->start_y + i, size - 1)), size)] |= START;
+
+    storage[xy2int(std::max(0, std::min(scenario->goal_x + i, size - 1)), scenario->goal_y, size)] |= GOAL;
+    storage[xy2int(scenario->goal_x, std::max(0, std::min(scenario->goal_y + i, size - 1)), size)] |= GOAL;
+  }
+  renderMap();
 }
 
 void MapWidget::paintEvent(QPaintEvent*) {
@@ -46,9 +59,21 @@ void MapWidget::renderMap() {
 
 QRgb MapWidget::colorPixel(uint8_t byte) {
   if (showAstar) {
+    if (byte & EXPAND_A) {
+      return DEFAULT_BIT_PALETTE[7];
+    }
+    if (byte & VISIT_A) {
+      return DEFAULT_BIT_PALETTE[6];
+    }
 
   }
   if (showFringe) {
+    if (byte & EXPAND_F) {
+      return DEFAULT_BIT_PALETTE[5];
+    }
+    if (byte & VISIT_F) {
+      return DEFAULT_BIT_PALETTE[4];
+    }
 
   }
   if (scenario.has_value()) {
@@ -66,12 +91,22 @@ QRgb MapWidget::colorPixel(uint8_t byte) {
   return DEFAULT_BIT_PALETTE[0];
 }
 
-int MapWidget::showHideAstar() {
-  return 0;
+void MapWidget::showHideAstar() {
+  if (showAstar) {
+    showAstar = false;
+  } else {
+    showAstar = true;
+  }
+  renderMap();
 }
 
-int MapWidget::showHideFringe() {
-  return 0;
+void MapWidget::showHideFringe() {
+  if (showFringe) {
+    showFringe = false;
+  } else {
+    showFringe = true;
+  }
+  renderMap();
 }
 
 void MapWidget::visit_fringe(QVector<QPoint> vec) {
@@ -87,9 +122,11 @@ void MapWidget::visit_astar(QVector<QPoint> vec) {
 }
 
 void MapWidget::expand_fringe(QPoint point) {
+  storage[xy2int(point.x(), point.y(), size)] |= EXPAND_F;
 }
 
 void MapWidget::expand_astar(QPoint point) {
+  storage[xy2int(point.x(), point.y(), size)] |= EXPAND_A;
 }
 
 void MapWidget::clear() {
@@ -119,13 +156,3 @@ void MapWidget::clear_astar() {
   }
 }
 
-void MapWidget::drawCross(const int& x, const int& y, const uint& index_or_rgb) {
-  if (size < 2) {
-    return;
-  }
-  QPainter painter(this);
-  
-  painter.setPen(QColor(index_or_rgb));
-  painter.drawLine(std::max(0, x-2), y, std::min(size - 1, x + 2), y);
-  painter.drawLine(x, std::max(0, y-2), x, std::min(size - 1, y+2));
-}
