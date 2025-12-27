@@ -1,15 +1,15 @@
-// so fullscreen works straight on _windows_.
-// QDialog and QMainwindow are windows.
-// Make a QDialog with view and controls, pop that up and make it fullscreen.
 #include <QDialog>
 #include <QWidget>
 #include <QGraphicsView>
 #include <QPushButton>
 #include <qnamespace.h>
 #include <QBoxLayout>
+#include <QScrollArea>
+#include <qscrollarea.h>
 
 class FullscreenDialog : public QDialog {
 public:
+    FullscreenDialog(QScrollArea *scroll);
     FullscreenDialog(QGraphicsView *view);
     QPushButton *runAstarButton;
     QPushButton *runFringeButton;
@@ -18,8 +18,5 @@ public:
     QPushButton *exitFullscreenButton;
 private:
     QGraphicsView *view;
-
+    QScrollArea *scroll;
 };
-
-
-

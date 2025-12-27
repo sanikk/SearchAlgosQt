@@ -21,18 +21,14 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   tabLayout->addWidget(controlsBox);
 
   mapScene = new MapWidget{};
-  auto* scroll = new QScrollArea;
+  scroll = new QScrollArea;
   scroll->setWidget(mapScene);
   scroll->setWidgetResizable(false);
   tabLayout->addWidget(scroll);
-  // mapScene = new MapScene{};
-  // view = new QGraphicsView{ mapScene };
   // view->setDragMode(QGraphicsView::ScrollHandDrag);
-  // view->scale(5, 5);
   // view->setRenderHint(QPainter::SmoothPixmapTransform, false);
   // view->setRenderHint(QPainter::Antialiasing, false);
   // view->setRenderHint(QPainter::LosslessImageRendering, false);
-  // tabLayout->addWidget(view);
 
   setLayout(tabLayout);
 
@@ -43,7 +39,7 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
 
 
 void VisualSearchTab::launchFullscreenDialog() {
-  FullscreenDialog* fsd = new FullscreenDialog{view};
+  FullscreenDialog* fsd = new FullscreenDialog{scroll};
   connect(fsd->runAstarButton, &QPushButton::clicked, runAstarButton, &QPushButton::clicked);
   connect(fsd->runFringeButton, &QPushButton::clicked, runFringeButton, &QPushButton::clicked);
   connect(fsd->showHideAstarButton, &QPushButton::clicked, showHideAstarButton, &QPushButton::clicked);
@@ -54,8 +50,8 @@ void VisualSearchTab::launchFullscreenDialog() {
 }
 
 void VisualSearchTab::endFullScreenDialog() {
-  view->setParent(this);
-  tabLayout->addWidget(view);
+  scroll->setParent(this);
+  tabLayout->addWidget(scroll);
 }
 
 void VisualSearchTab::mapChanged() {
