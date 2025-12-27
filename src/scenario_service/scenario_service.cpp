@@ -1,5 +1,4 @@
 #include "scenario_service.h"
-#include <iostream>
 
 
 ScenarioService::ScenarioService() {};
