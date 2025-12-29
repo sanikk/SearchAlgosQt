@@ -85,7 +85,6 @@ QRgb MapWidget::colorPixel(uint8_t byte) {
     }
   }
   if (byte & WALL) {
-    // std::cout << "wall" << std::endl;
     return DEFAULT_BIT_PALETTE[1];
   }
   return DEFAULT_BIT_PALETTE[0];
