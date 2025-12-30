@@ -1,3 +1,6 @@
+#pragma once
+#include "scenario_controls.h"
+
 #include <QDialog>
 #include <QWidget>
 #include <QPushButton>
@@ -6,7 +9,7 @@
 
 class FullscreenDialog : public QDialog {
 public:
-    FullscreenDialog(QScrollArea *scroll);
+    FullscreenDialog(QScrollArea *scroll, ScenarioControls* i_scenario_controls);
     QPushButton *runAstarButton;
     QPushButton *runFringeButton;
     QPushButton *showHideAstarButton;
@@ -14,4 +17,5 @@ public:
     QPushButton *exitFullscreenButton;
 private:
     QScrollArea *scroll;
+    ScenarioControls* scenario_controls;
 };

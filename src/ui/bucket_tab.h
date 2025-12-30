@@ -11,7 +11,7 @@ class BucketTab : public QWidget {
     Q_OBJECT;
 
 public:
-    BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls);
+    BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls);
 public slots:
     void updateTableScenarios(int index);
     void runAstar();
@@ -20,7 +20,7 @@ public slots:
 private:
     ScenarioService& scenarioService;
     SearchService& searchService;
-    ScenarioControls& scenarioControls;
+    ScenarioControls* scenarioControls;
 
     QTableWidget *resultTable;
     QTableWidget* get_resultTable();
