@@ -1,13 +1,13 @@
 #include "fullscreenDialog.h"
 
-FullscreenDialog::FullscreenDialog(QGraphicsView *view) : QDialog(), view(view)
+
+FullscreenDialog::FullscreenDialog(QScrollArea *scroll) : QDialog(), scroll(scroll)
 {
   setAttribute(Qt::WA_DeleteOnClose);
   QVBoxLayout *mainLayout = new QVBoxLayout{};
   
   QWidget *controlsBox = new QWidget{};
-
-  QHBoxLayout * boxLayout = new QHBoxLayout{};
+  QHBoxLayout *boxLayout = new QHBoxLayout{};
   runAstarButton = new QPushButton{ "Run A*" };
   boxLayout->addWidget(runAstarButton);
   runFringeButton = new QPushButton{ "Run Fringe" };
@@ -19,9 +19,10 @@ FullscreenDialog::FullscreenDialog(QGraphicsView *view) : QDialog(), view(view)
   exitFullscreenButton = new QPushButton{"Exit fullscreen"};
   boxLayout->addWidget(exitFullscreenButton);
   controlsBox->setLayout(boxLayout);
-
   mainLayout->addWidget(controlsBox);
-  mainLayout->addWidget(view);
+  mainLayout->addWidget(scroll);
+
   setLayout(mainLayout);
+  
   connect(exitFullscreenButton, &QPushButton::clicked, this, &QDialog::close);
 }

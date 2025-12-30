@@ -1,6 +1,4 @@
 #include "ui.h"
-#include "scenario_controls.h"
-#include "testbed_tab.h"
 
 Ui::Ui(ScenarioService& i_scenario_service, SearchService& i_search_service) : scenarioControls(new ScenarioControls{i_scenario_service}) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -18,7 +16,7 @@ Ui::Ui(ScenarioService& i_scenario_service, SearchService& i_search_service) : s
   testBedTab = new TestBedTab{i_scenario_service, i_search_service, *scenarioControls};
   tabWindow->addTab(testBedTab, "TestBed Tab");
   setLayout(mainLayout);
-  setWindowTitle("QT STARTER");
+  setWindowTitle("SearchAlgosQt");
 
   connect(fileSelectionTab, &FileSelection::scenarioFileChanged, scenarioControls, &ScenarioControls::updateBucketBox);
   connect(scenarioControls->bucketBox, &QComboBox::currentIndexChanged, bucketTab, &BucketTab::updateTableScenarios);

@@ -1,17 +1,17 @@
 #pragma once
+
 #include "scenario_service.h"
 #include "search_service.h"
-#include "map_scene.h"
+#include "map_widget.h"
 #include "fullscreenDialog.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-// #include <QBoxLayout>
 #include <QComboBox>
 #include <QWidget>
-#include <QGraphicsItem>
-#include <QGraphicsView>
 #include <QPushButton>
+#include <QPainter>
+#include <QScrollArea>
 
 
 class VisualSearchTab : public QWidget {
@@ -33,8 +33,8 @@ private:
     QPushButton *fullscreenButton;
     QWidget *controlsBox;
 
-    MapScene *mapScene;
-    QGraphicsView *view;
+    MapWidget *mapScene;
+    QScrollArea* scroll;
 
     QVBoxLayout *tabLayout;
     void showHideFringe();

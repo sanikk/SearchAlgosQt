@@ -20,11 +20,15 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   controlsBox->setLayout(controlsLayout);
   tabLayout->addWidget(controlsBox);
 
-  mapScene = new MapScene{};
-  view = new QGraphicsView{ mapScene };
-  view->setDragMode(QGraphicsView::ScrollHandDrag);
-  view->scale(5, 5);
-  tabLayout->addWidget(view);
+  mapScene = new MapWidget{};
+  scroll = new QScrollArea;
+  scroll->setWidget(mapScene);
+  scroll->setWidgetResizable(false);
+  tabLayout->addWidget(scroll);
+  // view->setDragMode(QGraphicsView::ScrollHandDrag);
+  // view->setRenderHint(QPainter::SmoothPixmapTransform, false);
+  // view->setRenderHint(QPainter::Antialiasing, false);
+  // view->setRenderHint(QPainter::LosslessImageRendering, false);
 
   setLayout(tabLayout);
 
@@ -35,7 +39,7 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
 
 
 void VisualSearchTab::launchFullscreenDialog() {
-  FullscreenDialog* fsd = new FullscreenDialog{view};
+  FullscreenDialog* fsd = new FullscreenDialog{scroll};
   connect(fsd->runAstarButton, &QPushButton::clicked, runAstarButton, &QPushButton::clicked);
   connect(fsd->runFringeButton, &QPushButton::clicked, runFringeButton, &QPushButton::clicked);
   connect(fsd->showHideAstarButton, &QPushButton::clicked, showHideAstarButton, &QPushButton::clicked);
@@ -46,8 +50,8 @@ void VisualSearchTab::launchFullscreenDialog() {
 }
 
 void VisualSearchTab::endFullScreenDialog() {
-  view->setParent(this);
-  tabLayout->addWidget(view);
+  scroll->setParent(this);
+  tabLayout->addWidget(scroll);
 }
 
 void VisualSearchTab::mapChanged() {
@@ -59,31 +63,19 @@ void VisualSearchTab::scenarioChanged(int index) {
 }
 
 void VisualSearchTab::showHideFringe() {
-  int ret = mapScene->showHideFringe();
-  if (ret == 0) {
-    return;
-  }
-  if (ret==1) {
+  mapScene->showHideFringe();
+  if (mapScene->showFringe) {
     showHideFringeButton->setText("Hide Fringe");
-    return;
-  }
-  if (ret==2) {
+  } else {
     showHideFringeButton->setText("Show Fringe");
-    return;
   }
 }
 
 void VisualSearchTab::showHideAstar() {
-  int ret = mapScene->showHideAstar();
-  if (ret==0) {
-    return;
-  }
-  if (ret==1) {
+  mapScene->showHideAstar();
+  if (mapScene->showAstar) {
     showHideAstarButton->setText("Hide A*");
-    return;
-  }
-  if (ret==2) {
+  } else {
     showHideAstarButton->setText("Show A*");
-    return;
   }
 }

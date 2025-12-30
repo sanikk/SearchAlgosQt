@@ -4,10 +4,9 @@ add_library(ui STATIC
     file_selection.cpp file_selection.h
     bucket_tab.cpp bucket_tab.h
     visual_search_tab.cpp visual_search_tab.h
-    map_scene.cpp map_scene.h
+    map_widget.cpp map_widget.h
     fullscreenDialog.cpp fullscreenDialog.h
     testbed_tab.cpp testbed_tab.h
-    # graphics_image_item.cpp graphics_image_item.h
 )
 
 target_include_directories(ui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
