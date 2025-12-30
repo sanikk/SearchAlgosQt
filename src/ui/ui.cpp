@@ -1,7 +1,7 @@
 #include "ui.h"
 
 Ui::Ui(ScenarioService& i_scenario_service, SearchService& i_search_service) : scenarioControls(new ScenarioControls{i_scenario_service}) {
-  QVBoxLayout *mainLayout = new QVBoxLayout;
+  mainLayout = new QVBoxLayout;
 
   mainLayout->addWidget(scenarioControls);
   tabWindow = new QTabWidget{};
@@ -9,11 +9,11 @@ Ui::Ui(ScenarioService& i_scenario_service, SearchService& i_search_service) : s
 
   fileSelectionTab = new FileSelection{i_scenario_service};
   tabWindow->addTab(fileSelectionTab, "File Selection Tab");
-  bucketTab = new BucketTab{i_scenario_service, i_search_service, *scenarioControls};
+  bucketTab = new BucketTab{i_scenario_service, i_search_service, scenarioControls};
   tabWindow->addTab(bucketTab, "Bucket Tab");
-  visualSearchTab = new VisualSearchTab{i_scenario_service, i_search_service};
+  visualSearchTab = new VisualSearchTab{i_scenario_service, i_search_service, scenarioControls};
   tabWindow->addTab(visualSearchTab, "Search Tab");
-  testBedTab = new TestBedTab{i_scenario_service, i_search_service, *scenarioControls};
+  testBedTab = new TestBedTab{i_scenario_service, i_search_service, scenarioControls};
   tabWindow->addTab(testBedTab, "TestBed Tab");
   setLayout(mainLayout);
   setWindowTitle("SearchAlgosQt");
@@ -23,5 +23,11 @@ Ui::Ui(ScenarioService& i_scenario_service, SearchService& i_search_service) : s
   connect(scenarioControls->bucketBox, &QComboBox::currentIndexChanged, testBedTab, &TestBedTab::updateTableScenarios);
   connect(fileSelectionTab, &FileSelection::mapFileChanged, visualSearchTab, &VisualSearchTab::mapChanged);
   connect(scenarioControls, &ScenarioControls::scenarioChanged, visualSearchTab, &VisualSearchTab::scenarioChanged);
+  connect(visualSearchTab, &VisualSearchTab::fullscreenDialogClosed, this, &Ui::closeFullscreenDialog);
+}
+
+void Ui::closeFullscreenDialog() {
+  scenarioControls->setParent(this);
+  mainLayout->insertWidget(0, scenarioControls);
 }
 

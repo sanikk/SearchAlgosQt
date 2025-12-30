@@ -10,6 +10,7 @@
 
 #include <QTabWidget>
 #include <QWidget>
+#include <qboxlayout.h>
 
 
 class Ui: public QWidget {
@@ -19,9 +20,12 @@ public:
     Ui(ScenarioService& i_scenario_service, SearchService& i_searchService);
 
 private:
+    void closeFullscreenDialog();
     ScenarioControls *scenarioControls;
 
+    QVBoxLayout *mainLayout;
     QTabWidget *tabWindow;
+
 
     FileSelection *fileSelectionTab;
     BucketTab *bucketTab;

@@ -1,11 +1,12 @@
 #include "fullscreenDialog.h"
+#include "scenario_controls.h"
 
 
-FullscreenDialog::FullscreenDialog(QScrollArea *scroll) : QDialog(), scroll(scroll)
+FullscreenDialog::FullscreenDialog(QScrollArea *scroll, ScenarioControls* i_scenario_controls) : QDialog(), scroll(scroll), scenario_controls(i_scenario_controls)
 {
   setAttribute(Qt::WA_DeleteOnClose);
   QVBoxLayout *mainLayout = new QVBoxLayout{};
-  
+  mainLayout->addWidget(scenario_controls); 
   QWidget *controlsBox = new QWidget{};
   QHBoxLayout *boxLayout = new QHBoxLayout{};
   runAstarButton = new QPushButton{ "Run A*" };

@@ -1,7 +1,7 @@
 #include "bucket_tab.h"
 
 
-BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls) 
+BucketTab::BucketTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls) 
   : scenarioService(i_scenario_service), searchService(i_search_service), scenarioControls(i_scenario_controls) {
   QVBoxLayout *layout = new QVBoxLayout{};
   runBox = get_runBox();
@@ -33,7 +33,7 @@ QTableWidget* BucketTab::get_resultTable() {
 void BucketTab::runAstar() {
   // qDebug() << "running astar";
   try {
-    int bucket = scenarioControls.get_bucketIndex();
+    int bucket = scenarioControls->get_bucketIndex();
     if (bucket == -1) {
       return;
     }
@@ -47,7 +47,7 @@ void BucketTab::runAstar() {
 void BucketTab::runFringe() {
   // qDebug() << "running fringe";
   try {
-    int bucket = scenarioControls.get_bucketIndex();
+    int bucket = scenarioControls->get_bucketIndex();
     if (bucket == -1) {
       return;
     }

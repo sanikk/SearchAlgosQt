@@ -1,7 +1,7 @@
 #include "visual_search_tab.h"
 
-VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service)
-  : QWidget(), scenarioService(i_scenario_service), searchService(i_search_service) {
+VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls)
+  : QWidget(), scenarioService(i_scenario_service), searchService(i_search_service), scenario_controls(i_scenario_controls) {
   
   tabLayout = new QVBoxLayout{};
   controlsBox =new QWidget{};
@@ -39,7 +39,7 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
 
 
 void VisualSearchTab::launchFullscreenDialog() {
-  FullscreenDialog* fsd = new FullscreenDialog{scroll};
+  FullscreenDialog* fsd = new FullscreenDialog{scroll, scenario_controls};
   connect(fsd->runAstarButton, &QPushButton::clicked, runAstarButton, &QPushButton::clicked);
   connect(fsd->runFringeButton, &QPushButton::clicked, runFringeButton, &QPushButton::clicked);
   connect(fsd->showHideAstarButton, &QPushButton::clicked, showHideAstarButton, &QPushButton::clicked);
@@ -52,6 +52,7 @@ void VisualSearchTab::launchFullscreenDialog() {
 void VisualSearchTab::endFullScreenDialog() {
   scroll->setParent(this);
   tabLayout->addWidget(scroll);
+  emit fullscreenDialogClosed();
 }
 
 void VisualSearchTab::mapChanged() {

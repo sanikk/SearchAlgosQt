@@ -1,7 +1,7 @@
 #include "testbed_tab.h"
 
 
-TestBedTab::TestBedTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls& i_scenario_controls) 
+TestBedTab::TestBedTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls) 
   : scenarioService(i_scenario_service), searchService(i_search_service), scenarioControls(i_scenario_controls) {
   QVBoxLayout *layout = new QVBoxLayout{};
   runBox = get_runBox();
@@ -33,7 +33,7 @@ QTableWidget* TestBedTab::get_resultTable() {
 void TestBedTab::runTest() {
   // qDebug() << "running astar";
   try {
-    int bucket = scenarioControls.get_bucketIndex();
+    int bucket = scenarioControls->get_bucketIndex();
     if (bucket == -1) {
       return;
     }
@@ -46,7 +46,7 @@ void TestBedTab::runTest() {
 
 void TestBedTab::runBase() {
   try {
-    int bucket = scenarioControls.get_bucketIndex();
+    int bucket = scenarioControls->get_bucketIndex();
     if (bucket == -1) {
       qDebug() << "scenarioControl.get_bucketIndex return -1";
       return;
