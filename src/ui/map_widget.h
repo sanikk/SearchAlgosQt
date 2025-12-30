@@ -1,21 +1,21 @@
 #pragma once
 #include "scenario.h"
-//#include "tools.h"
 #include "conversions.h"
+
 #include <QWidget>
 #include <QPainter>
-#include <cstdint>
 #include <optional>
+
 /*
 bit scheme
-bit 7: open/closed renamed to WALL since that's what we might draw
+bit 7: WALL
 bit 6: start 
 bit 5: goal
 bit 4: f_visited
 bit 3: f_expanded
 bit 2: a_visited
 bit 1: a_expanded
-bit 0: reserved - found route?
+bit 0: found route
 */
 // Bitwise ops
 constexpr std::uint8_t WALL         = 1u << 7;
@@ -35,7 +35,7 @@ constexpr std::uint8_t CLEAR_ASTAR = ~(VISIT_A | EXPAND_A);
 * index = size * y + x
 */
 
-static constexpr std::array<QRgb, 9> DEFAULT_BIT_PALETTE = {
+constexpr std::array<QRgb, 9> DEFAULT_BIT_PALETTE = {
     qRgb(255, 255, 255),   // 0 OPEN GROUND white
     qRgb(0,   0,   0),     // 1 WALL black
     qRgb(255, 105, 180),   // 2 START pink

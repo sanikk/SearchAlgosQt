@@ -1,4 +1,5 @@
 #pragma once
+
 #include "scenario_service.h"
 #include "search_service.h"
 #include "map_widget.h"
@@ -8,8 +9,6 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QWidget>
-#include <QGraphicsItem>
-#include <QGraphicsView>
 #include <QPushButton>
 #include <QPainter>
 #include <QScrollArea>

@@ -91,20 +91,12 @@ QRgb MapWidget::colorPixel(uint8_t byte) {
 }
 
 void MapWidget::showHideAstar() {
-  if (showAstar) {
-    showAstar = false;
-  } else {
-    showAstar = true;
-  }
+  showAstar = !showAstar;
   renderMap();
 }
 
 void MapWidget::showHideFringe() {
-  if (showFringe) {
-    showFringe = false;
-  } else {
-    showFringe = true;
-  }
+  showFringe = !showFringe;
   renderMap();
 }
 

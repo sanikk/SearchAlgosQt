@@ -1,4 +1,5 @@
 #pragma once
+
 #include "scenario_controls.h"
 #include "scenario_service.h"
 #include "search_service.h"
@@ -6,6 +7,7 @@
 #include "bucket_tab.h"
 #include "file_selection.h"
 #include "testbed_tab.h"
+
 #include <QTabWidget>
 #include <QWidget>
 
