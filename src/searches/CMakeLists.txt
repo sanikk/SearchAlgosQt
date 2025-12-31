@@ -1,6 +1,7 @@
 add_library(searches STATIC
     searches.h
     astar_search.cpp astar_search.h
+    astar_with_callbacks.cpp astar_with_callbacks.h
     fringe_search.cpp fringe_search.h
     dll.cpp dll.h
     fringe_with_dll.cpp fringe_with_dll.h

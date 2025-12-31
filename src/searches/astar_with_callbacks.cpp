@@ -1,12 +1,19 @@
 #include "astar_search.h"
-#include <iostream>
 
 
 void reconstruct_route() {
 }
 
 
-RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vector<std::string> &citymap) {
+RetVal astar_search(int startx, 
+                    int starty, 
+                    int goalx, 
+                    int goaly, 
+                    const std::vector<std::string> &citymap,
+                    void (*visit)(int, int),
+                    void (*expand)(int, int)
+                    //void (*found)()
+                    ) {
 
   Node start_node{startx, starty};
   Node goal_node{goalx, goaly};
@@ -24,6 +31,7 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
 
   while (!heap.empty()) {
     Node current = heap.top();
+    expand(current.x, current.y);
     heap.pop();
     
     int current_index = xy2int(current, map_size);
@@ -33,7 +41,6 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
     // std::cout << "current is " << current.x << "," << current.y << " with estimated cost: " << current.cost << "and gscores "<< current_gscore << std::endl;
 
     if (current == goal_node) {
-      std::cout << "goal found with cost " << current_gscore << std::endl;
       std::vector<int> route;
       while (current_index != -1) {
         route.push_back(current_index);
@@ -47,6 +54,8 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
     children(current, citymap, children_list);
 
     for (auto child: children_list) {
+      visit(child.x, child.y);
+
       // std::cout << "child " << child.x << "," << child.y << "with cost " << child.cost << std::endl;
       double tentative_gscore = current_gscore + child.cost;
       int child_index = xy2int(child, map_size);
@@ -61,6 +70,6 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
       }
     }
   }
-  std::cout << "not found" << std::endl;
+  //std::cout << "not found" << std::endl;
   return RetVal();
 }
