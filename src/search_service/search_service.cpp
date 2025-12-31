@@ -111,3 +111,20 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
   }
   return retvals;
 }
+void SearchService::runAstarWithCallbacks(const int scenario_index, 
+                                        RetVal (*visit)(int, int),
+                                        RetVal (*expand)(int, int)
+                                        ) {
+  Scenario scenario = loadScenario(scenario_index);
+  RetVal ret = astar_with_callbacks(scenario.start_x, 
+                                  scenario.start_y, 
+                                  scenario.goal_x, 
+                                  scenario.goal_y, 
+                                  scenarioService.get_map(),
+                                  visit,
+                                  expand
+                                  );
+  if (ret.found) {
+    printRoute(ret.route);
+  }
+}

@@ -9,13 +9,13 @@
 #include <algorithm>
 
 //RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap);
-RetVal astar_search(
+RetVal astar_with_callbacks(
   int startx, 
   int starty, 
   int goalx, 
   int goaly, 
   const std::vector<std::string>& citymap, 
-  void (*visit)(),
-  void (*expand)(),
-  void (*found)()
+  RetVal (*visit)(int, int),
+  RetVal (*expand)(int, int)
+  //void (*found)()
 );

@@ -18,6 +18,7 @@ public:
   void fringeDll(int scenario_id);
   std::vector<RetVal> runAstarForBucket(const int bucket);
   std::vector<RetVal> runFringeForBucket(const int bucket);
+  void runAstarWithCallbacks(const int scenario_index, RetVal (*visit)(int, int), RetVal (*expand)(int, int));
 
   std::vector<RetVal> runTestVersionForBucket(const int bucket);
 private:

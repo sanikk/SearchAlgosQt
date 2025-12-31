@@ -1,17 +1,14 @@
 #include "astar_search.h"
 
 
-void reconstruct_route() {
-}
 
-
-RetVal astar_search(int startx, 
+RetVal astar_with_callbacks(int startx, 
                     int starty, 
                     int goalx, 
                     int goaly, 
                     const std::vector<std::string> &citymap,
-                    void (*visit)(int, int),
-                    void (*expand)(int, int)
+                    RetVal (*visit)(int, int),
+                    RetVal (*expand)(int, int)
                     //void (*found)()
                     ) {
 
