@@ -10,7 +10,7 @@
 
 #include <QTabWidget>
 #include <QWidget>
-#include <qboxlayout.h>
+#include <QBoxLayout>
 
 
 class Ui: public QWidget {

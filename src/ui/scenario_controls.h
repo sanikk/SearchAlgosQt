@@ -1,5 +1,7 @@
 #pragma once
+
 #include "scenario_service.h"
+
 #include <QComboBox>
 #include <QVBoxLayout>
 

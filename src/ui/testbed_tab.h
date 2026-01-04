@@ -1,7 +1,9 @@
 #pragma once
+
 #include "scenario_controls.h"
 #include "scenario_service.h"
 #include "search_service.h"
+
 #include <QWidget>
 #include <QBoxLayout>
 #include <QTableWidget>

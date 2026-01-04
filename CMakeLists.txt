@@ -20,7 +20,7 @@ add_subdirectory(src/search_service)
 add_subdirectory(src/ui)
 
 add_executable(searchalgos src/main.cpp)
-target_link_libraries(searchalgos PRIVATE models tools shared_search_tools Qt6::Core Qt6::Widgets scenario_service search_service ui)
+target_link_libraries(searchalgos PUBLIC tools Qt6::Core Qt6::Widgets scenario_service search_service ui)
 
 # enable_testing()
 # add_subdirectory(tests)
