@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <string>
 #include <vector>
-#include <fstream>
 #include <limits>
 
 constexpr std::streamsize MAX = std::numeric_limits<std::streamsize>::max();

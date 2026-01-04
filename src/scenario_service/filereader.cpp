@@ -1,5 +1,5 @@
 #include "filereader.h"
-
+#include <fstream>
 
 std::ifstream readFile(const std::filesystem::path &filename) {
   std::ifstream f(filename);
@@ -14,7 +14,7 @@ std::vector<std::string> readMap(const std::filesystem::path& filename) {
   std::ifstream f = readFile(filename);
   std::string str;
 
-  //first loop skips over the map headers
+  //first loop skips over the map headers until we get to the 'width...' line
   while (getline(f, str)) {
     if (str.compare(0, 6, "width ") == 0) {
       width = std::stoi(str.substr(6, std::string::npos));
