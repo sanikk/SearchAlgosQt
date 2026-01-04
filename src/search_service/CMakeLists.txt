@@ -11,4 +11,5 @@ target_include_directories(search_service
 #    PRIVATE
 #        ${CMAKE_CURRENT_SOURCE_DIR}/../searches
 )
-target_link_libraries(search_service PRIVATE models tools shared_search_tools scenario_service searches)
+target_link_libraries(search_service PRIVATE tools searches
+                                     PUBLIC models Qt6::Core scenario_service)

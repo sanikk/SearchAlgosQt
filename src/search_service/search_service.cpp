@@ -1,6 +1,7 @@
 #include "search_service.h"
-#include "fringe_with_dll.h"
-#include <chrono>
+#include "searches.h"
+#include "conversions.h"
+// TODO: remove this iostream import, no prints here after dev
 #include <iostream>
 
 SearchService::SearchService(
@@ -9,18 +10,19 @@ SearchService::SearchService(
 
 Scenario SearchService::loadScenario(int index) {
   Scenario scen = scenarioService.get_scenario(index);
-  std::cout << scen << std::endl;
   return scen;
 }
 
 
 void printRoute(const std::vector<std::pair<int, int>>& route) {
+  // TODO: remove this
   for (std::pair<int, int> pari   : route) {
     std::cout << pari.first << "," << pari.second << std::endl;
   }
 }
 
 void printRoute(const std::vector<int>& route, const int map_size) {
+  // TODO: remove this
   printRoute(pair_route(route, map_size));
 }
 
@@ -49,7 +51,7 @@ void SearchService::runFringe(int index) {
     ret.timing = end - start; 
 
   if (ret.cost.has_value()) {
-    std::cout << ret.cost.value() << std::endl;
+    //std::cout << ret.cost.value() << std::endl;
     printRoute(ret.route);
   }
 }
@@ -60,18 +62,6 @@ void SearchService::runFringe(int bucket, int index) {
 
 const double EPSILON = 0.0001;
 
-// int SearchService::full_comparison_run() {
-//   std::vector<Scenario> scenarios = scenario_service.get_all_scenarios();
-//   const std::vector<std::string>& citymap = scenario_service.get_map();
-//   for (Scenario scenario : scenarios) {
-//     RetVal retAstar = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
-//     RetVal retFringe = fringe_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
-//     if (retAstar.cost != retFringe.cost) {
-//       std::cout << retAstar.cost.value() << " != " << retFringe.cost.value() << std::endl; 
-//     }
-//   }     
-//   return 0;
-// } 
 
 std::vector<RetVal> SearchService::runAstarForBucket(int bucket) {
   std::vector<RetVal> retvals;
@@ -111,20 +101,7 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
   }
   return retvals;
 }
-void SearchService::runAstarWithCallbacks(const int scenario_index, 
-                                        RetVal (*visit)(int, int),
-                                        RetVal (*expand)(int, int)
-                                        ) {
-  Scenario scenario = loadScenario(scenario_index);
-  RetVal ret = astar_with_callbacks(scenario.start_x, 
-                                  scenario.start_y, 
-                                  scenario.goal_x, 
-                                  scenario.goal_y, 
-                                  scenarioService.get_map(),
-                                  visit,
-                                  expand
-                                  );
-  if (ret.found) {
-    printRoute(ret.route);
-  }
+
+
+void SearchService::runAstarWithSignals(const int scenario_index, SearchSignals* signalpack) {
 }

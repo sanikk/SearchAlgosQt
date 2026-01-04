@@ -1,6 +1,10 @@
 #include "fringe_search.h"
-#include <iomanip>
-#include <iostream>
+#include "conversions.h"
+#include "shared_search_tools.h"
+
+#include <deque>
+//#include <iomanip>
+//#include <iostream>
 
 
 RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<std::string> citymap) {
@@ -49,7 +53,7 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
             }
 
             if (current == goal_index) {
-                std::cout << std::setprecision(10) << "found goal! cost " << g_score << std::endl;
+//                std::cout << std::setprecision(10) << "found goal! cost " << g_score << std::endl;
                 found = true;
                 std::vector<int> route;
                 while (current != -1) {
@@ -84,7 +88,7 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
                 // std::cout << "flimit set to " << std::setprecision(17) << flimit << std::endl;
             std::swap(later, now);
         } else {
-            std::cout << "not found" << std::endl;
+            //std::cout << "not found" << std::endl;
             return RetVal();
         }
         

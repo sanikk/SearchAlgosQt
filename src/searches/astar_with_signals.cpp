@@ -1,5 +1,8 @@
-#include "astar_search.h"
+#include "astar_with_signals.h"
+#include "shared_search_tools.h"
 
+#include <queue>
+#include <unordered_map>
 
 
 RetVal astar_with_callbacks(int startx, 
@@ -7,9 +10,7 @@ RetVal astar_with_callbacks(int startx,
                     int goalx, 
                     int goaly, 
                     const std::vector<std::string> &citymap,
-                    RetVal (*visit)(int, int),
-                    RetVal (*expand)(int, int)
-                    //void (*found)()
+                    SearchSignals* signals_pack
                     ) {
 
   Node start_node{startx, starty};
@@ -28,7 +29,7 @@ RetVal astar_with_callbacks(int startx,
 
   while (!heap.empty()) {
     Node current = heap.top();
-    expand(current.x, current.y);
+    // expand(current.x, current.y);
     heap.pop();
     
     int current_index = xy2int(current, map_size);
@@ -51,7 +52,7 @@ RetVal astar_with_callbacks(int startx,
     children(current, citymap, children_list);
 
     for (auto child: children_list) {
-      visit(child.x, child.y);
+      // visit(child.x, child.y);
 
       // std::cout << "child " << child.x << "," << child.y << "with cost " << child.cost << std::endl;
       double tentative_gscore = current_gscore + child.cost;
