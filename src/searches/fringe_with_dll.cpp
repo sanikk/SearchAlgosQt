@@ -1,5 +1,8 @@
 #include "fringe_with_dll.h"
-#include <iostream>
+#include "conversions.h"
+#include "shared_search_tools.h"
+#include "dll.h"
+//#include <iostream>
 
 
 RetVal fringe_with_dll(int startx, int starty, int goalx, int goaly, std::vector<std::string> citymap) {
@@ -35,7 +38,7 @@ RetVal fringe_with_dll(int startx, int starty, int goalx, int goaly, std::vector
       }
 
       if (current == goal_index) {
-        std::cout << "goal found with cost " << gscore << std::endl;
+//        std::cout << "goal found with cost " << gscore << std::endl;
         found = true;
         foundcost = gscore;
         break;
@@ -66,7 +69,7 @@ if (found) {
     while (current != -1) {
       auto [cx, cy] = int2xy(current, map_size);
       route.push_back({cx,cy});
-      std::cout << cx << "," << cy << std::endl;
+//      std::cout << cx << "," << cy << std::endl;
       current = std::get<0>(cache[current]);
     }
     return RetVal(foundcost, route);

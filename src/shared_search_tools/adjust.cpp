@@ -1,4 +1,6 @@
 #include "adjust.h"
+#include <cstdint>
+#include <cstring>
 
 double float_adjust(double value) {
     std::uint64_t bits;

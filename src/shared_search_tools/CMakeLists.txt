@@ -5,4 +5,4 @@ add_library(shared_search_tools STATIC
     adjust.cpp adjust.h
 )
 target_include_directories(shared_search_tools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(shared_search_tools PRIVATE models)
+target_link_libraries(shared_search_tools PUBLIC models)

@@ -1,4 +1,5 @@
 #include "map_widget.h"
+#include "conversions.h"
 
 MapWidget::MapWidget(int i_size, QWidget* parent): QWidget(parent) {
   size = i_size;
@@ -98,6 +99,12 @@ void MapWidget::showHideAstar() {
 void MapWidget::showHideFringe() {
   showFringe = !showFringe;
   renderMap();
+}
+
+void MapWidget::astarVisit(int x, int y) {
+}
+
+void MapWidget::astarFinished(RetVal retval) {
 }
 
 void MapWidget::visit_fringe(QVector<QPoint> vec) {

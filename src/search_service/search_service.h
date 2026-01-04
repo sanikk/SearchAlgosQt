@@ -1,12 +1,13 @@
 #pragma once
 #include "models.h"
-#include "shared_search_tools.h"
 #include "scenario_service.h"
-#include "searches.h"
+#include "search_signals.h"
 
-class SearchService {
+#include <QObject>
+
+class SearchService : public QObject {
+  Q_OBJECT;
 public:
-  // SearchService();
   SearchService(ScenarioService& i_scenario_service);
   void runAstar(const int index);
   void runAstar(const int bucket, const int index);
@@ -18,6 +19,7 @@ public:
   void fringeDll(int scenario_id);
   std::vector<RetVal> runAstarForBucket(const int bucket);
   std::vector<RetVal> runFringeForBucket(const int bucket);
+  void runAstarWithSignals(const int scenario_index, SearchSignals* signalpack);
 
   std::vector<RetVal> runTestVersionForBucket(const int bucket);
 private:

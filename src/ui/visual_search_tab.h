@@ -3,8 +3,8 @@
 #include "scenario_service.h"
 #include "search_service.h"
 #include "map_widget.h"
-#include "fullscreenDialog.h"
 #include "scenario_controls.h"
+#include "search_signals.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -23,10 +23,14 @@ public:
 public slots:
     void mapChanged();
     void scenarioChanged(int scenario_index);
+signals:
+    void fullscreenDialogClosed();
 private:
     ScenarioService& scenarioService;
     SearchService& searchService;
     ScenarioControls* scenario_controls;
+    SearchSignals* astar_signals;
+    SearchSignals* fringe_signals;
     
     QPushButton *runAstarButton;
     QPushButton *runFringeButton;
@@ -40,20 +44,11 @@ private:
 
     QVBoxLayout *tabLayout;
     void showHideFringe();
+    void runAstar();
     void showHideAstar();
     void launchFullscreenDialog();
     void endFullScreenDialog();
-    void runAstar();
 
-signals:
-    void fullscreenDialogClosed();
-
-    void astarVisitSignal(int x, int y);
-    void astarExpandSignal(int x, int y);
-    void astarFoundSignal(double cost);
-    void fringeVisitSignal(int x, int y);
-    void fringeExpandSignal(int x, int y);
-    void fringeFoundSignal(double cost);
 };
 
 

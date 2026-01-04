@@ -94,7 +94,6 @@ void TestBedTab::updateTableScenarios(int index) {
 }
 
 void TestBedTab::load_retvals_to_resultTable(std::vector<RetVal> retvals, int startColumn) {
-  // for (RetVal ret : retvals) {
   for (int i=0; i < retvals.size(); i++) {
     if (retvals[i].cost.has_value()) {
       QTableWidgetItem *cost = new QTableWidgetItem{QString("%1").arg(retvals[i].cost.value())};

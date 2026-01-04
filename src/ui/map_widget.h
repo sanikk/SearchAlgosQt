@@ -1,6 +1,6 @@
 #pragma once
+#include "retval.h"
 #include "scenario.h"
-#include "conversions.h"
 
 #include <QWidget>
 #include <QPainter>
@@ -57,6 +57,12 @@ public:
     void showHideAstar();
     bool showFringe;
     bool showAstar;
+
+
+public slots:
+    void astarVisit(int x, int y);
+    void astarFinished(RetVal ret);
+
 
 protected:
     void paintEvent(QPaintEvent* ev) override;

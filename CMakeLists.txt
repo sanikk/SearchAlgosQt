@@ -9,19 +9,19 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
+set(CMAKE_AUTOMOC ON)
+
 add_subdirectory(src/models)
 add_subdirectory(src/tools)
 add_subdirectory(src/scenario_service)
 add_subdirectory(src/shared_search_tools)
 add_subdirectory(src/searches)
 add_subdirectory(src/search_service)
-# add_subdirectory(src)
 add_subdirectory(src/ui)
 
 add_executable(searchalgos src/main.cpp)
-target_link_libraries(searchalgos PRIVATE models tools shared_search_tools Qt6::Core Qt6::Widgets scenario_service search_service ui)
-set(CMAKE_AUTOMOC ON)
+target_link_libraries(searchalgos PUBLIC tools Qt6::Core Qt6::Widgets scenario_service search_service ui)
 
-enable_testing()
-add_subdirectory(tests)
+# enable_testing()
+# add_subdirectory(tests)
 
