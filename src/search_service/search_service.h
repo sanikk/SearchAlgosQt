@@ -20,6 +20,7 @@ public:
   std::vector<RetVal> runAstarForBucket(const int bucket);
   std::vector<RetVal> runFringeForBucket(const int bucket);
   void runAstarWithSignals(const int scenario_index, SearchSignals* signalpack);
+  void runFringeWithSignals(const int scenario_index, SearchSignals* signalpack);
 
   std::vector<RetVal> runTestVersionForBucket(const int bucket);
 private:

@@ -1,8 +1,7 @@
 #include "search_service.h"
 #include "searches.h"
 #include "conversions.h"
-// TODO: remove this iostream import, no prints here after dev
-#include <iostream>
+//#include <iostream>
 
 SearchService::SearchService(
     ScenarioService& i_scenario_service)
@@ -17,7 +16,7 @@ Scenario SearchService::loadScenario(int index) {
 void printRoute(const std::vector<std::pair<int, int>>& route) {
   // TODO: remove this
   for (std::pair<int, int> pari   : route) {
-    std::cout << pari.first << "," << pari.second << std::endl;
+//    std::cout << pari.first << "," << pari.second << std::endl;
   }
 }
 
@@ -104,4 +103,18 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
 
 
 void SearchService::runAstarWithSignals(const int scenario_index, SearchSignals* signalpack) {
+  Scenario scenario = loadScenario(scenario_index);
+  //std::cout << "firing off search in scenario " << scenario_index << std::endl;
+  RetVal ret = astar_with_signals(scenario.start_x, scenario.start_y, 
+                                  scenario.goal_x, scenario.goal_y,
+                                  scenarioService.get_map(),
+                                  signalpack);
+  //std::cout << ret.found << std::endl;
+  if (ret.cost.has_value()) {
+    //std::cout << "cost: " << ret.cost.value() << std::endl;
+  }
+
+}
+
+void SearchService::runFringeWithSignals(const int scenario_index, SearchSignals* signalpack) {
 }
