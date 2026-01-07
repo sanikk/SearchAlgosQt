@@ -4,8 +4,7 @@
 #include <queue>
 #include <unordered_map>
 
-
-RetVal astar_with_callbacks(int startx, 
+RetVal astar_with_signals(int startx, 
                     int starty, 
                     int goalx, 
                     int goaly, 
@@ -29,14 +28,11 @@ RetVal astar_with_callbacks(int startx,
 
   while (!heap.empty()) {
     Node current = heap.top();
-    // expand(current.x, current.y);
+    signals_pack->node_expanded(current.x, current.y);
     heap.pop();
     
     int current_index = xy2int(current, map_size);
     double current_gscore = gscores[current_index];
-    // std::cout << "current gscore " << current_gscore << std::endl;
-
-    // std::cout << "current is " << current.x << "," << current.y << " with estimated cost: " << current.cost << "and gscores "<< current_gscore << std::endl;
 
     if (current == goal_node) {
       std::vector<int> route;
@@ -52,9 +48,8 @@ RetVal astar_with_callbacks(int startx,
     children(current, citymap, children_list);
 
     for (auto child: children_list) {
-      // visit(child.x, child.y);
+      signals_pack->node_visited(child.x, child.y);
 
-      // std::cout << "child " << child.x << "," << child.y << "with cost " << child.cost << std::endl;
       double tentative_gscore = current_gscore + child.cost;
       int child_index = xy2int(child, map_size);
       
@@ -68,6 +63,5 @@ RetVal astar_with_callbacks(int startx,
       }
     }
   }
-  //std::cout << "not found" << std::endl;
   return RetVal();
 }
