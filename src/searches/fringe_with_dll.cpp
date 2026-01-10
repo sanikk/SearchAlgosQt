@@ -1,6 +1,10 @@
 #include "fringe_with_dll.h"
 #include "conversions.h"
-#include "shared_search_tools.h"
+#include "children.h"
+#include "heuristics.h"
+#include "adjust.h"
+
+//#include "shared_search_tools.h"
 #include "dll.h"
 //#include <iostream>
 
@@ -19,7 +23,7 @@ RetVal fringe_with_dll(int startx, int starty, int goalx, int goaly, std::vector
   cache[start_index] = {-1, 0.0};
   bool found = false;
   double foundcost;
-  double flimit = float_adjust(heuristics(startx, starty, goalx, goaly));
+  double flimit = SearchTools::float_adjust(SearchTools::heuristics(startx, starty, goalx, goaly));
 
   std::vector<std::tuple<int, int, double>> kids;
 
@@ -29,7 +33,7 @@ RetVal fringe_with_dll(int startx, int starty, int goalx, int goaly, std::vector
       const auto [nx, ny] = int2xy(current, map_size);
       const auto [parent, gscore] = cache[current];
 
-      const double fscore = gscore + heuristics(nx, ny, goalx, goaly);
+      const double fscore = gscore + SearchTools::heuristics(nx, ny, goalx, goaly);
 
       // std::cout << "current: " << current << ", (" << nx << "," << ny << "):" << gscore << std::endl;
       if (fscore > flimit) {
@@ -43,7 +47,7 @@ RetVal fringe_with_dll(int startx, int starty, int goalx, int goaly, std::vector
         foundcost = gscore;
         break;
       }
-      children(nx, ny, citymap, kids);
+      SearchTools::children(nx, ny, citymap, kids);
       for(const auto [childx, childy, childcost]: kids) {
         // std::cout << "child " <<childx << "," << childy << ":" << childcost << std::endl;
         const double child_gscore = gscore + childcost;
@@ -61,7 +65,7 @@ RetVal fringe_with_dll(int startx, int starty, int goalx, int goaly, std::vector
       kids.clear();
       fringe.remove(current);
     } // for current : fringe
-    flimit = float_adjust(fscore_min);
+    flimit = SearchTools::float_adjust(fscore_min);
   } // while not found
 if (found) {
     std::vector<std::pair<int,int>> route;

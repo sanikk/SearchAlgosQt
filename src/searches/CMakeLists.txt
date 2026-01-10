@@ -11,4 +11,4 @@ add_library(searches STATIC
 # target_include_directories(searches PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(searches PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(searches PUBLIC models Qt6::Core 
-                               PRIVATE tools shared_search_tools)
+                               PRIVATE tools search_tools)

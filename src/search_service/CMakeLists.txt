@@ -1,4 +1,7 @@
 add_library(search_service STATIC
+    search_thread.h
+    astar_thread.cpp astar_thread.h
+    worker.cpp worker.h
     search_service.cpp search_service.h
 )
 
@@ -11,5 +14,5 @@ target_include_directories(search_service
 #    PRIVATE
 #        ${CMAKE_CURRENT_SOURCE_DIR}/../searches
 )
-target_link_libraries(search_service PRIVATE tools searches
+target_link_libraries(search_service PRIVATE tools searches search_tools
                                      PUBLIC models Qt6::Core scenario_service)

@@ -1,6 +1,8 @@
 #include "fringe_search.h"
 #include "conversions.h"
-#include "shared_search_tools.h"
+//#include "shared_search_tools.h"
+#include "children.h"
+#include "heuristics.h"
 
 #include <deque>
 //#include <iomanip>
@@ -25,7 +27,7 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
       
     bool found = false;
     double epsilon = 0.00000002;
-    double flimit = heuristics(startx, starty, goalx, goaly) + epsilon;
+    double flimit = SearchTools::heuristics(startx, starty, goalx, goaly) + epsilon;
 
     // std::cout << "initial flimit " << std::setprecision(17) << flimit << std::endl;
 
@@ -44,7 +46,7 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
 
             // std::cout << nx << "," << ny << std::endl;
 
-            double fscore = g_score + heuristics(nx, ny, goalx, goaly);
+            double fscore = g_score + SearchTools::heuristics(nx, ny, goalx, goaly);
 
             if (fscore > flimit) {
                 fscore_min = std::min(fscore, fscore_min);
@@ -65,7 +67,7 @@ RetVal fringe_search(int startx, int starty, int goalx, int goaly, std::vector<s
             }
 
             std::vector<std::tuple<int, int, double>> succ_list;
-            children(nx, ny, citymap, succ_list);
+            SearchTools::children(nx, ny, citymap, succ_list);
             for (const auto [succ_x, succ_y, succ_cost] : succ_list) {
 
                 double succ_gscore = g_score + succ_cost;
