@@ -11,7 +11,7 @@
 
 class AstarThread : public SearchThread {
 
-Q_OBJECT
+// Q_OBJECT
 
 public:
     AstarThread(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap, SearchService* search_service);
@@ -23,6 +23,9 @@ public:
         int goaly, 
         const std::vector<std::string>& citymap
     );
+
+
+    void astar_search_thread(int startx, int starty, int goalx, int goaly, const std::vector<std::string> &citymap);
 
 };
 

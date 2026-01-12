@@ -4,11 +4,11 @@
 #include <vector>
 #include <string>
 
-RetVal astar_with_signals(
-    int startx, 
-    int starty, 
-    int goalx, 
-    int goaly, 
+void astar_with_signals(
+    const int startx, 
+    const int starty, 
+    const int goalx, 
+    const int goaly, 
     const std::vector<std::string>& citymap,
     SearchSignals* signals_pack
 );

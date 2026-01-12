@@ -4,7 +4,6 @@
 #include "heuristics.h"
 #include "adjust.h"
 
-//#include "shared_search_tools.h"
 #include "dll.h"
 //#include <iostream>
 

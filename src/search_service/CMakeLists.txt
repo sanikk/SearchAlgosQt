@@ -1,6 +1,6 @@
 add_library(search_service STATIC
-    search_thread.h
-    astar_thread.cpp astar_thread.h
+#    search_thread.h
+#    astar_thread.cpp astar_thread.h
     worker.cpp worker.h
     search_service.cpp search_service.h
 )

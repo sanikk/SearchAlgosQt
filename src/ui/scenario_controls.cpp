@@ -51,5 +51,5 @@ void ScenarioControls::scenarioSelected(int index) {
   if (index == -1) {
     return;
   }
-  scenarioChanged(bucketBox->currentData().toInt());
+  emit scenarioChanged(get_scenarioIndex());
 }

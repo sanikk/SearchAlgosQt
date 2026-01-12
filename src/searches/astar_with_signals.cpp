@@ -1,10 +1,10 @@
 #include "astar_with_signals.h"
-//#include "shared_search_tools.h"
 #include "children.h"
 #include "heuristics.h"
 
 #include <queue>
 #include <unordered_map>
+#include <iostream>
 
 void astar_with_signals(const int startx, 
                     const int starty, 
@@ -30,6 +30,7 @@ void astar_with_signals(const int startx,
   while (!heap.empty()) {
     Node current = heap.top();
     signals_pack->node_expanded(current.x, current.y);
+    std::cout << "popped " << current.x << "," << current.y << std::endl;
     heap.pop();
     
     int current_index = xy2int(current, map_size);

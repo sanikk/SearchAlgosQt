@@ -1,7 +1,12 @@
 #include "search_service.h"
+//#include "astar_with_signals.h"
+//#include "astar_thread.h"
+//#include "search_signals.h"
 #include "searches.h"
 #include "conversions.h"
-//#include <iostream>
+#include "worker.h"
+#include <iostream>
+//#include <qobject.h>
 
 SearchService::SearchService(
     ScenarioService& i_scenario_service)
@@ -101,20 +106,72 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
   return retvals;
 }
 
-
-void SearchService::runAstarWithSignals(const int scenario_index, SearchSignals* signalpack) {
+void SearchService::run_astar_thread(const int scenario_index) { 
+  std::cout << "SearchService " << QThread::currentThread() << std::endl;
   Scenario scenario = loadScenario(scenario_index);
-  //std::cout << "firing off search in scenario " << scenario_index << std::endl;
-  RetVal ret = astar_with_signals(scenario.start_x, scenario.start_y, 
-                                  scenario.goal_x, scenario.goal_y,
-                                  scenarioService.get_map(),
-                                  signalpack);
-  //std::cout << ret.found << std::endl;
-  if (ret.cost.has_value()) {
-    //std::cout << "cost: " << ret.cost.value() << std::endl;
-  }
+  WorkerRunner(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this);
 
+  //AstarThread* at = new AstarThread{scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this};
+  //QObject::connect(at, &SearchThread::finished, at, &SearchThread::deleteLater);
+  //at->start();
 }
 
-void SearchService::runFringeWithSignals(const int scenario_index, SearchSignals* signalpack) {
-}
+
+//void SearchService::runAstarWithSignals(const int scenario_index, SearchSignals* signalpack) {
+//void SearchService::runAstarWithSignals(const int scenario_index, MapWidget& map_widget) {
+// void SearchService::runAstarWithSignals(const int scenario_index) {
+//   std::cout << "SearchService " << QObject::thread() << std::endl;
+//   Scenario scenario = loadScenario(scenario_index);
+// 
+// //  runThread(new AstarWorker{scenario.start_x, scenario.start_y, 
+// //                                  scenario.goal_x, scenario.goal_y,
+// //                                  scenarioService.get_map()});
+//   Worker* worker = new AstarWorker{scenario.start_x, scenario.start_y, 
+//                                   scenario.goal_x, scenario.goal_y,
+//                                   scenarioService.get_map()};
+// 
+//   QThread* thread = new QThread;
+//   worker->moveToThread(thread);
+// 
+//   QObject::connect(thread, &QThread::started, worker, &Worker::run);
+//   QObject::connect(worker, &Worker::finished, thread, &QThread::quit);
+//   QObject::connect(thread, &QThread::finished, worker, &QObject::deleteLater);
+//   QObject::connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+// 
+//   QObject::connect(&worker->search_signals, &SearchSignals::visit, this, &SearchService::astarVisit); 
+//   QObject::connect(&worker->search_signals, &SearchSignals::expand, this, &SearchService::astarExpand); 
+// 
+//   std::cout << "SearchSignals " << worker->search_signals.thread() << std::endl;
+//   thread->start();
+// //   RetVal ret = astar_with_signals(scenario.start_x, scenario.start_y, 
+// //                                   scenario.goal_x, scenario.goal_y,
+// //                                   scenarioService.get_map(),
+// //                                   signalpack);
+//   //if (ret.cost.has_value()) {
+//     //std::cout << "cost: " << ret.cost.value() << std::endl;
+//   //}
+// 
+// }
+
+// void SearchService::runFringeWithSignals(const int scenario_index, SearchSignals* signalpack) {
+//   Scenario scenario = loadScenario(scenario_index);
+//   //std::cout << "firing off search in scenario " << scenario_index << std::endl;
+//   // RetVal ret = fringe_with_signals(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y,scenarioService.get_map(),signalpack);
+//   //std::cout << ret.found << std::endl;
+//   //if (ret.cost.has_value()) {
+//     //std::cout << "cost: " << ret.cost.value() << std::endl;
+//   //}
+// 
+// }
+
+// void SearchService::runThread(Worker* worker) {
+//   QThread* thread = new QThread;
+//   worker->moveToThread(thread);
+// 
+//   QObject::connect(thread, &QThread::started, worker, &Worker::run);
+//   QObject::connect(worker, &Worker::finished, thread, &QThread::quit);
+//   QObject::connect(thread, &QThread::finished, worker, &QObject::deleteLater);
+//   QObject::connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+// 
+//   thread->start();
+// }
