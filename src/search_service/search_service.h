@@ -22,11 +22,8 @@ public:
   void fringeDll(int scenario_id);
   std::vector<RetVal> runAstarForBucket(const int bucket);
   std::vector<RetVal> runFringeForBucket(const int bucket);
-  //void runAstarWithSignals(const int scenario_index, SearchSignals* signalpack);
-  //void runAstarWithSignals(const int scenario_index, MapWidget& map_widget);
-  void runAstarWithSignals(const int scenario_index);
-  //void runFringeWithSignals(const int scenario_index, SearchSignals* signalpack);
-  //void runThread(Worker* worker);
+
+  // void runAstarWithSignals(const int scenario_index);
   void run_astar_thread(const int scenario_index);
 
   std::vector<RetVal> runTestVersionForBucket(const int bucket);
