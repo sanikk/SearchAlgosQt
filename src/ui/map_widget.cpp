@@ -102,30 +102,48 @@ void MapWidget::showHideFringe() {
 }
 
 void MapWidget::astarVisit(int x, int y) {
+  uint8_t& cell = storage[xy2int(x,y,size)];
+  cell |= VISIT_A;
+  if (showAstar && !(cell & EXPAND_A)) {
+      img.setPixel(x, y, DEFAULT_BIT_PALETTE[6]);
+      update(x*mapScale, y*mapScale, mapScale, mapScale);
+  }
 }
+
+void MapWidget::astarExpand(int x, int y) {
+  storage[xy2int(x, y, size)] |= EXPAND_A;
+  if (showAstar) {
+    img.setPixel(x, y, DEFAULT_BIT_PALETTE[7]);
+    update(x*mapScale, y*mapScale, mapScale, mapScale);
+  }
+}
+
 
 void MapWidget::astarFinished(RetVal retval) {
+  // TODO: write this
 }
 
-void MapWidget::visit_fringe(QVector<QPoint> vec) {
-  for (QPoint point : vec) {
-    storage[xy2int(point.x(), point.y(), size)] |= VISIT_F;
+void MapWidget::fringeVisit(int x, int y) {
+  uint8_t& cell = storage[xy2int(x,y,size)];
+  cell |= VISIT_F;
+  if (showFringe && !(cell & EXPAND_F)) {
+      img.setPixel(x, y, DEFAULT_BIT_PALETTE[4]);
+      update(x*mapScale, y*mapScale, mapScale, mapScale);
   }
 }
 
-void MapWidget::visit_astar(QVector<QPoint> vec) {
-  for (QPoint point : vec) {
-    storage[xy2int(point.x(), point.y(), size)] |= VISIT_A;
+void MapWidget::fringeExpand(int x, int y) {
+  storage[xy2int(x, y, size)] |= EXPAND_F;
+  if (showFringe) {
+    img.setPixel(x, y, DEFAULT_BIT_PALETTE[5]);
+    update(x*mapScale, y*mapScale, mapScale, mapScale);
   }
 }
 
-void MapWidget::expand_fringe(QPoint point) {
-  storage[xy2int(point.x(), point.y(), size)] |= EXPAND_F;
+void MapWidget::fringeFinished(RetVal retval) {
+// TODO: write this
 }
 
-void MapWidget::expand_astar(QPoint point) {
-  storage[xy2int(point.x(), point.y(), size)] |= EXPAND_A;
-}
 
 void MapWidget::clear() {
   storage.assign(size * size, 0); 

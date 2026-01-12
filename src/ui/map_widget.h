@@ -6,17 +6,6 @@
 #include <QPainter>
 #include <optional>
 
-/*
-bit scheme
-bit 7: WALL
-bit 6: start 
-bit 5: goal
-bit 4: f_visited
-bit 3: f_expanded
-bit 2: a_visited
-bit 1: a_expanded
-bit 0: found route
-*/
 // Bitwise ops
 constexpr std::uint8_t WALL         = 1u << 7;
 constexpr std::uint8_t START        = 1u << 6;
@@ -48,7 +37,7 @@ constexpr std::array<QRgb, 9> DEFAULT_BIT_PALETTE = {
 };
 
 class MapWidget : public QWidget {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     MapWidget(int size = 0, QWidget* parent = nullptr);
     void setMap(std::vector<std::string>  citymap);
@@ -60,7 +49,11 @@ public:
 
 
 public slots:
+    void fringeVisit(int x, int y);
+    void fringeExpand(int x, int y);
+    void fringeFinished(RetVal ret);
     void astarVisit(int x, int y);
+    void astarExpand(int x, int y);
     void astarFinished(RetVal ret);
 
 
@@ -77,10 +70,6 @@ private:
     void renderMap();
 
     int mapScale = 5;
-    void visit_astar(QVector<QPoint> vec);
-    void visit_fringe(QVector<QPoint> vec);
-    void expand_astar(QPoint point);
-    void expand_fringe(QPoint point);
 
     void clear();
     void clear_scenario();

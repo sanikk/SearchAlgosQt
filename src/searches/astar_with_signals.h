@@ -3,13 +3,14 @@
 #include "tools.h"
 #include <vector>
 #include <string>
-//#include <algorithm>
 
-RetVal astar_with_signals(
-  int startx, 
-  int starty, 
-  int goalx, 
-  int goaly, 
-  const std::vector<std::string>& citymap,
-  SearchSignals* signals_pack
+void astar_with_signals(
+    const int startx, 
+    const int starty, 
+    const int goalx, 
+    const int goaly, 
+    const std::vector<std::string>& citymap,
+    SearchSignals* signals_pack
 );
+
+

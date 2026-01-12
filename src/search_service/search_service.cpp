@@ -1,7 +1,8 @@
 #include "search_service.h"
 #include "searches.h"
 #include "conversions.h"
-// TODO: remove this iostream import, no prints here after dev
+#include "worker.h"
+
 #include <iostream>
 
 SearchService::SearchService(
@@ -17,7 +18,7 @@ Scenario SearchService::loadScenario(int index) {
 void printRoute(const std::vector<std::pair<int, int>>& route) {
   // TODO: remove this
   for (std::pair<int, int> pari   : route) {
-    std::cout << pari.first << "," << pari.second << std::endl;
+//    std::cout << pari.first << "," << pari.second << std::endl;
   }
 }
 
@@ -102,6 +103,8 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
   return retvals;
 }
 
-
-void SearchService::runAstarWithSignals(const int scenario_index, SearchSignals* signalpack) {
+void SearchService::run_astar_thread(const int scenario_index) { 
+  std::cout << "SearchService " << QThread::currentThread() << std::endl;
+  Scenario scenario = loadScenario(scenario_index);
+  WorkerRunner(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this);
 }

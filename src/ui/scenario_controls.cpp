@@ -27,27 +27,29 @@ void ScenarioControls::updateScenarioBox(int index) {
   if (index == -1) {
     return;
   }
-  QStringList scenario_list;
   auto bucket_scenarios = scenarioService.get_bucketScenarios(index);
   for (Scenario &scen : bucket_scenarios) {
-    scenario_list.append(QString("%1: ideal_cost %2, (%3,%4) => (%5,%6)").arg(scen.id).arg(scen.cost).arg(scen.start_x).arg(scen.start_y).arg(scen.goal_x).arg(scen.goal_y));
+    scenarioBox->addItem(QString("%1: ideal_cost %2, (%3,%4) => (%5,%6)")
+                         .arg(scen.id)
+                         .arg(scen.cost)
+                         .arg(scen.start_x)
+                         .arg(scen.start_y)
+                         .arg(scen.goal_x)
+                         .arg(scen.goal_y), scen.id);
   }
-  scenarioBox->addItems(scenario_list);
 }
 
 int ScenarioControls::get_bucketIndex() {
-  // TODO: make this obsolete and remove it
   return bucketBox->currentIndex();
 }
 
 int ScenarioControls::get_scenarioIndex() {
-  // TODO: make this obsolete and remove it
-  return scenarioBox->currentIndex();
+  return scenarioBox->currentData().toInt();
 }
 
 void ScenarioControls::scenarioSelected(int index) {
   if (index == -1) {
     return;
   }
-  scenarioChanged(bucketBox->currentIndex() * 10 + index);
+  emit scenarioChanged(get_scenarioIndex());
 }

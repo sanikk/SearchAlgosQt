@@ -4,7 +4,7 @@
 #include "search_service.h"
 #include "map_widget.h"
 #include "scenario_controls.h"
-#include "search_signals.h"
+//#include "search_signals.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -29,8 +29,6 @@ private:
     ScenarioService& scenarioService;
     SearchService& searchService;
     ScenarioControls* scenario_controls;
-    SearchSignals* astar_signals;
-    SearchSignals* fringe_signals;
     
     QPushButton *runAstarButton;
     QPushButton *runFringeButton;
@@ -41,9 +39,11 @@ private:
 
     MapWidget *mapScene;
     QScrollArea* scroll;
-
     QVBoxLayout *tabLayout;
+
+private slots:
     void showHideFringe();
+    void runFringe();
     void runAstar();
     void showHideAstar();
     void launchFullscreenDialog();

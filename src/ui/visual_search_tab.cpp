@@ -1,5 +1,6 @@
 #include "visual_search_tab.h"
 #include "fullscreenDialog.h"
+#include "search_service.h"
 
 VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls)
   : QWidget(), scenarioService(i_scenario_service), searchService(i_search_service), scenario_controls(i_scenario_controls) {
@@ -36,12 +37,11 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   connect(fullscreenButton, &QPushButton::clicked, this, &VisualSearchTab::launchFullscreenDialog);
   connect(showHideFringeButton, &QPushButton::clicked, this, &VisualSearchTab::showHideFringe);
   connect(showHideAstarButton, &QPushButton::clicked, this, &VisualSearchTab::showHideAstar);
+  connect(runAstarButton, &QPushButton::clicked, this, &VisualSearchTab::runAstar);
 
 
-  astar_signals = new SearchSignals{};
-  fringe_signals = new SearchSignals{};
-  connect(astar_signals, &SearchSignals::visit, mapScene, &MapWidget::astarVisit);
-  connect(astar_signals, &SearchSignals::finished, mapScene, &MapWidget::astarFinished);
+  connect(&searchService, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit);
+  connect(&searchService, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand);
 }
 
 
@@ -79,25 +79,12 @@ void VisualSearchTab::showHideFringe() {
   }
 }
 
-// void VisualSearchTab::runAstar() {
-// 
-//   qDebug() << "running astar";
-//   try {
-//     // int bucket = scenario_controls->get_bucketIndex();
-//     searchService.runAstarWithCallbacks(scenario_controls->get_scenarioIndex(),
-//                                         signalAstarVisit,
-//                                         signalAstarExpand);
-//   } catch (std::runtime_error &e) {
-//     qDebug() << e.what();
-//   }
-// }
+void VisualSearchTab::runFringe() {
+}
 
 
 void VisualSearchTab::runAstar() {
-  //SearchSignals* astar_signals = new SearchSignals{};
-  // connect(astar_signals, &SearchSignals::visit, mapScene, &MapWidget::astarVisit);
-  // RetVal ret = searchService.runAstarWithSignals(scenario_controls->get_scenarioIndex(), astar_signals);
-  searchService.runAstarWithSignals(scenario_controls->get_scenarioIndex(), astar_signals);
+  searchService.run_astar_thread(scenario_controls->get_scenarioIndex());
 }
 
 void VisualSearchTab::showHideAstar() {
@@ -108,12 +95,3 @@ void VisualSearchTab::showHideAstar() {
     showHideAstarButton->setText("Show A*");
   }
 }
-
-// signal wrapper functions
-// void VisualSearchTab::signalAstarVisit(int x, int y) {
-//   emit astarVisitSignal(x, y); 
-// }
-// 
-// void VisualSearchTab::signalAstarExpand(int x, int y) {
-//   emit astarExpandSignal(x, y); 
-// }

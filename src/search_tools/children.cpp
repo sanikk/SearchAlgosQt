@@ -1,6 +1,6 @@
 #include "children.h"
 
-void children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
+void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
   int map_size = citymap.size();
   for (int i=0;i < 8;i++) {
     const auto& [dx, dy, cost] = neighbor_offsets[i];
@@ -27,7 +27,7 @@ void children(int x, int y, const std::vector<std::string>& citymap, std::vector
   }
 }
 
-void children(int x, int y, const std::vector<std::string>& citymap, std::vector<std::tuple<int, int, double>>& node_list) {
+void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<std::tuple<int, int, double>>& node_list) {
   int map_size = citymap.size();
   for (int i=0;i < 8;i++) {
     const auto& [dx, dy, cost] = neighbor_offsets[i];
@@ -52,7 +52,7 @@ void children(int x, int y, const std::vector<std::string>& citymap, std::vector
   }
 }
 
-void children(Node node, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
+void SearchTools::children(Node node, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
   children(node.x, node.y, citymap, node_list);
 }
 

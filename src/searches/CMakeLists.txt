@@ -1,7 +1,6 @@
 add_library(searches STATIC
     searches.h
     astar_search.cpp astar_search.h
-    astar_with_signals.cpp astar_with_signals.h
     fringe_search.cpp fringe_search.h
     dll.cpp dll.h
     fringe_with_dll.cpp fringe_with_dll.h
@@ -11,4 +10,4 @@ add_library(searches STATIC
 # target_include_directories(searches PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(searches PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(searches PUBLIC models Qt6::Core 
-                               PRIVATE tools shared_search_tools)
+                               PRIVATE tools search_tools)

@@ -1,6 +1,8 @@
 #include "astar_search.h"
 #include "conversions.h"
-#include "shared_search_tools.h"
+//#include "shared_search_tools.h"
+#include "children.h"
+#include "heuristics.h"
 
 #include <queue>
 #include <unordered_map>
@@ -17,7 +19,7 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
 
   Node start_node{startx, starty};
   Node goal_node{goalx, goaly};
-  start_node.cost = heuristics(start_node, goal_node);
+  start_node.cost = SearchTools::heuristics(start_node, goal_node);
 
   std::priority_queue<Node, std::vector<Node>, std::greater<Node>> heap;
   heap.push(start_node);
@@ -51,7 +53,7 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
     }
 
     std::vector<Node> children_list;
-    children(current, citymap, children_list);
+    SearchTools::children(current, citymap, children_list);
 
     for (auto child: children_list) {
       // std::cout << "child " << child.x << "," << child.y << "with cost " << child.cost << std::endl;
@@ -63,7 +65,7 @@ RetVal astar_search(int startx, int starty, int goalx, int goaly, const std::vec
       
         gscores[child_index] = tentative_gscore;
         camefrom[child_index] = current_index;
-        child.cost = tentative_gscore + heuristics(child, goal_node);
+        child.cost = tentative_gscore + SearchTools::heuristics(child, goal_node);
         heap.push(child);
       }
     }
