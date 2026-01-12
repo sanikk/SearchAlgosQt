@@ -37,7 +37,7 @@ constexpr std::array<QRgb, 9> DEFAULT_BIT_PALETTE = {
 };
 
 class MapWidget : public QWidget {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     MapWidget(int size = 0, QWidget* parent = nullptr);
     void setMap(std::vector<std::string>  citymap);

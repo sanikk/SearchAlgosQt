@@ -1,6 +1,5 @@
 add_library(tools STATIC
     tools.h
-    search_signals.h
     conversions.cpp conversions.h
     exceptions.cpp exceptions.h
 )

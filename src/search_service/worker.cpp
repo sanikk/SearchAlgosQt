@@ -35,7 +35,7 @@ AstarWorker::AstarWorker(int startx, int starty, int goalx, int goaly, const std
 void AstarWorker::run() {
   for (int i=0; i < 100; i++) {
     emit visit_node(i, i);
-    emit expand_node(i+1, i+1);
+    emit expand_node(i+1, i);
     QThread::msleep(20);
   }
   emit finished();

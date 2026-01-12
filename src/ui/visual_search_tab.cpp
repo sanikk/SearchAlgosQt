@@ -38,19 +38,10 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   connect(showHideFringeButton, &QPushButton::clicked, this, &VisualSearchTab::showHideFringe);
   connect(showHideAstarButton, &QPushButton::clicked, this, &VisualSearchTab::showHideAstar);
   connect(runAstarButton, &QPushButton::clicked, this, &VisualSearchTab::runAstar);
-  //QObject::connect(runAstarButton, &QPushButton::clicked, this, &VisualSearchTab::run_astar_thread);
 
-
-  //astar_signals = new SearchSignals{};
-  //fringe_signals = new SearchSignals{};
-  //connect(astar_signals, &SearchSignals::visit, mapScene, &MapWidget::astarVisit);
-  //connect(astar_signals, &SearchSignals::expand, mapScene, &MapWidget::astarExpand);
-  //connect(astar_signals, &SearchSignals::finished, mapScene, &MapWidget::astarFinished);
 
   connect(&searchService, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit);
   connect(&searchService, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand);
-  //connect(astar_signals, &SearchSignals::expand, mapScene, &MapWidget::astarExpand);
-  //connect(astar_signals, &SearchSignals::finished, mapScene, &MapWidget::astarFinished);
 }
 
 
@@ -89,13 +80,10 @@ void VisualSearchTab::showHideFringe() {
 }
 
 void VisualSearchTab::runFringe() {
-  //searchService.runFringeWithSignals(scenario_controls->get_scenarioIndex(), astar_signals);
 }
 
 
 void VisualSearchTab::runAstar() {
-  //searchService.runAstarWithSignals(scenario_controls->get_scenarioIndex(), astar_signals);
-  //searchService.runAstarWithSignals(scenario_controls->get_scenarioIndex());
   searchService.run_astar_thread(scenario_controls->get_scenarioIndex());
 }
 
