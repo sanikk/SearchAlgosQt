@@ -22,7 +22,7 @@ void SearchTools::children(int x, int y, const std::vector<std::string>& citymap
       if (dx2 < 0 || dx2 >= map_size || dy2 < 0 || dy2 >= map_size || citymap[dy2][dx2] != '.') {
         continue;
       }
-      node_list.push_back(Node(nx, ny, cost));
+      node_list.emplace_back(Node(nx, ny, cost));
     }
   }
 }
