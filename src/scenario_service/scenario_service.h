@@ -11,7 +11,7 @@ public:
   Scenario get_scenario(const int index);
   std::vector<int> get_bucketList();
   std::vector<Scenario> get_bucketScenarios(int bucket);
-  std::vector<std::string> get_map();
+  std::vector<std::string>& get_map();
   std::vector<Scenario> get_allScenarios();
   bool setMapFile(const std::filesystem::path& i_map_file);
   bool setScenarioFile(const std::filesystem::path& i_scenario_file);
