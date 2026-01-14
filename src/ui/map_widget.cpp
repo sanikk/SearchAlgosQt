@@ -1,10 +1,42 @@
 #include "map_widget.h"
 #include "conversions.h"
 
-MapWidget::MapWidget(int i_size, QWidget* parent): QWidget(parent) {
-  size = i_size;
-  img = QImage(size, size, QImage::Format_RGB32);
+#include <QTimer>
+#include <QScreen>
+#include <QWindow>
+#include <qnumeric.h>
+
+MapWidget::MapWidget(int i_size, QWidget* parent): 
+  QWidget(parent), size(i_size), 
+  img(QImage(i_size, i_size, QImage::Format_RGB32)),
+  searching(false) 
+{
   storage.assign(size * size, 0);
+  timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, static_cast<void (QWidget::*)()>(&MapWidget::update));
+  connect(this->windowHandle(), &QWindow::screenChanged, this, &MapWidget::set_refresh_rate);
+}
+
+void MapWidget::start_search() {
+  qDebug() << "starting search";
+  searching = true;
+  set_refresh_rate(window()->screen());
+  timer->start();
+}
+
+void MapWidget::stop_search() {
+  qDebug() << "stopping search";
+  searching = false;
+  timer->stop();
+}
+
+void MapWidget::set_refresh_rate(QScreen* screen) {
+  if (!screen) {
+    qDebug() << "no screen";
+    return;
+  }
+  timer->setInterval(qRound(1000.0 / screen->refreshRate()));
+
 }
 
 
@@ -55,7 +87,6 @@ void MapWidget::renderMap() {
     } 
   }
   resize(img.height()*mapScale, img.width()*mapScale);
-  update();
 }
 
 QRgb MapWidget::colorPixel(uint8_t byte) {
@@ -106,7 +137,6 @@ void MapWidget::astarVisit(int x, int y) {
   cell |= VISIT_A;
   if (showAstar && !(cell & EXPAND_A)) {
       img.setPixel(x, y, DEFAULT_BIT_PALETTE[6]);
-      update(x*mapScale, y*mapScale, mapScale, mapScale);
   }
 }
 
@@ -114,13 +144,13 @@ void MapWidget::astarExpand(int x, int y) {
   storage[xy2int(x, y, size)] |= EXPAND_A;
   if (showAstar) {
     img.setPixel(x, y, DEFAULT_BIT_PALETTE[7]);
-    update(x*mapScale, y*mapScale, mapScale, mapScale);
   }
 }
 
 
 void MapWidget::astarFinished(RetVal retval) {
   // TODO: write this
+  stop_search();
 }
 
 void MapWidget::fringeVisit(int x, int y) {
@@ -128,7 +158,6 @@ void MapWidget::fringeVisit(int x, int y) {
   cell |= VISIT_F;
   if (showFringe && !(cell & EXPAND_F)) {
       img.setPixel(x, y, DEFAULT_BIT_PALETTE[4]);
-      update(x*mapScale, y*mapScale, mapScale, mapScale);
   }
 }
 
@@ -136,12 +165,12 @@ void MapWidget::fringeExpand(int x, int y) {
   storage[xy2int(x, y, size)] |= EXPAND_F;
   if (showFringe) {
     img.setPixel(x, y, DEFAULT_BIT_PALETTE[5]);
-    update(x*mapScale, y*mapScale, mapScale, mapScale);
   }
 }
 
 void MapWidget::fringeFinished(RetVal retval) {
 // TODO: write this
+  stop_search();
 }
 
 

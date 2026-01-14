@@ -47,6 +47,11 @@ public:
     bool showFringe;
     bool showAstar;
 
+    bool searching;
+    void set_refresh_rate(QScreen* screen);
+    void start_search();
+    void stop_search();
+
 
 public slots:
     void fringeVisit(int x, int y);
@@ -75,5 +80,7 @@ private:
     void clear_scenario();
     void clear_fringe();
     void clear_astar();
+
+    QTimer* timer;
 };
 
