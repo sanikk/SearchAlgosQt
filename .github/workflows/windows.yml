@@ -21,7 +21,7 @@ jobs:
         with:
           version: '6.10.1'
           arch: 'win64_msvc2022_64'
-          modules: 'qtwidgets'
+          modules: 'qtbase'
 
       - name: Configure
         run: |
