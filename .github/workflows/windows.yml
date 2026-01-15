@@ -2,11 +2,12 @@ name: Windows Qt Build
 
 on:
   push:
-    branches: [ main, release_stuff ]
+    branches:
+      - main
+      - release_stuff
     tags:
       - 'v*'
   pull_request:
-  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -16,35 +17,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Qt
+      - name: Install Qt (MSVC)
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.10.1'
           arch: 'win64_msvc2022_64'
 
-      - name: Configure
-        run: |
-          cmake -S . -B build -G "Ninja" `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DCMAKE_PREFIX_PATH="$env:Qt6_DIR"
+      - name: Configure (MSVC)
+        run: >
+          cmake -S . -B build
+          -G "Visual Studio 17 2022"
+          -A x64
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH="${{ env.Qt6_DIR }}"
 
       - name: Build
-        run: |
-          cmake --build build --config Release
+        run: cmake --build build --config Release
 
       - name: Deploy Qt runtime
         run: |
           mkdir deploy
-          copy build\searchalgos.exe deploy\
-          windeployqt deploy\searchalgos.exe
+          copy build\Release\searchalgos.exe deploy\
+          "${{ env.Qt6_DIR }}\bin\windeployqt.exe" deploy\searchalgos.exe
 
       - name: Package
         run: |
-          $version = ${{ github.ref_name || 'pre1.0' }}
-          powershell Compress-Archive deploy searchalgos-windows-$version.zip
+          set VERSION=${{ github.ref_name }}
+          if "%VERSION%"=="" set VERSION=dev
+          powershell Compress-Archive deploy searchalgos-windows-%VERSION%.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: searchalgos-windows
-          path: searchalgos-windows.zip
+          path: searchalgos-windows-*.zip
