@@ -10,8 +10,8 @@ Here is the non-Qt C++ version: https://github.com/sanikk/algolabra-cpp
 
 And the original Python version, with PyQt6: https://github.com/sanikk/algolabra
 
-Maps are from the wonderful people at [MovingAI](https://www.movingai.com/). I just provide them here for
-convenience.
+Maps and scenario files included in this repository are from [MovingAI](https://www.movingai.com/)
+ and are provided for convenience. Users should refer to MovingAI for original data, licensing terms, and additional compatible maps.
 
 ## Third-party libraries
 

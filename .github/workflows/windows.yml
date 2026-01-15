@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-      - release_stuff
     tags:
       - 'v*'
   pull_request:
+    branches:
+      - main
 
 jobs:
   build-windows:
@@ -44,7 +45,14 @@ jobs:
         run: |
           set VERSION=${{ github.ref_name }}
           if (-not $version) { $version = "dev" }
-          powershell Compress-Archive deploy searchalgos-windows-%VERSION%.zip
+          powershell Compress-Archive deploy searchalgos-windows-$version.zip
+
+      - name: Upload Release Asset
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: searchalgos-windows-*.zip
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
