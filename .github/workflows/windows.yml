@@ -2,10 +2,11 @@ name: Windows Qt Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, release_stuff ]
     tags:
       - 'v*'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build-windows:
