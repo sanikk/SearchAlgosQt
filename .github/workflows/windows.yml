@@ -39,6 +39,12 @@ jobs:
         run: |
           mkdir deploy
           copy build\Release\searchalgos.exe deploy\
+
+
+          # Copy map & scenario files
+          copy Boston_0_512.map deploy\
+          copy Boston_0_512.map.scen deploy\
+          
           & "$env:QT_ROOT_DIR\bin\windeployqt.exe" deploy\searchalgos.exe
 
       - name: Package
@@ -47,11 +53,15 @@ jobs:
           if (-not $version) { $version = "dev" }
           powershell Compress-Archive deploy searchalgos-windows-$version.zip
 
-      - name: Upload Release Asset
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Release
         uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
         with:
-          files: searchalgos-windows-*.zip
+          files: |
+            README.md
+            LICENSE_Qt-LGPL.txt
+            Boston_0_512.map
+            Boston_0_512.map.scen
 
 
       - name: Upload artifact
