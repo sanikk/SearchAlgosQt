@@ -1,6 +1,7 @@
 #include "visual_search_tab.h"
 #include "fullscreenDialog.h"
 #include "search_service.h"
+#include <qnamespace.h>
 
 VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls)
   : QWidget(), scenarioService(i_scenario_service), searchService(i_search_service), scenario_controls(i_scenario_controls) {
@@ -39,9 +40,9 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   connect(showHideAstarButton, &QPushButton::clicked, this, &VisualSearchTab::showHideAstar);
   connect(runAstarButton, &QPushButton::clicked, this, &VisualSearchTab::runAstar);
 
-
-  connect(&searchService, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit);
-  connect(&searchService, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand);
+  connect(&searchService, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit, Qt::DirectConnection);
+  connect(&searchService, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand, Qt::DirectConnection);
+  connect(&searchService, &SearchService::astarFound, mapScene, &MapWidget::astarFinished, Qt::DirectConnection);
 }
 
 
@@ -80,10 +81,12 @@ void VisualSearchTab::showHideFringe() {
 }
 
 void VisualSearchTab::runFringe() {
+  mapScene->start_search();
 }
 
 
 void VisualSearchTab::runAstar() {
+  mapScene->start_search();
   searchService.run_astar_thread(scenario_controls->get_scenarioIndex());
 }
 

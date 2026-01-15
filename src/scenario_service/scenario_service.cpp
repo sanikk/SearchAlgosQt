@@ -12,7 +12,7 @@ Scenario ScenarioService::get_scenario(const int index)
   return scenarios[index];
 }
 
-std::vector<std::string> ScenarioService::get_map(){
+std::vector<std::string>& ScenarioService::get_map(){
   return citymap;
 }
 

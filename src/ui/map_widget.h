@@ -47,6 +47,10 @@ public:
     bool showFringe;
     bool showAstar;
 
+    bool searching;
+    void start_search();
+    void stop_search();
+
 
 public slots:
     void fringeVisit(int x, int y);

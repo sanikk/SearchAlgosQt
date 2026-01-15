@@ -3,7 +3,6 @@
 #include "conversions.h"
 #include "worker.h"
 
-#include <iostream>
 
 SearchService::SearchService(
     ScenarioService& i_scenario_service)
@@ -39,10 +38,6 @@ void SearchService::runAstar(int index) {
   }
 }
 
-void SearchService::runAstar(int bucket, int index) {
-  SearchService::runAstar(10 * bucket + index);
-}
-
 void SearchService::runFringe(int index) {
   Scenario scenario = loadScenario(index);
   const std::vector<std::string>& citymap = scenarioService.get_map();
@@ -52,17 +47,9 @@ void SearchService::runFringe(int index) {
     ret.timing = end - start; 
 
   if (ret.cost.has_value()) {
-    //std::cout << ret.cost.value() << std::endl;
     printRoute(ret.route);
   }
 }
-
-void SearchService::runFringe(int bucket, int index) {
-  SearchService::runFringe(bucket * 10 + index);
-}
-
-const double EPSILON = 0.0001;
-
 
 std::vector<RetVal> SearchService::runAstarForBucket(int bucket) {
   std::vector<RetVal> retvals;
@@ -104,7 +91,27 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
 }
 
 void SearchService::run_astar_thread(const int scenario_index) { 
-  std::cout << "SearchService " << QThread::currentThread() << std::endl;
   Scenario scenario = loadScenario(scenario_index);
   WorkerRunner(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this);
 }
+
+// void SearchService::astar_visited(int x, int y) {
+//   // TODO: unused wrapper now
+//   // std::cout << "visited " << x << "," << y << std::endl;
+//   emit astarVisit(x, y);
+// 
+// }
+// 
+// void SearchService::astar_expanded(int x, int y) {
+//   // TODO: unused wrapper now
+//   // std::cout << "expanded " << x << "," << y << std::endl;
+//   emit astarExpand(x, y);
+// 
+// }
+// 
+// void SearchService::astar_goal_found(double cost) {
+//   // TODO: unused wrapper now
+//   // std::cout << "found with cost " << cost << std::endl;
+//   emit astarFound(cost);
+// 
+// }
