@@ -25,8 +25,8 @@ jobs:
       - name: Configure
         run: |
           cmake -S . -B build -G "Ninja" `
-                -DCMAKE_BUILD_TYPE=Release `
-                -DCMAKE_PREFIX_PATH="${{ env.Qt6_DIR }}"
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_PREFIX_PATH="$env:Qt6_DIR"
 
       - name: Build
         run: |
@@ -35,7 +35,7 @@ jobs:
       - name: Deploy Qt runtime
         run: |
           mkdir deploy
-          copy build\yourapp.exe deploy\
+          copy build\searchalgos.exe deploy\
           windeployqt deploy\searchalgos.exe
 
       - name: Package
