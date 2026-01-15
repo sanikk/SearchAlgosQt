@@ -38,7 +38,7 @@ jobs:
         run: |
           mkdir deploy
           copy build\Release\searchalgos.exe deploy\
-          & "$env:Qt6_DIR\bin\windeployqt.exe" deploy\searchalgos.exe
+          & "$env:Qt6_ROOT\bin\windeployqt.exe" deploy\searchalgos.exe
 
       - name: Package
         run: |
