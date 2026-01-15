@@ -13,7 +13,11 @@ And the original Python version, with PyQt6: https://github.com/sanikk/algolabra
 Maps are from the wonderful people at [MovingAI](https://www.movingai.com/). I just provide them here for
 convenience.
 
-[Qt](https://www.qt.io/) is of course not my project, I just use it. I think it's nice for UIs.
+## Third-party libraries
+
+This project uses [Qt](https://www.qt.io/) for its GUI components. Qt is licensed under the
+[GNU Lesser General Public License (LGPL) v3](LICENSE_Qt-LGPL.txt).  
+This software links dynamically to the Qt libraries; Qt is not part of this project.
 
 ### INSTRUCTIONS
 
@@ -25,6 +29,7 @@ cd build
 cmake ..
 cmake --build .
 ```
+(I havent ran this in a while on my linux installs, i need to test the Linux instructions. You have been warned.)
 
 #### Windows (example for msvc, with Qt version 6.10.1 installed in the default destination)
 You only need to run the windeployqt.exe if your install cannot find the Qt6 files on its own, and then running
@@ -36,3 +41,7 @@ cmake --build .
 c:\Qt\6.10.1\msvc2022_64\bin\windeployqt.exe ./Debug/searchalgos.exe
 .\Debug\searchalgos.exe
 ```
+
+### RELEASES
+
+Providing a .zip file for windows users, with Qt6 libs.
