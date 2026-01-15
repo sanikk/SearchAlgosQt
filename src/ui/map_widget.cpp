@@ -1,44 +1,27 @@
 #include "map_widget.h"
 #include "conversions.h"
-
-#include <QTimer>
-#include <QScreen>
 #include <QWindow>
-#include <qnumeric.h>
 
-MapWidget::MapWidget(int i_size, QWidget* parent): 
-  QWidget(parent), size(i_size), 
+
+MapWidget::MapWidget(int i_size, QWidget* parent) 
+  : QWidget(parent), size(i_size), 
   img(QImage(i_size, i_size, QImage::Format_RGB32)),
   searching(false) 
 {
   storage.assign(size * size, 0);
-  timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, static_cast<void (QWidget::*)()>(&MapWidget::update));
-  connect(this->windowHandle(), &QWindow::screenChanged, this, &MapWidget::set_refresh_rate);
+  winId();
 }
 
+
 void MapWidget::start_search() {
-  qDebug() << "starting search";
+  //qDebug() << "starting search";
   searching = true;
-  set_refresh_rate(window()->screen());
-  timer->start();
 }
 
 void MapWidget::stop_search() {
-  qDebug() << "stopping search";
+  //qDebug() << "stopping search";
   searching = false;
-  timer->stop();
 }
-
-void MapWidget::set_refresh_rate(QScreen* screen) {
-  if (!screen) {
-    qDebug() << "no screen";
-    return;
-  }
-  timer->setInterval(qRound(1000.0 / screen->refreshRate()));
-
-}
-
 
 void MapWidget::setMap(std::vector<std::string>  citymap) {
   size = citymap.size();
@@ -69,6 +52,7 @@ void MapWidget::setScenario(Scenario i_scenario) {
     storage[xy2int(scenario->goal_x, std::max(0, std::min(scenario->goal_y + i, size - 1)), size)] |= GOAL;
   }
   renderMap();
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::paintEvent(QPaintEvent*) {
@@ -138,6 +122,7 @@ void MapWidget::astarVisit(int x, int y) {
   if (showAstar && !(cell & EXPAND_A)) {
       img.setPixel(x, y, DEFAULT_BIT_PALETTE[6]);
   }
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::astarExpand(int x, int y) {
@@ -145,12 +130,18 @@ void MapWidget::astarExpand(int x, int y) {
   if (showAstar) {
     img.setPixel(x, y, DEFAULT_BIT_PALETTE[7]);
   }
+  windowHandle()->requestUpdate();
 }
 
 
 void MapWidget::astarFinished(RetVal retval) {
   // TODO: write this
   stop_search();
+  //qDebug() << "MapWidget::astarFinished";
+  if (retval.cost.has_value()) {
+    //qDebug() << "cost was " << retval.cost.value();
+  }
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::fringeVisit(int x, int y) {

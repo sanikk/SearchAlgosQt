@@ -29,8 +29,8 @@ public:
 signals:
   void astarVisit(int x, int y);
   void astarExpand(int x, int y);
-  void astarFound(double cost);
-  //void astarFound(RetVal ret);
+  void astarGoal(double cost);
+  void astarFound(RetVal ret);
 private:
   ScenarioService& scenarioService;
   Scenario loadScenario(const int index);

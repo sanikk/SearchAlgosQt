@@ -42,6 +42,7 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
 
   connect(&searchService, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit, Qt::DirectConnection);
   connect(&searchService, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand, Qt::DirectConnection);
+  connect(&searchService, &SearchService::astarFound, mapScene, &MapWidget::astarFinished, Qt::DirectConnection);
 }
 
 

@@ -15,7 +15,8 @@ class AstarWorker: public QObject {
 signals:
     void visit_node(int x, int y);
     void expand_node(int x, int y);
-    void found_cost(double cost);
+    //void found_cost(double cost);
+    void found_goal(RetVal ret);
     void finished();
 
 public:

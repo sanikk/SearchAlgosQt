@@ -3,11 +3,11 @@
 #include "children.h"
 #include "heuristics.h"
 #include "conversions.h"
+#include "retval.h"
 
 #include <queue>
 
 #include <QThread>
-//#include <QDebug>
 
 
 WorkerRunner::WorkerRunner(int startx, int starty, int goalx, int goaly, 
@@ -25,7 +25,8 @@ WorkerRunner::WorkerRunner(int startx, int starty, int goalx, int goaly,
   
   connect(worker, &AstarWorker::visit_node, search_service, &SearchService::astarVisit, Qt::QueuedConnection);
   connect(worker, &AstarWorker::expand_node, search_service, &SearchService::astarExpand, Qt::QueuedConnection);
-  connect(worker, &AstarWorker::found_cost, search_service, &SearchService::astarFound, Qt::QueuedConnection);
+  //connect(worker, &AstarWorker::found_cost, search_service, &SearchService::astarGoal, Qt::QueuedConnection);
+  connect(worker, &AstarWorker::found_goal, search_service, &SearchService::astarFound, Qt::QueuedConnection);
 
   thread->start();
 }
@@ -38,12 +39,10 @@ AstarWorker::AstarWorker(int startx, int starty, int goalx, int goaly, const std
 : startx(startx), starty(starty), goalx(goalx), goaly(goaly), citymap(i_citymap) {
 }
 
-
 void AstarWorker::run() {
   astar_with_signals();
   emit finished();
 }
-
 
 void AstarWorker::astar_with_signals() {
   Node start_node{startx, starty};
@@ -70,14 +69,14 @@ void AstarWorker::astar_with_signals() {
     double current_gscore = gscores[current_index];
 
     if (current == goal_node) {
-      std::vector<int> route;
+      std::vector<std::pair<int, int>> route;
       while (current_index != -1) {
-        route.push_back(current_index);
+        route.push_back(int2xy(current_index, map_size));
         current_index = camefrom[current_index];
       }
       std::reverse(route.begin(), route.end());
-      emit found_cost(current_gscore);
-      //return RetVal(true);
+      //emit found_cost(current_gscore);
+      emit found_goal(RetVal(current_gscore, route));
       return;
     }
 
@@ -95,12 +94,10 @@ void AstarWorker::astar_with_signals() {
         camefrom[child_index] = current_index;
         child.cost = tentative_gscore + SearchTools::heuristics(child, goal_node);
         heap.push(child);
-        //qDebug() << "pushed child " << child.x << "," << child.y;
       }
     }
   }
-  emit found_cost(-1.0);
+  //emit found_cost(-1.0);
+  emit found_goal(RetVal());
   return;
-  //return RetVal();
-
 }
