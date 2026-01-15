@@ -43,7 +43,7 @@ jobs:
       - name: Package
         run: |
           set VERSION=${{ github.ref_name }}
-          if "%VERSION%"=="" set VERSION=dev
+          if (-not $version) { $version = "dev" }
           powershell Compress-Archive deploy searchalgos-windows-%VERSION%.zip
 
       - name: Upload artifact
