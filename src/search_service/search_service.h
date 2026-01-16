@@ -3,7 +3,6 @@
 #include "scenario_service.h"
 
 #include <QObject>
-#include <QThread>
 
 class SearchService : public QObject {
   Q_OBJECT
@@ -20,17 +19,19 @@ public:
   std::vector<RetVal> runFringeForBucket(const int bucket);
 
   void run_astar_thread(const int scenario_index);
+  void run_fringe_thread(const int scenario_index);
 
   std::vector<RetVal> runTestVersionForBucket(const int bucket);
-// public slots:
-//   void astar_visited(int x, int y);
-//   void astar_expanded(int x, int y);
-//   void astar_goal_found(double cost);
+
 signals:
   void astarVisit(int x, int y);
   void astarExpand(int x, int y);
   void astarGoal(double cost);
   void astarFound(RetVal ret);
+  void fringeVisit(int x, int y);
+  void fringeExpand(int x, int y);
+  void fringeFound(RetVal ret);
+
 private:
   ScenarioService& scenarioService;
   Scenario loadScenario(const int index);
