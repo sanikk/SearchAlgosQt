@@ -1,5 +1,6 @@
 #include "map_widget.h"
 #include "conversions.h"
+
 #include <QWindow>
 
 
@@ -8,7 +9,7 @@ MapWidget::MapWidget(int i_size, QWidget* parent)
   img(QImage(i_size, i_size, QImage::Format_RGB32)),
   searching(false) 
 {
-  storage.assign(size * size, 0);
+  clear_storage();
   winId();
 }
 
@@ -25,7 +26,7 @@ void MapWidget::stop_search() {
 
 void MapWidget::setMap(std::vector<std::string>  citymap) {
   size = citymap.size();
-  storage.assign(size * size, 0);
+  clear_storage();
   img = QImage(size, size, QImage::Format_RGB32);
   for (int y=0; y < size; y++) {
     for (int x=0; x < size; x++) {
@@ -109,11 +110,13 @@ QRgb MapWidget::colorPixel(uint8_t byte) {
 void MapWidget::showHideAstar() {
   showAstar = !showAstar;
   renderMap();
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::showHideFringe() {
   showFringe = !showFringe;
   renderMap();
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::astarVisit(int x, int y) {
@@ -150,6 +153,7 @@ void MapWidget::fringeVisit(int x, int y) {
   if (showFringe && !(cell & EXPAND_F)) {
       img.setPixel(x, y, DEFAULT_BIT_PALETTE[4]);
   }
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::fringeExpand(int x, int y) {
@@ -157,15 +161,17 @@ void MapWidget::fringeExpand(int x, int y) {
   if (showFringe) {
     img.setPixel(x, y, DEFAULT_BIT_PALETTE[5]);
   }
+  windowHandle()->requestUpdate();
 }
 
 void MapWidget::fringeFinished(RetVal retval) {
 // TODO: write this
   stop_search();
+  windowHandle()->requestUpdate();
 }
 
 
-void MapWidget::clear() {
+void MapWidget::clear_storage() {
   storage.assign(size * size, 0); 
 }
 

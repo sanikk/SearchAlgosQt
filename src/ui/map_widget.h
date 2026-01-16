@@ -1,10 +1,11 @@
 #pragma once
-#include "retval.h"
-#include "scenario.h"
+#include "models.h"
+
+#include <optional>
 
 #include <QWidget>
 #include <QPainter>
-#include <optional>
+
 
 // Bitwise ops
 constexpr std::uint8_t WALL         = 1u << 7;
@@ -75,7 +76,7 @@ private:
 
     int mapScale = 5;
 
-    void clear();
+    void clear_storage();
     void clear_scenario();
     void clear_fringe();
     void clear_astar();
