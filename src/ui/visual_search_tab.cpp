@@ -1,10 +1,8 @@
 #include "visual_search_tab.h"
 #include "fullscreenDialog.h"
-#include "search_service.h"
-#include <qnamespace.h>
 
 VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls)
-  : QWidget(), scenarioService(i_scenario_service), searchService(i_search_service), scenario_controls(i_scenario_controls) {
+  : QWidget(), scenario_service(i_scenario_service), search_service(i_search_service), scenario_controls(i_scenario_controls) {
   
   tabLayout = new QVBoxLayout{};
   controlsBox =new QWidget{};
@@ -39,10 +37,15 @@ VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchServ
   connect(showHideFringeButton, &QPushButton::clicked, this, &VisualSearchTab::showHideFringe);
   connect(showHideAstarButton, &QPushButton::clicked, this, &VisualSearchTab::showHideAstar);
   connect(runAstarButton, &QPushButton::clicked, this, &VisualSearchTab::runAstar);
+  connect(runFringeButton, &QPushButton::clicked, this, &VisualSearchTab::runFringe); 
 
-  connect(&searchService, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit, Qt::DirectConnection);
-  connect(&searchService, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand, Qt::DirectConnection);
-  connect(&searchService, &SearchService::astarFound, mapScene, &MapWidget::astarFinished, Qt::DirectConnection);
+  connect(&search_service, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit, Qt::DirectConnection);
+  connect(&search_service, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand, Qt::DirectConnection);
+  connect(&search_service, &SearchService::astarFound, mapScene, &MapWidget::astarFinished, Qt::DirectConnection);
+
+  connect(&search_service, &SearchService::fringeVisit, mapScene, &MapWidget::fringeVisit, Qt::DirectConnection);
+  connect(&search_service, &SearchService::fringeExpand, mapScene, &MapWidget::fringeExpand, Qt::DirectConnection);
+  connect(&search_service, &SearchService::fringeFound, mapScene, &MapWidget::fringeFinished, Qt::DirectConnection);
 }
 
 
@@ -64,11 +67,11 @@ void VisualSearchTab::endFullScreenDialog() {
 }
 
 void VisualSearchTab::mapChanged() {
-  mapScene->setMap(scenarioService.get_map());
+  mapScene->setMap(scenario_service.get_map());
 }
 
 void VisualSearchTab::scenarioChanged(int index) {
-  mapScene->setScenario(scenarioService.get_scenario(index));
+  mapScene->setScenario(scenario_service.get_scenario(index));
 }
 
 void VisualSearchTab::showHideFringe() {
@@ -82,12 +85,13 @@ void VisualSearchTab::showHideFringe() {
 
 void VisualSearchTab::runFringe() {
   mapScene->start_search();
+  search_service.run_fringe_thread(scenario_controls->get_scenarioIndex());
 }
 
 
 void VisualSearchTab::runAstar() {
   mapScene->start_search();
-  searchService.run_astar_thread(scenario_controls->get_scenarioIndex());
+  search_service.run_astar_thread(scenario_controls->get_scenarioIndex());
 }
 
 void VisualSearchTab::showHideAstar() {

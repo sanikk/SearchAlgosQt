@@ -1,6 +1,5 @@
 #include "search_service.h"
 #include "searches.h"
-#include "conversions.h"
 #include "worker.h"
 
 
@@ -14,17 +13,6 @@ Scenario SearchService::loadScenario(int index) {
 }
 
 
-void printRoute(const std::vector<std::pair<int, int>>& route) {
-  // TODO: remove this
-  for (std::pair<int, int> pari   : route) {
-//    std::cout << pari.first << "," << pari.second << std::endl;
-  }
-}
-
-void printRoute(const std::vector<int>& route, const int map_size) {
-  // TODO: remove this
-  printRoute(pair_route(route, map_size));
-}
 
 void SearchService::runAstar(int index) {
   Scenario scenario = loadScenario(index);
@@ -34,7 +22,7 @@ void SearchService::runAstar(int index) {
   auto end = std::chrono::high_resolution_clock::now();
   ret.timing = end - start; 
   if (ret.found) {
-    printRoute(ret.route);
+
   }
 }
 
@@ -47,7 +35,7 @@ void SearchService::runFringe(int index) {
     ret.timing = end - start; 
 
   if (ret.cost.has_value()) {
-    printRoute(ret.route);
+  
   }
 }
 
@@ -92,26 +80,13 @@ std::vector<RetVal> SearchService::runTestVersionForBucket(const int bucket) {
 
 void SearchService::run_astar_thread(const int scenario_index) { 
   Scenario scenario = loadScenario(scenario_index);
-  WorkerRunner(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this);
+  WorkerRunner w = WorkerRunner();
+  w.run_astar(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this);
 }
 
-// void SearchService::astar_visited(int x, int y) {
-//   // TODO: unused wrapper now
-//   // std::cout << "visited " << x << "," << y << std::endl;
-//   emit astarVisit(x, y);
-// 
-// }
-// 
-// void SearchService::astar_expanded(int x, int y) {
-//   // TODO: unused wrapper now
-//   // std::cout << "expanded " << x << "," << y << std::endl;
-//   emit astarExpand(x, y);
-// 
-// }
-// 
-// void SearchService::astar_goal_found(double cost) {
-//   // TODO: unused wrapper now
-//   // std::cout << "found with cost " << cost << std::endl;
-//   emit astarFound(cost);
-// 
-// }
+void SearchService::run_fringe_thread(const int scenario_index) { 
+  Scenario scenario = loadScenario(scenario_index);
+  WorkerRunner w = WorkerRunner();
+  w.run_fringe(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenarioService.get_map(), this);
+}
+

@@ -4,7 +4,6 @@
 #include "search_service.h"
 #include "map_widget.h"
 #include "scenario_controls.h"
-//#include "search_signals.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -26,8 +25,8 @@ public slots:
 signals:
     void fullscreenDialogClosed();
 private:
-    ScenarioService& scenarioService;
-    SearchService& searchService;
+    ScenarioService& scenario_service;
+    SearchService& search_service;
     ScenarioControls* scenario_controls;
     
     QPushButton *runAstarButton;
