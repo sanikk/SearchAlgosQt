@@ -12,6 +12,7 @@
 #include <QPushButton>
 #include <QPainter>
 #include <QScrollArea>
+#include <QLabel>
 
 
 class VisualSearchTab : public QWidget {
@@ -22,6 +23,16 @@ public:
 public slots:
     void mapChanged();
     void scenarioChanged(int scenario_index);
+
+    void visit_astar();
+    void expand_astar();
+    void cost_astar();
+    void reset_astar();
+
+    void visit_fringe();
+    void expand_fringe();
+    void cost_fringe();
+    void reset_fringe();
 signals:
     void fullscreenDialogClosed();
 private:
@@ -39,6 +50,26 @@ private:
     MapWidget *mapScene;
     QScrollArea* scroll;
     QVBoxLayout *tabLayout;
+
+    void make_connections();
+    QWidget* make_controls_box();
+    QHBoxLayout* make_buttons_row();
+    QWidget* make_status_rows();
+    QLabel* make_label(QString text);
+
+    QLabel* astar_visited;
+    QLabel* astar_expanded;
+    QLabel* astar_cost;
+
+    QLabel* fringe_visited;
+    QLabel* fringe_expanded;
+    QLabel* fringe_cost;
+    QLabel* fringe_flimit;
+
+    // TODO: these will go in SearchService
+    int astar_visits, astar_expands;
+    int fringe_visits, fringe_expands;
+    double fringe_costs, astar_costs, fringe_flimits;
 
 private slots:
     void showHideFringe();
