@@ -1,5 +1,7 @@
 #include "filereader.h"
 #include <fstream>
+#include <sstream>
+#include <string>
 
 std::ifstream readFile(const std::filesystem::path &filename) {
   std::ifstream f(filename);
@@ -9,27 +11,29 @@ std::ifstream readFile(const std::filesystem::path &filename) {
   return f;
 }
 
-std::vector<std::string> readMap(const std::filesystem::path& filename) {
+MapData readMap(const std::filesystem::path& filename) {
   int width;
   std::ifstream f = readFile(filename);
   std::string str;
 
   //first loop skips over the map headers until we get to the 'width...' line
-  while (getline(f, str)) {
+  while (std::getline(f, str)) {
     if (str.compare(0, 6, "width ") == 0) {
       width = std::stoi(str.substr(6, std::string::npos));
       break;
     }
     continue;
   }
-
-  std::vector<std::string> citymap;
+  std::vector<uint8_t> citymap;
   while (getline(f, str)) {
     if (str.empty() || str.size() < width)
       continue;
-    citymap.push_back(str.substr(0, width));
+    for (char c : str) {
+      if (c=='\n' || c=='\r') continue;
+      citymap.push_back(c == '@' ? 1u: 0u);
+    }
   }
-  return citymap;
+  return MapData(width, citymap);
 }
 
 std::vector<Scenario> readScenarios(const std::filesystem::path& filename) {

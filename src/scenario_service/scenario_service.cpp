@@ -1,10 +1,11 @@
 #include "scenario_service.h"
+#include "map_data.h"
 #include "filereader.h"
 
 
-ScenarioService::ScenarioService() {};
+ScenarioService::ScenarioService() : map_size(0) {};
 
-Scenario ScenarioService::get_scenario(const int index)
+Scenario& ScenarioService::get_scenario(const int index)
 {
   if (index < 0 || index >= scenarios.size()) {
     throw std::invalid_argument("invalid scenario number.");
@@ -12,7 +13,7 @@ Scenario ScenarioService::get_scenario(const int index)
   return scenarios[index];
 }
 
-std::vector<std::string>& ScenarioService::get_map(){
+std::vector<uint8_t>& ScenarioService::get_map(){
   return citymap;
 }
 
@@ -24,12 +25,13 @@ bool ScenarioService::setMapFile(const std::filesystem::path& i_map_file) {
   if (i_map_file.empty() || !std::filesystem::is_regular_file(i_map_file)) {
     return false;
   }
-  std::vector<std::string> citymap_candidate = readMap(i_map_file);
-  if (citymap_candidate.empty()) {
+  MapData md = readMap(i_map_file);
+  if (md.map_data.empty()) {
     return false;
   }
   mapFile = i_map_file;
-  citymap = citymap_candidate;
+  citymap = md.map_data;
+  map_size = md.map_size;
   return true;
 }
 
@@ -63,3 +65,8 @@ std::vector<Scenario> ScenarioService::get_bucketScenarios(int bucket) {
   }
   return returnable;
 }
+
+int ScenarioService::get_map_size() {
+  return map_size;
+}
+
