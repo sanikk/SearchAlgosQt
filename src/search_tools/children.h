@@ -23,11 +23,11 @@ const std::array<std::tuple<int, int, double>, 8> neighbor_offsets = {{
 }};
 
 void children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list);
-void children(int x, int y, int map_size, const std::vector<uint8_t>& citymap, std::vector<Node>& node_list);
+//void children(int x, int y, int map_size, const std::vector<uint8_t>& citymap, std::vector<Node>& node_list);
 void children(int x, int y, const std::vector<std::string>& citymap, std::vector<std::tuple<int, int, double>>& node_list);
-void children(int x, int y, int map_size, const std::vector<uint8_t>& citymap, std::vector<std::tuple<int, int, double>>& node_list);
+//void children(int x, int y, int map_size, const std::vector<uint8_t>& citymap, std::vector<std::tuple<int, int, double>>& node_list);
 void children(Node node, const std::vector<std::string>& citymap, std::vector<Node>& node_list);
-void children(Node node, const std::vector<uint8_t>& citymap, std::vector<Node>& node_list);
+//void children(Node node, const std::vector<uint8_t>& citymap, std::vector<Node>& node_list);
 
 }
 
