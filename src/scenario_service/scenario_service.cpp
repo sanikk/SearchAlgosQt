@@ -3,7 +3,7 @@
 #include "filereader.h"
 
 
-ScenarioService::ScenarioService() : map_size(0) {};
+ScenarioService::ScenarioService(int map_size) : map_size(map_size) { citymap.assign(map_size * map_size, 0); };
 
 Scenario& ScenarioService::get_scenario(const int index)
 {

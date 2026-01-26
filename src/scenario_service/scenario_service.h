@@ -6,7 +6,7 @@
 class ScenarioService {
 
 public:
-  ScenarioService();
+  ScenarioService(int map_size = 0);
   Scenario& get_scenario(const int index);
   std::vector<int> get_bucketList();
   std::vector<Scenario> get_bucketScenarios(int bucket);
