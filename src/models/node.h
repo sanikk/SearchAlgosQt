@@ -3,10 +3,11 @@
 
 struct Node {
   double cost;
-  int x, y;
+  int x, y, index;
 
-  Node(int i_x, int i_y, double i_cost) : x(i_x), y(i_y), cost(i_cost) {}
-  Node(int i_x, int i_y) : x(i_x), y(i_y) {}
+  Node(int i_x, int i_y, int i_index, int i_cost) 
+    : x(i_x), y(i_y), index(i_index), cost(i_cost) {}
+  Node(int i_x, int i_y, int i_index) : x(i_x), y(i_y), index(i_index) {}
   Node() {}
 
   friend bool operator==(const Node& l, const Node& r) { return l.x==r.x && l.y == r.y; }
