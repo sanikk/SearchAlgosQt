@@ -3,10 +3,14 @@
 void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
   int map_size = citymap.size();
   for (int i=0;i < 8;i++) {
+    if (x==0 && (i == 1 || i == 2 || i == 3)) continue; 
+    if (x==map_size - 1 && (i==5 || i == 6 || i == 7)) continue;
+    if (y==0 && (i == 3 || i == 4 || i == 5)) continue;
+    if (y==map_size - 1 && (i == 7 || i == 0 || i == 1)) continue;
     const auto& [dx, dy, cost] = neighbor_offsets[i];
     int nx = x + dx;
     int ny = y + dy;
-    if (nx < 0 || nx >= map_size || ny < 0 || ny >= map_size || citymap[ny][nx] != '.') {
+    if (citymap[ny][nx] != '.') {
       continue;
     }
     if (i % 2 == 0) {
@@ -16,9 +20,8 @@ void SearchTools::children(int x, int y, const std::vector<std::string>& citymap
       int dy1 = y + std::get<1>(neighbor_offsets[i-1]);
       int dx2 = x + std::get<0>(neighbor_offsets[(i + 1) % 8]);
       int dy2 = y + std::get<1>(neighbor_offsets[(i + 1) % 8]);
-      if ((dx1 < 0 || dx1 >= map_size || dy1 < 0 || dy1 >= map_size || citymap[dy1][dx1] != '.') &&
-(dx2 < 0 || dx2 >= map_size || dy2 < 0 || dy2 >= map_size || citymap[dy2][dx2] != '.')) continue;
-      node_list.emplace_back(Node(nx, ny, cost));
+      if (citymap[dy1][dx1] != '.' && citymap[dy2][dx2] != '.') continue;
+      node_list.emplace_back(Node(nx, ny, ny * citymap.size() + nx, cost));
     }
   }
 }
@@ -26,10 +29,14 @@ void SearchTools::children(int x, int y, const std::vector<std::string>& citymap
 void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<std::tuple<int, int, double>>& node_list) {
   int map_size = citymap.size();
   for (int i=0;i < 8;i++) {
+    if (x==0 && (i == 1 || i == 2 || i == 3)) continue; 
+    if (x==map_size - 1 && (i==5 || i == 6 || i == 7)) continue;
+    if (y==0 && (i == 3 || i == 4 || i == 5)) continue;
+    if (y==map_size - 1 && (i == 7 || i == 0 || i == 1)) continue;
     const auto& [dx, dy, cost] = neighbor_offsets[i];
     int nx = x + dx;
     int ny = y + dy;
-    if (nx < 0 || nx >= map_size || ny < 0 || ny >= map_size || citymap[ny][nx] != '.') {
+    if (citymap[ny][nx] != '.') {
       continue;
     }
     if (i % 2 != 0) {
@@ -37,9 +44,10 @@ void SearchTools::children(int x, int y, const std::vector<std::string>& citymap
       int dy1 = y + std::get<1>(neighbor_offsets[i-1]);
       int dx2 = x + std::get<0>(neighbor_offsets[(i + 1) % 8]);
       int dy2 = y + std::get<1>(neighbor_offsets[(i + 1) % 8]);
-      if ((dx1 < 0 || dx1 >= map_size || dy1 < 0 || dy1 >= map_size || citymap[dy1][dx1] != '.') && (dx2 < 0 || dx2 >= map_size || dy2 < 0 || dy2 >= map_size || citymap[dy2][dx2] != '.')) continue;
+      if (citymap[dy1][dx1] != '.' && citymap[dy2][dx2] != '.') continue;
     }
     node_list.emplace_back(nx, ny, cost);  
+    //node_list.emplace_back(nx, ny, ny * citymap.size() + nx, cost);  
   }
 }
 
@@ -47,37 +55,101 @@ void SearchTools::children(Node node, const std::vector<std::string>& citymap, s
   children(node.x, node.y, citymap, node_list);
 }
 
-// void SearchTools::children(Node node, const std::vector<uint8_t>& citymap, std::vector<Node>& node_list) {
-//   children(node.x, node.y, citymap, node_list);
-// }
+ChildrenNodes::ChildrenNodes(const int width, 
+                             const int heigth, const std::vector<uint8_t>& citymap) : 
+  Children(width, heigth, citymap),
+  offsets_(std::array<NodeOffset, 8>{{
+    {0, -1, -width_, 1.0},
+    {-1, -1, -width_ - 1, DIAG},
+    {-1, 0, -1, 1.0},
+    {-1, 1, width_ - 1, DIAG},
+    {0, 1, width_, 1.0},
+    {1, 1, width_ + 1, DIAG},
+    {1, 0, 1, 1.0},
+    {1, -1, -width_+1, DIAG}
+  }}) {}
 
-Children::Children(const int map_size, const std::vector<uint8_t>& citymap) : map_size_(map_size), citymap_(&citymap), offsets_(std::array<Offset, 8>{{
-    {-map_size, 1.0},
-    {-map_size - 1, DIAG},
-    {-1, 1.0},
-    {map_size-1, DIAG},
-    {map_size, 1.0},
-    {map_size+1, DIAG},
-    {1, 1.0},
-    {-map_size+1, DIAG}
-  }})
-{
-}
-void Children::children(int x, int y) {
-  children(y * map_size_ + x);
-}
-void Children::children(int current_index) {
+void ChildrenNodes::children(Node current) {
   for (int i=0;i < 8;i++) {
+
+    if (current.x < 1 && (i == 1 || i == 2 || i == 3)) continue; 
+    if (current.x > width_ - 2 && (i==5 || i == 6 || i == 7)) continue;
+    if (current.y < 1 && (i == 3 || i == 4 || i == 5)) continue;
+    if (current.y > heigth_ - 2 && (i == 7 || i == 0 || i == 1)) continue;
+    
+    NodeOffset current_offset = offsets_[i];
+    int ni = current.index + current_offset.index_delta;
+
+    if ((*citymap_)[ni] & WALL) continue;
+    
+    if (i % 2 != 0) { // with diagonals we need to check the neighbors to see if there's a way.
+      int di1 = current.index + offsets_[i-1].index_delta;
+      int di2 = current.index + offsets_[(i+1) % 8].index_delta;
+      if ((*citymap_)[di1] & WALL && (*citymap_)[di2] & WALL) continue;
+    }
+    out_nodes_.emplace_back(current.x + current_offset.x_delta,
+                            current.y + current_offset.y_delta,
+                            ni, 
+                            current_offset.cost);  
+  }
+}
+
+std::vector<Node>& ChildrenNodes::get_nodes(Node current) {
+  out_nodes_.clear();
+  ChildrenNodes::children(current);
+  return out_nodes_;
+  
+}
+ChildrenTuples::ChildrenTuples(const int width, const int heigth, const std::vector<uint8_t>& citymap) : Children(width, heigth, citymap),
+  offsets_(std::array<Offset, 8>{{
+    {-width_, 1.0},
+    {-width_ - 1, DIAG},
+    {-1, 1.0},
+    {width_ - 1, DIAG},
+    {width_, 1.0},
+    {width_ + 1, DIAG},
+    {1, 1.0},
+    {-width_+1, DIAG}
+  }}) {}
+
+void ChildrenTuples::children(int current_index) {
+  int col = current_index % width_;
+  bool on_left = col < 1;
+  bool on_right = col > width_ - 2;
+  int row = current_index / width_;
+  bool on_top = row < 1;
+  bool on_bottom = row > heigth_ - 2;
+  for (int i=0;i < 8;i++) {
+    if (on_left && (i == 1 || i == 2 || i == 3)) continue; 
+    if (on_right && (i==5 || i == 6 || i == 7)) continue;
+    if (on_top && (i == 3 || i == 4 || i == 5)) continue;
+    if (on_bottom && (i == 7 || i == 0 || i == 1)) continue;
     const auto& [delta, cost] = offsets_[i];
     int ni = current_index + delta;
-    if (ni < 0 || ni >= citymap_->size() || (*citymap_)[ni] & WALL) {
+    if (
+      (*citymap_)[ni] & WALL) {
       continue;
     }
     if (i % 2 != 0) { // with diagonals we need to check the neighbors to see if there's a way.
       int di1 = current_index + offsets_[i-1].delta;
       int di2 = current_index + offsets_[(i+1) % 8].delta;
-      if ((di1 < 0 || di1 >= citymap_->size() || (*citymap_)[di1] & WALL) && (di2 < 0 || di2 >= citymap_->size() || (*citymap_)[di2] & WALL)) continue;
+      if ((
+        (*citymap_)[di1] & WALL) && (
+        (*citymap_)[di2] & WALL)) continue;
     }
     out_tuples_.emplace_back(ni, cost);  
   }
+}
+
+std::vector<std::tuple<int, double>>& ChildrenTuples::get_tuples(int x, int y) {
+  out_tuples_.clear();
+  children(y * width_ + x);
+  return out_tuples_;
+
+}
+
+std::vector<std::tuple<int, double>>& ChildrenTuples::get_tuples(int current_index) {
+  out_tuples_.clear();
+  children(current_index);
+  return out_tuples_;
 }
