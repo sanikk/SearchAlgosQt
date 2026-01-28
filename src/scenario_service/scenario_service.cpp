@@ -2,8 +2,10 @@
 #include "map_data.h"
 #include "filereader.h"
 
+#include <iostream>
 
-ScenarioService::ScenarioService(int map_size) : map_size(map_size) { citymap.assign(map_size * map_size, 0); };
+ScenarioService::ScenarioService(int width, int height) 
+  : width(width), height(height) { citymap.assign(width * height, 0); };
 
 Scenario& ScenarioService::get_scenario(const int index)
 {
@@ -17,46 +19,50 @@ std::vector<uint8_t>& ScenarioService::get_map(){
   return citymap;
 }
 
-std::vector<Scenario> ScenarioService::get_allScenarios() {
+std::vector<Scenario> ScenarioService::get_all_scenarios() {
   return scenarios;
 }
 
-bool ScenarioService::setMapFile(const std::filesystem::path& i_map_file) {
+bool ScenarioService::set_map_file(const std::filesystem::path& i_map_file) {
+  std::cout << "entered ScenarioService::set_map_file with parameter " << i_map_file << std::endl;
   if (i_map_file.empty() || !std::filesystem::is_regular_file(i_map_file)) {
+    std::cout << "failed first check" << std::endl;
     return false;
   }
-  MapData md = readMap(i_map_file);
+  MapData md = read_map(i_map_file);
   if (md.map_data.empty()) {
+    std::cout << "md.map_data was empty. returning" << std::endl;
     return false;
   }
-  mapFile = i_map_file;
+  map_file = i_map_file;
   citymap = md.map_data;
-  map_size = md.map_size;
+  width = md.width;
+  height = md.height;
   return true;
 }
 
-bool ScenarioService::setScenarioFile(const std::filesystem::path& i_scenario_file) {
+bool ScenarioService::set_scenario_file(const std::filesystem::path& i_scenario_file) {
   if(i_scenario_file.empty() || !std::filesystem::is_regular_file(i_scenario_file)) {
     return false;
   }
-  scenarios = readScenarios(i_scenario_file);
-  bucketList.clear();
+  scenarios = read_scenarios(i_scenario_file);
+  bucket_list.clear();
   int previous_bucket = -1;
   for (Scenario scenario: scenarios) {
     if (scenario.bucket != previous_bucket) {
-      bucketList.push_back(scenario.bucket);
+      bucket_list.push_back(scenario.bucket);
       previous_bucket = scenario.bucket;
     }
   }
-  scenarioFile = i_scenario_file;
+  scenario_file = i_scenario_file;
   return true;
 }
 
-std::vector<int> ScenarioService::get_bucketList() {
-  return bucketList;
+std::vector<int> ScenarioService::get_bucket_list() {
+  return bucket_list;
 }
 
-std::vector<Scenario> ScenarioService::get_bucketScenarios(int bucket) {
+std::vector<Scenario> ScenarioService::get_bucket_scenarios(int bucket) {
   std::vector<Scenario> returnable;
   for (Scenario scenario : scenarios) {
     if (scenario.bucket == bucket) {
@@ -66,7 +72,9 @@ std::vector<Scenario> ScenarioService::get_bucketScenarios(int bucket) {
   return returnable;
 }
 
-int ScenarioService::get_map_size() {
-  return map_size;
+std::tuple<int, int> ScenarioService::get_map_size() {
+  return {width, height};
 }
-
+void ScenarioService::clear() {
+  citymap.clear();
+}

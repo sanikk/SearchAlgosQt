@@ -1,5 +1,6 @@
 #pragma once
 
+#include "fullscreenDialog.h"
 #include "scenario_service.h"
 #include "search_service.h"
 #include "map_widget.h"
@@ -21,35 +22,37 @@ class VisualSearchTab : public QWidget {
 public:
     VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* scenario_controls);
 public slots:
-    void mapChanged();
-    void scenarioChanged(int scenario_index);
+    void map_changed();
+    void scenario_changed(int scenario_index);
 
-    void visit_astar();
-    void expand_astar();
-    void cost_astar();
+    void visit_astar(int x, int y, int value);
+    void expand_astar(int x, int y, int value);
+    void found_astar(RetVal ret);
     void reset_astar();
 
-    void visit_fringe();
-    void expand_fringe();
-    void cost_fringe();
+    void visit_fringe(int x, int y, int value);
+    void expand_fringe(int value);
+    void found_fringe(RetVal ret);
     void reset_fringe();
+
+    void redraw_map();
 signals:
-    void fullscreenDialogClosed();
+    void fullscreen_dialog_closed();
 private:
     ScenarioService& scenario_service;
     SearchService& search_service;
     ScenarioControls* scenario_controls;
     
-    QPushButton *runAstarButton;
-    QPushButton *runFringeButton;
-    QPushButton *showHideAstarButton;
-    QPushButton *showHideFringeButton;
-    QPushButton *fullscreenButton;
-    QWidget *controlsBox;
+    QPushButton *run_astar_button;
+    QPushButton *run_fringe_button;
+    QPushButton *show_hide_astar_button;
+    QPushButton *show_hide_fringe_button;
+    QPushButton *fullscreen_button;
+    QWidget *controls_box;
 
-    MapWidget *mapScene;
+    MapWidget *map_scene;
     QScrollArea* scroll;
-    QVBoxLayout *tabLayout;
+    QVBoxLayout *tab_layout;
 
     void make_connections();
     QWidget* make_controls_box();
@@ -70,6 +73,10 @@ private:
     int astar_visits, astar_expands;
     int fringe_visits, fringe_expands;
     double fringe_costs, astar_costs, fringe_flimits;
+
+    bool show_fringe, show_astar;
+    //, fullscreen_dialog;
+    FullscreenDialog* fsd = nullptr;
 
 private slots:
     void showHideFringe();

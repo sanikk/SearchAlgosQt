@@ -1,14 +1,14 @@
 #pragma once
 #include "search_service.h"
-#include "models.h"
+#include "retval.h"
 #include <QObject>
 
 
 class WorkerRunner : QObject {
 public:
     WorkerRunner();
-    void run_astar(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap, SearchService* search_service);
-    void run_fringe(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap, SearchService* search_service);
+    void run_astar(int startx, int starty, int goalx, int goaly, int width, int height, const std::vector<uint8_t>& citymap, SearchService* search_service);
+    void run_fringe(int startx, int starty, int goalx, int goaly, int width, int height, const std::vector<uint8_t>& citymap, SearchService* search_service);
 };
 
 
@@ -24,11 +24,11 @@ signals:
     void finished();
 
 public: 
-    Worker(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap);
+    Worker(int startx, int starty, int goalx, int goaly, int width, int height, const std::vector<uint8_t>& citymap);
     virtual void run() {};
-
-    int startx, starty, goalx, goaly;
-    const std::vector<std::string>& citymap;
+protected:
+    int startx, starty, goalx, goaly, width, height;
+    const std::vector<uint8_t>& citymap;
 
 };
 
@@ -43,7 +43,7 @@ class AstarWorker: public Worker {
 
 
 public:
-    AstarWorker(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap);
+    AstarWorker(int startx, int starty, int goalx, int goaly, int width, int height, const std::vector<uint8_t>& citymap);
     void run() override;
 
 private:
@@ -61,7 +61,7 @@ class FringeWorker: public Worker {
 
 
 public:
-    FringeWorker(int startx, int starty, int goalx, int goaly, const std::vector<std::string>& citymap);
+    FringeWorker(int startx, int starty, int goalx, int goaly, int width, int height, const std::vector<uint8_t>& citymap);
     void run() override;
 
 private:

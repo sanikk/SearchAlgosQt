@@ -1,9 +1,13 @@
 #include "filereader.h"
+#include "cell_flags.h"
+
 #include <fstream>
 #include <sstream>
 #include <string>
 
-std::ifstream readFile(const std::filesystem::path &filename) {
+#include <iostream>
+
+std::ifstream read_file(const std::filesystem::path &filename) {
   std::ifstream f(filename);
   if (!f) {
     throw std::invalid_argument(filename.string());
@@ -11,12 +15,13 @@ std::ifstream readFile(const std::filesystem::path &filename) {
   return f;
 }
 
-MapData readMap(const std::filesystem::path& filename) {
+MapData read_map(const std::filesystem::path& filename) {
   int width;
-  std::ifstream f = readFile(filename);
+  std::ifstream f = read_file(filename);
   std::string str;
 
   //first loop skips over the map headers until we get to the 'width...' line
+  int height = 0;
   while (std::getline(f, str)) {
     if (str.compare(0, 6, "width ") == 0) {
       width = std::stoi(str.substr(6, std::string::npos));
@@ -26,19 +31,23 @@ MapData readMap(const std::filesystem::path& filename) {
   }
   std::vector<uint8_t> citymap;
   while (getline(f, str)) {
-    if (str.empty() || str.size() < width)
+    if (str.empty() || str.size() < width) {
       continue;
+    }
+    height++;
     for (char c : str) {
-      if (c=='\n' || c=='\r') continue;
-      citymap.push_back(c == '@' ? 1u: 0u);
+      if (c=='\n' || c=='\r') {
+        continue;
+      }
+      citymap.push_back(c == '@' ? WALL: 0u);
     }
   }
-  return MapData(width, citymap);
+  return MapData(height, width, citymap);
 }
 
-std::vector<Scenario> readScenarios(const std::filesystem::path& filename) {
+std::vector<Scenario> read_scenarios(const std::filesystem::path& filename) {
   std::vector<Scenario> scenarios;
-  std::ifstream f = readFile(filename);
+  std::ifstream f = read_file(filename);
   std::string str;
   std::string trash;
   int i = 0;

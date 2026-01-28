@@ -1,45 +1,43 @@
 #include "file_selection.h"
 
-FileSelection::FileSelection(ScenarioService& i_scenario_service) : scenarioService(i_scenario_service) {
+FileSelection::FileSelection(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
     QVBoxLayout *controlsLayout = new QVBoxLayout;
 
-    scenarioFileLabel = new QLabel{tr("No Scenario File Chosen")};
-    controlsLayout->addWidget(scenarioFileLabel);
-    scenarioFileButton = new QPushButton{"Choose a &Scenario file"};
-    controlsLayout->addWidget(scenarioFileButton);
-    connect(scenarioFileButton, &QPushButton::clicked, this, &FileSelection::chooseScenarioFile);
+    scenario_file_label = new QLabel{tr("No Scenario File Chosen")};
+    controlsLayout->addWidget(scenario_file_label);
+    scenario_file_button = new QPushButton{"Choose a &Scenario file"};
+    controlsLayout->addWidget(scenario_file_button);
+    connect(scenario_file_button, &QPushButton::clicked, this, &FileSelection::choose_scenario_file);
 
-    mapFileLabel = new QLabel{"No Map File Chosen"};
-    controlsLayout->addWidget(mapFileLabel);
-    mapFileButton = new QPushButton{"Choose a &Map file"};
-    controlsLayout->addWidget(mapFileButton);
-    connect(mapFileButton, &QPushButton::clicked, this, &FileSelection::chooseMapFile);
+    map_file_label = new QLabel{"No Map File Chosen"};
+    controlsLayout->addWidget(map_file_label);
+    map_file_button = new QPushButton{"Choose a &Map file"};
+    controlsLayout->addWidget(map_file_button);
+    connect(map_file_button, &QPushButton::clicked, this, &FileSelection::choose_map_file);
 
     setLayout(controlsLayout);
 }
 
-void FileSelection::chooseScenarioFile() {
+void FileSelection::choose_scenario_file() {
   QString ret = QFileDialog::getOpenFileName(this,
           tr("Choose a Scenario File"), 
           QString::fromStdString(std::filesystem::current_path().parent_path().string()), // cha-cha-chain of FOO-OOLS
           tr("Scenario Files (*.map.scen)"));
   if (!ret.isEmpty()) {
     std::filesystem::path scenario_file(ret.toStdString());
-    setScenarioFile(scenario_file);
+    set_scenario_file(scenario_file);
   }
 }
 
-void FileSelection::setScenarioFile(std::filesystem::path& filepath) {
+void FileSelection::set_scenario_file(std::filesystem::path& filepath) {
   try {
-    // TODO: ok this logic is in the wrong place. ask scenarioService for strings to display.
-    if (scenarioService.setScenarioFile(filepath)) {
-      // scenarioFileLabel->setText(filepath.filename().c_str());
-      scenarioFileLabel->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
+    if (scenario_service.set_scenario_file(filepath)) {
+      scenario_file_label->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
       std::filesystem::path candidate = filepath.replace_extension();
       if (!candidate.empty() && std::filesystem::is_regular_file(candidate)) {
-        setMapFile(candidate);
+        set_map_file(candidate);
       }
-      emit scenarioFileChanged();
+      emit scenario_file_changed();
     }
   } catch (const std::invalid_argument& e) {
     qDebug() << e.what();
@@ -47,23 +45,24 @@ void FileSelection::setScenarioFile(std::filesystem::path& filepath) {
   }
 }
 
-void FileSelection::chooseMapFile() {
+void FileSelection::choose_map_file() {
   QString ret = QFileDialog::getOpenFileName(this,
           tr("Choose a Map File"), 
           QString::fromStdString(std::filesystem::current_path().parent_path().string()), // cha-cha-chain of FOO-OOLS
           tr("Map Files (*.map)"));
   if (!ret.isEmpty()) {
     std::filesystem::path map_file(ret.toStdString());
-    setMapFile(map_file);
+    set_map_file(map_file);
   }
 }
 
-void FileSelection::setMapFile(std::filesystem::path& filepath) {
+void FileSelection::set_map_file(std::filesystem::path& filepath) {
   try {
-    if (scenarioService.setMapFile(filepath)) {
-      // TODO: logic does not belong here. ask service for string to display.
-      mapFileLabel->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
-      emit mapFileChanged();
+    auto ret = scenario_service.set_map_file(filepath);
+    //if (scenario_service.set_map_file(filepath)) {
+    if (ret) {
+      map_file_label->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
+      emit map_file_changed();
     }
   } catch (const std::invalid_argument& e) {
     qDebug() << e.what();

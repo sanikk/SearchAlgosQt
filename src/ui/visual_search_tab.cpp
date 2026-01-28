@@ -1,43 +1,42 @@
 #include "visual_search_tab.h"
-#include "fullscreenDialog.h"
-#include <qsizepolicy.h>
 
 VisualSearchTab::VisualSearchTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls)
-  : QWidget(), scenario_service(i_scenario_service), search_service(i_search_service), scenario_controls(i_scenario_controls) {
+  : QWidget(), scenario_service(i_scenario_service), search_service(i_search_service), scenario_controls(i_scenario_controls), show_astar(true), show_fringe(true)
+{
   
-  tabLayout = new QVBoxLayout{};
-  controlsBox = make_controls_box();
-  controlsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  tabLayout->addWidget(controlsBox);
+  tab_layout = new QVBoxLayout{};
+  controls_box = make_controls_box();
+  controls_box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  tab_layout->addWidget(controls_box);
 
-  mapScene = new MapWidget{};
+  map_scene = new MapWidget{};
   scroll = new QScrollArea;
-  scroll->setWidget(mapScene);
+  scroll->setWidget(map_scene);
   scroll->setWidgetResizable(false);
-  tabLayout->addWidget(scroll);
+  tab_layout->addWidget(scroll);
   // view->setDragMode(QGraphicsView::ScrollHandDrag);
   // view->setRenderHint(QPainter::SmoothPixmapTransform, false);
   // view->setRenderHint(QPainter::Antialiasing, false);
   // view->setRenderHint(QPainter::LosslessImageRendering, false);
 
-  setLayout(tabLayout);
+  setLayout(tab_layout);
   make_connections();
 }
 
 void VisualSearchTab::make_connections() {
-  connect(fullscreenButton, &QPushButton::clicked, this, &VisualSearchTab::launchFullscreenDialog);
-  connect(showHideFringeButton, &QPushButton::clicked, this, &VisualSearchTab::showHideFringe);
-  connect(showHideAstarButton, &QPushButton::clicked, this, &VisualSearchTab::showHideAstar);
-  connect(runAstarButton, &QPushButton::clicked, this, &VisualSearchTab::runAstar);
-  connect(runFringeButton, &QPushButton::clicked, this, &VisualSearchTab::runFringe); 
+  connect(fullscreen_button, &QPushButton::clicked, this, &VisualSearchTab::launchFullscreenDialog);
+  connect(show_hide_fringe_button, &QPushButton::clicked, this, &VisualSearchTab::showHideFringe);
+  connect(show_hide_astar_button, &QPushButton::clicked, this, &VisualSearchTab::showHideAstar);
+  connect(run_astar_button, &QPushButton::clicked, this, &VisualSearchTab::runAstar);
+  connect(run_fringe_button, &QPushButton::clicked, this, &VisualSearchTab::runFringe); 
 
-  connect(&search_service, &SearchService::astarVisit, mapScene, &MapWidget::astarVisit, Qt::DirectConnection);
-  connect(&search_service, &SearchService::astarExpand, mapScene, &MapWidget::astarExpand, Qt::DirectConnection);
-  connect(&search_service, &SearchService::astarFound, mapScene, &MapWidget::astarFinished, Qt::DirectConnection);
+//  connect(&search_service, &SearchService::visit_astar_signal, map_scene, &MapWidget::astarVisit, Qt::DirectConnection);
+//  connect(&search_service, &SearchService::expand_astar_signal, map_scene, &MapWidget::astarExpand, Qt::DirectConnection);
+//  connect(&search_service, &SearchService::found_astar_signal, map_scene, &MapWidget::astarFinished, Qt::DirectConnection);
 
-  connect(&search_service, &SearchService::fringeVisit, mapScene, &MapWidget::fringeVisit, Qt::DirectConnection);
-  connect(&search_service, &SearchService::fringeExpand, mapScene, &MapWidget::fringeExpand, Qt::DirectConnection);
-  connect(&search_service, &SearchService::fringeFound, mapScene, &MapWidget::fringeFinished, Qt::DirectConnection);
+//  connect(&search_service, &SearchService::visit_fringe_signal, map_scene, &MapWidget::fringeVisit, Qt::DirectConnection);
+//  connect(&search_service, &SearchService::expand_fringe_signal, map_scene, &MapWidget::fringeExpand, Qt::DirectConnection);
+//  connect(&search_service, &SearchService::found_fringe_signal, &MapWidget::fringeFinished, Qt::DirectConnection);
 
   // TODO: example connection, just passing the current value as int to be displayed. SearchService keeps track of this.
   //connect(&search_service, &SearchService::astar_visited, astar_visited, &QLabel::setText);
@@ -45,7 +44,7 @@ void VisualSearchTab::make_connections() {
 
 QWidget* VisualSearchTab::make_controls_box() {
 
-  controlsBox =new QWidget{};
+  controls_box =new QWidget{};
   QVBoxLayout* controlsLayout = new QVBoxLayout;
 
   QHBoxLayout* buttonsLayout = make_buttons_row();
@@ -53,22 +52,22 @@ QWidget* VisualSearchTab::make_controls_box() {
   QWidget* status_rows = make_status_rows();
   controlsLayout->addWidget(status_rows);
 
-  controlsBox->setLayout(controlsLayout);
-  return controlsBox;
+  controls_box->setLayout(controlsLayout);
+  return controls_box;
 }
 
 QHBoxLayout* VisualSearchTab::make_buttons_row() {
   QHBoxLayout* buttonsLayout = new QHBoxLayout{};
-  runFringeButton = new QPushButton{ "Run Fringe" };
-  buttonsLayout->addWidget(runFringeButton);
-  runAstarButton = new QPushButton{ "Run A*" };
-  buttonsLayout ->addWidget(runAstarButton);
-  showHideAstarButton = new QPushButton{"Hide A*"};
-  buttonsLayout -> addWidget(showHideAstarButton);
-  showHideFringeButton = new QPushButton{"Hide Fringe"};
-  buttonsLayout -> addWidget(showHideFringeButton);
-  fullscreenButton = new QPushButton{"Fullscreen"};
-  buttonsLayout -> addWidget(fullscreenButton);
+  run_fringe_button = new QPushButton{ "Run Fringe" };
+  buttonsLayout->addWidget(run_fringe_button);
+  run_astar_button = new QPushButton{ "Run A*" };
+  buttonsLayout ->addWidget(run_astar_button);
+  show_hide_astar_button = new QPushButton{"Hide A*"};
+  buttonsLayout -> addWidget(show_hide_astar_button);
+  show_hide_fringe_button = new QPushButton{"Hide Fringe"};
+  buttonsLayout -> addWidget(show_hide_fringe_button);
+  fullscreen_button = new QPushButton{"Fullscreen"};
+  buttonsLayout -> addWidget(fullscreen_button);
   return buttonsLayout;
 }
 
@@ -120,11 +119,11 @@ QLabel* VisualSearchTab::make_label(QString text) {
 }
 
 void VisualSearchTab::launchFullscreenDialog() {
-  FullscreenDialog* fsd = new FullscreenDialog{scroll, scenario_controls};
-  connect(fsd->runAstarButton, &QPushButton::clicked, runAstarButton, &QPushButton::clicked);
-  connect(fsd->runFringeButton, &QPushButton::clicked, runFringeButton, &QPushButton::clicked);
-  connect(fsd->showHideAstarButton, &QPushButton::clicked, showHideAstarButton, &QPushButton::clicked);
-  connect(fsd->showHideFringeButton, &QPushButton::clicked, showHideFringeButton, &QPushButton::clicked);
+  fsd = new FullscreenDialog{scroll, scenario_controls};
+  connect(fsd->run_astar_button, &QPushButton::clicked, run_astar_button, &QPushButton::clicked);
+  connect(fsd->run_fringe_button, &QPushButton::clicked, run_fringe_button, &QPushButton::clicked);
+  connect(fsd->show_hide_astar_button, &QPushButton::clicked, show_hide_astar_button, &QPushButton::clicked);
+  connect(fsd->show_hide_fringe_button, &QPushButton::clicked, show_hide_fringe_button, &QPushButton::clicked);
 
   connect(fsd, &QDialog::finished, this, &VisualSearchTab::endFullScreenDialog);
   fsd->showFullScreen();
@@ -132,92 +131,111 @@ void VisualSearchTab::launchFullscreenDialog() {
 
 void VisualSearchTab::endFullScreenDialog() {
   scroll->setParent(this);
-  tabLayout->addWidget(scroll);
-  emit fullscreenDialogClosed();
+  tab_layout->addWidget(scroll);
+  emit fullscreen_dialog_closed();
 }
 
-void VisualSearchTab::mapChanged() {
-  mapScene->setMap(scenario_service.get_map());
+
+void VisualSearchTab::redraw_map() {
+  // TODO: redraw_map AND mapChanged?
+  map_scene->render_map(search_service.get_map_frame(show_astar, show_fringe), 
+                      scenario_service.get_map_width());
 }
 
-void VisualSearchTab::scenarioChanged(int index) {
-  mapScene->setScenario(scenario_service.get_scenario(index));
+
+void VisualSearchTab::map_changed() {
+  map_scene->render_map(search_service.get_map_frame(show_astar, show_fringe), scenario_service.get_map_width());
+}
+
+void VisualSearchTab::scenario_changed(int index) {
+  map_scene->render_map(search_service.get_map_frame(show_astar, show_fringe), scenario_service.get_map_width());
 }
 
 void VisualSearchTab::showHideFringe() {
-  mapScene->showHideFringe();
-  if (mapScene->showFringe) {
-    showHideFringeButton->setText("Hide Fringe");
+  if (show_fringe) {
+    show_hide_fringe_button->setText("Hide Fringe");
+    if (fsd) {
+      fsd->show_hide_fringe_button->setText("Hide Fringe");
+    }
   } else {
-    showHideFringeButton->setText("Show Fringe");
+    show_hide_fringe_button->setText("Show Fringe");
+    if (fsd) {
+      fsd->show_hide_fringe_button->setText("Show Fringe");
+    }
   }
 }
 
 void VisualSearchTab::runFringe() {
-  mapScene->start_search();
-  search_service.run_fringe_thread(scenario_controls->get_scenarioIndex());
+  map_scene->start_search();
+  search_service.run_fringe_thread(scenario_controls->get_scenario_index());
 }
 
 
 void VisualSearchTab::runAstar() {
-  mapScene->start_search();
-  search_service.run_astar_thread(scenario_controls->get_scenarioIndex());
+  map_scene->start_search();
+  search_service.run_astar_thread(scenario_controls->get_scenario_index());
 }
 
 void VisualSearchTab::showHideAstar() {
-  mapScene->showHideAstar();
-  if (mapScene->showAstar) {
-    showHideAstarButton->setText("Hide A*");
+  if (show_astar) {
+    show_hide_astar_button->setText("Hide A*");
+    if (fsd) {
+      fsd->show_hide_astar_button->setText("Hide A*");
+    }
   } else {
-    showHideAstarButton->setText("Show A*");
+    show_hide_astar_button->setText("Show A*");
+    if (fsd) {
+      fsd->show_hide_astar_button->setText("Show A*");
+    }
   }
 }
 
-// TODO: ok this should all be in SearchService
-void VisualSearchTab::visit_astar() {
-    astar_visits++;
-    astar_visited->setText(QString("visited: %1").arg(astar_visits));
+void VisualSearchTab::visit_astar(int x, int y, int value) {
+  astar_visited->setText(QString("visited: %1").arg(value));
+  if (show_astar) {
+    map_scene->draw_pixel(x, y, 6);
+  }
 }
 
-void VisualSearchTab::expand_astar() {
-    astar_expands++;
-    astar_expanded->setText(QString("expanded: %1").arg(astar_expands));
+void VisualSearchTab::expand_astar(int x, int y, int value) {
+  astar_expanded->setText(QString("expanded: %1").arg(value));
+  if (show_astar) {
+    map_scene->draw_pixel(x, y, 7);
+  }
 }
 
-void VisualSearchTab::cost_astar() {
-    astar_costs++;
-    astar_cost->setText(QString("costed: %1").arg(astar_costs));
+void VisualSearchTab::found_astar(RetVal ret) {
+  if (ret.cost.has_value()) { 
+    astar_cost->setText(QString("cost: %1").arg(ret.cost.value()));
+  } else {
+    astar_cost->setText("Not found");
+  }
 }
 
-void VisualSearchTab::visit_fringe() {
-    fringe_visits++;
-    fringe_visited->setText(QString("visited: %1").arg(fringe_visits));
+void VisualSearchTab::visit_fringe(int x, int y, int value) {
+    fringe_visited->setText(QString("visited: %1").arg(value));
 }
 
-void VisualSearchTab::expand_fringe() {
-    fringe_expands++;
-    fringe_expanded->setText(QString("expanded: %1").arg(fringe_expands));
+void VisualSearchTab::expand_fringe(int value) {
+    fringe_expanded->setText(QString("expanded: %1").arg(value));
 }
 
-void VisualSearchTab::cost_fringe() {
-    fringe_costs++;
-    fringe_cost->setText(QString("costed: %1").arg(fringe_costs));
+void VisualSearchTab::found_fringe(RetVal ret) {
+  if (ret.cost.has_value()) { 
+    fringe_cost->setText(QString("cost: %1").arg(ret.cost.value()));
+  } else {
+    fringe_cost->setText("Not found");
+  }
 }
 
 void VisualSearchTab::reset_astar() {
     astar_visited->setText("visited: 0");
-    astar_visits = 0;
     astar_expanded->setText("expanded: 0");
-    astar_expands = 0;
     astar_cost->setText("cost: 0");
-    astar_costs = 0;
 }
 
 void VisualSearchTab::reset_fringe() {
     fringe_visited->setText("visited: 0");
-    fringe_visits = 0;
     fringe_expanded->setText("expanded: 0");
-    fringe_expands = 0;
     fringe_cost->setText("cost: 0");
-    fringe_costs = 0;
 }

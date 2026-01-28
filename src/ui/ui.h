@@ -17,19 +17,19 @@ class Ui: public QWidget {
     Q_OBJECT;
 
 public:
-    Ui(ScenarioService& i_scenario_service, SearchService& i_searchService);
+    Ui(ScenarioService& i_scenario_service, SearchService& i_search_service);
 
 private:
-    void closeFullscreenDialog();
-    ScenarioControls *scenarioControls;
+    void close_fullscreen_dialog();
+    ScenarioControls *scenario_controls;
 
-    QVBoxLayout *mainLayout;
-    QTabWidget *tabWindow;
+    QVBoxLayout *main_layout;
+    QTabWidget *tab_window;
 
 
-    FileSelection *fileSelectionTab;
-    BucketTab *bucketTab;
-    VisualSearchTab *visualSearchTab;
-    TestBedTab *testBedTab;
+    FileSelection *file_selection_tab;
+    BucketTab *bucket_tab;
+    VisualSearchTab *visual_search_tab;
+    TestBedTab *test_bed_tab;
 };
 

@@ -1,35 +1,34 @@
 #include "scenario_controls.h"
 
-ScenarioControls::ScenarioControls(ScenarioService& i_scenario_service) : scenarioService(i_scenario_service) {
-  QVBoxLayout *controlsLayout = new QVBoxLayout{};
-  bucketBox = new QComboBox{};
-  controlsLayout->addWidget(bucketBox);
-  scenarioBox = new QComboBox{};
-  controlsLayout->addWidget(scenarioBox);
-  setLayout(controlsLayout);
+ScenarioControls::ScenarioControls(ScenarioService& i_scenario_service) : scenario_service(i_scenario_service) {
+  QVBoxLayout *controls_layout = new QVBoxLayout{};
+  bucket_box = new QComboBox{};
+  controls_layout->addWidget(bucket_box);
+  scenario_box = new QComboBox{};
+  controls_layout->addWidget(scenario_box);
+  setLayout(controls_layout);
 
-  connect(bucketBox, &QComboBox::currentIndexChanged, this, &ScenarioControls::updateScenarioBox);
-  connect(scenarioBox, &QComboBox::currentIndexChanged, this, &ScenarioControls::scenarioSelected);
+  connect(bucket_box, &QComboBox::currentIndexChanged, this, &ScenarioControls::update_scenario_box);
+  connect(scenario_box, &QComboBox::currentIndexChanged, this, &ScenarioControls::scenario_selected);
 }
 
-void ScenarioControls::updateBucketBox() {
-  bucketBox->clear();
+void ScenarioControls::update_bucket_box() {
+  bucket_box->clear();
   QStringList bucket_list;
-  auto ret_value = scenarioService.get_bucketList();
-  for (int &bucket : scenarioService.get_bucketList()) {
+  for (int &bucket : scenario_service.get_bucket_list()) {
     bucket_list.append(QString("%1: %2-%3").arg(bucket).arg((bucket)*10).arg((bucket + 1) * 10 - 1));
   }
-  bucketBox->addItems(bucket_list);
+  bucket_box->addItems(bucket_list);
 }
 
-void ScenarioControls::updateScenarioBox(int index) {
-  scenarioBox->clear();
+void ScenarioControls::update_scenario_box(int index) {
+  scenario_box->clear();
   if (index == -1) {
     return;
   }
-  auto bucket_scenarios = scenarioService.get_bucketScenarios(index);
+  auto bucket_scenarios = scenario_service.get_bucket_scenarios(index);
   for (Scenario &scen : bucket_scenarios) {
-    scenarioBox->addItem(QString("%1: ideal_cost %2, (%3,%4) => (%5,%6)")
+    scenario_box->addItem(QString("%1: ideal_cost %2, (%3,%4) => (%5,%6)")
                          .arg(scen.id)
                          .arg(scen.cost)
                          .arg(scen.start_x)
@@ -39,17 +38,17 @@ void ScenarioControls::updateScenarioBox(int index) {
   }
 }
 
-int ScenarioControls::get_bucketIndex() {
-  return bucketBox->currentIndex();
+int ScenarioControls::get_bucket_index() {
+  return bucket_box->currentIndex();
 }
 
-int ScenarioControls::get_scenarioIndex() {
-  return scenarioBox->currentData().toInt();
+int ScenarioControls::get_scenario_index() {
+  return scenario_box->currentData().toInt();
 }
 
-void ScenarioControls::scenarioSelected(int index) {
+void ScenarioControls::scenario_selected(int index) {
   if (index == -1) {
     return;
   }
-  emit scenarioChanged(get_scenarioIndex());
+  emit scenario_changed(get_scenario_index());
 }

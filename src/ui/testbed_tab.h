@@ -15,20 +15,20 @@ class TestBedTab : public QWidget {
 public:
     TestBedTab(ScenarioService& i_scenario_service, SearchService& i_search_service, ScenarioControls* i_scenario_controls);
 public slots:
-    void updateTableScenarios(int index);
-    void runTest();
-    void runBase();
+    void update_table_scenarios(int index);
+    void run_test();
+    void run_base();
 
 private:
-    ScenarioService& scenarioService;
-    SearchService& searchService;
-    ScenarioControls* scenarioControls;
+    ScenarioService& scenario_service;
+    SearchService& search_service;
+    ScenarioControls* scenario_controls;
 
-    QTableWidget *resultTable;
-    QTableWidget* get_resultTable();
-    QWidget* get_runBox();
-    QWidget *runBox;
-    QPushButton *testButton;
-    QPushButton *baseButton;
-    void load_retvals_to_resultTable(std::vector<RetVal> retvals, int start_column);
+    QTableWidget *result_table;
+    QTableWidget* get_result_table();
+    QWidget* get_run_box();
+    QWidget *run_box;
+    QPushButton *test_button;
+    QPushButton *base_button;
+    void load_retvals_to_result_table(std::vector<RetVal> retvals, int start_column);
 };

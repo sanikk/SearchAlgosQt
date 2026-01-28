@@ -10,11 +10,11 @@
 class FullscreenDialog : public QDialog {
 public:
     FullscreenDialog(QScrollArea *scroll, ScenarioControls* i_scenario_controls);
-    QPushButton *runAstarButton;
-    QPushButton *runFringeButton;
-    QPushButton *showHideAstarButton;
-    QPushButton *showHideFringeButton;
-    QPushButton *exitFullscreenButton;
+    QPushButton *run_astar_button;
+    QPushButton *run_fringe_button;
+    QPushButton *show_hide_astar_button;
+    QPushButton *show_hide_fringe_button;
+    QPushButton *exit_fullscreen_button;
 private:
     QScrollArea *scroll;
     ScenarioControls* scenario_controls;

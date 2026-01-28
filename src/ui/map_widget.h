@@ -1,25 +1,13 @@
 #pragma once
-#include "models.h"
-
-#include <optional>
+//#include "models.h"
+//#include "scenario.h"
+//#include "retval.h"
+//#include <optional>
 
 #include <QWidget>
 #include <QPainter>
 
 
-// Bitwise ops
-constexpr std::uint8_t WALL         = 1u << 7;
-constexpr std::uint8_t START        = 1u << 6;
-constexpr std::uint8_t GOAL         = 1u << 5;
-constexpr std::uint8_t VISIT_F      = 1u << 4;
-constexpr std::uint8_t EXPAND_F     = 1u << 3;
-constexpr std::uint8_t VISIT_A      = 1u << 2;
-constexpr std::uint8_t EXPAND_A     = 1u << 1;
-constexpr std::uint8_t FOUND        = 1u << 0;
-
-constexpr std::uint8_t CLEAR_SCENARIO = WALL;
-constexpr std::uint8_t CLEAR_FRINGE = ~(VISIT_F | EXPAND_F);
-constexpr std::uint8_t CLEAR_ASTAR = ~(VISIT_A | EXPAND_A);
 
 /* 
 * index = size * y + x
@@ -41,12 +29,13 @@ class MapWidget : public QWidget {
     Q_OBJECT
 public:
     MapWidget(int size = 0, QWidget* parent = nullptr);
-    void setMap(std::vector<std::string>  citymap);
-    void setScenario(Scenario i_scenario);
-    void showHideFringe();
-    void showHideAstar();
-    bool showFringe;
-    bool showAstar;
+    //void setMap(std::vector<std::string>  citymap);
+    //void setMap();
+    //void setScenario(Scenario i_scenario);
+    //void showHideFringe();
+    //void showHideAstar();
+    //bool showFringe;
+    //bool showAstar;
 
     bool searching;
     void start_search();
@@ -54,12 +43,14 @@ public:
 
 
 public slots:
-    void fringeVisit(int x, int y);
-    void fringeExpand(int x, int y);
-    void fringeFinished(RetVal ret);
-    void astarVisit(int x, int y);
-    void astarExpand(int x, int y);
-    void astarFinished(RetVal ret);
+//     void fringeVisit(int x, int y, int value);
+//     void fringeExpand(int x, int y, int value);
+//     void fringeFinished(RetVal ret);
+//     void astarVisit(int x, int y, int value);
+//     void astarExpand(int x, int y, int value);
+//     void astarFinished(RetVal ret);
+    void draw_pixel(int x, int y, int color_index);
+    void render_map(std::vector<int> map_data, int map_size);
 
 
 protected:
@@ -67,18 +58,15 @@ protected:
 
 private:
     QImage img;
-    std::vector<uint8_t> storage;
-    int size;
-    std::optional<Scenario> scenario;
+//    int size;
 
-    QRgb colorPixel(uint8_t byte);
-    void renderMap();
+    //int colorPixel(uint8_t byte);
 
-    int mapScale = 5;
+    int map_scale = 5;
 
-    void clear_storage();
-    void clear_scenario();
-    void clear_fringe();
-    void clear_astar();
+    //void clear_storage();
+    //void clear_scenario();
+    //void clear_fringe();
+    //void clear_astar();
 };
 

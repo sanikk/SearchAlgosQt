@@ -4,27 +4,27 @@
 FullscreenDialog::FullscreenDialog(QScrollArea *scroll, ScenarioControls* i_scenario_controls) : QDialog(), scroll(scroll), scenario_controls(i_scenario_controls)
 {
   setAttribute(Qt::WA_DeleteOnClose);
-  QVBoxLayout *mainLayout = new QVBoxLayout{};
-  mainLayout->addWidget(scenario_controls);
+  QVBoxLayout *main_layout = new QVBoxLayout{};
+  main_layout->addWidget(scenario_controls);
 
-  QWidget *controlsBox = new QWidget{};
-  QHBoxLayout *boxLayout = new QHBoxLayout{};
-  runAstarButton = new QPushButton{ "Run A*" };
-  boxLayout->addWidget(runAstarButton);
-  runFringeButton = new QPushButton{ "Run Fringe" };
-  boxLayout->addWidget(runFringeButton);
-  showHideAstarButton = new QPushButton{"Hide A*"};
-  boxLayout->addWidget(showHideAstarButton);
-  showHideFringeButton = new QPushButton{"Hide Fringe"};
-  boxLayout->addWidget(showHideFringeButton);
-  exitFullscreenButton = new QPushButton{"Exit fullscreen"};
-  boxLayout->addWidget(exitFullscreenButton);
-  controlsBox->setLayout(boxLayout);
-  mainLayout->addWidget(controlsBox);
+  QWidget *controls_box = new QWidget{};
+  QHBoxLayout *box_layout = new QHBoxLayout{};
+  run_astar_button = new QPushButton{ "Run A*" };
+  box_layout->addWidget(run_astar_button);
+  run_fringe_button = new QPushButton{ "Run Fringe" };
+  box_layout->addWidget(run_fringe_button);
+  show_hide_astar_button = new QPushButton{"Hide A*"};
+  box_layout->addWidget(show_hide_astar_button);
+  show_hide_fringe_button = new QPushButton{"Hide Fringe"};
+  box_layout->addWidget(show_hide_fringe_button);
+  exit_fullscreen_button = new QPushButton{"Exit fullscreen"};
+  box_layout->addWidget(exit_fullscreen_button);
+  controls_box->setLayout(box_layout);
+  main_layout->addWidget(controls_box);
 
-  mainLayout->addWidget(scroll);
+  main_layout->addWidget(scroll);
 
-  setLayout(mainLayout);
+  setLayout(main_layout);
   
-  connect(exitFullscreenButton, &QPushButton::clicked, this, &QDialog::close);
+  connect(exit_fullscreen_button, &QPushButton::clicked, this, &QDialog::close);
 }

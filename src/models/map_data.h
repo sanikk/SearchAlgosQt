@@ -6,9 +6,9 @@
 class MapData {
 
 public:
-  MapData(int map_size = 0) : map_size(map_size) { map_data.assign(map_size * map_size, 0); };
-  MapData(int map_size, std::vector<uint8_t> map_data) : map_size(map_size) { map_data.assign(map_size * map_size, 0); };
+  MapData(int width = 0, int height = 0) : width(width), height(height) { map_data.assign(width * height, 0); }
+  MapData(int width, int height, std::vector<uint8_t> map_data) : width(width), height(height), map_data(map_data) {}
 
-  int map_size;
+  int width, height;
   std::vector<uint8_t> map_data;
 };

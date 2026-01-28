@@ -1,5 +1,4 @@
 #pragma once
-//#include "models.h"
 #include "scenario.h"
 #include "map_data.h"
 
@@ -9,5 +8,5 @@
 
 constexpr std::streamsize MAX = std::numeric_limits<std::streamsize>::max();
 
-MapData readMap(const std::filesystem::path& filename);
-std::vector<Scenario> readScenarios(const std::filesystem::path& filename);
+MapData read_map(const std::filesystem::path& filename);
+std::vector<Scenario> read_scenarios(const std::filesystem::path& filename);

@@ -1,4 +1,5 @@
 #include "children.h"
+#include "conversions.h"
 
 void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
   int map_size = citymap.size();
@@ -101,15 +102,18 @@ std::vector<Node>& ChildrenNodes::get_nodes(Node current) {
   
 }
 ChildrenTuples::ChildrenTuples(const int width, const int heigth, const std::vector<uint8_t>& citymap) : Children(width, heigth, citymap),
-  offsets_(std::array<Offset, 8>{{
-    {-width_, 1.0},
-    {-width_ - 1, DIAG},
-    {-1, 1.0},
-    {width_ - 1, DIAG},
-    {width_, 1.0},
-    {width_ + 1, DIAG},
-    {1, 1.0},
-    {-width_+1, DIAG}
+  offsets_(std::array<NodeOffset, 8>{{
+
+
+    {0, -1, -width_, 1.0},
+    {-1, -1, -width_ - 1, DIAG},
+    {-1, 0, -1, 1.0},
+    {-1, 1, width_ - 1, DIAG},
+    {0, 1, width_, 1.0},
+    {1, 1, width_ + 1, DIAG},
+    {1, 0, 1, 1.0},
+    {1, -1, -width_+1, DIAG}
+
   }}) {}
 
 void ChildrenTuples::children(int current_index) {
@@ -119,36 +123,37 @@ void ChildrenTuples::children(int current_index) {
   int row = current_index / width_;
   bool on_top = row < 1;
   bool on_bottom = row > heigth_ - 2;
+  auto [current_x, current_y] = int2xy(current_index, width_);
   for (int i=0;i < 8;i++) {
     if (on_left && (i == 1 || i == 2 || i == 3)) continue; 
     if (on_right && (i==5 || i == 6 || i == 7)) continue;
     if (on_top && (i == 3 || i == 4 || i == 5)) continue;
     if (on_bottom && (i == 7 || i == 0 || i == 1)) continue;
-    const auto& [delta, cost] = offsets_[i];
-    int ni = current_index + delta;
+    const auto& [delta_x, delta_y, delta_index, cost] = offsets_[i];
+    int ni = current_index + delta_index;
     if (
       (*citymap_)[ni] & WALL) {
       continue;
     }
     if (i % 2 != 0) { // with diagonals we need to check the neighbors to see if there's a way.
-      int di1 = current_index + offsets_[i-1].delta;
-      int di2 = current_index + offsets_[(i+1) % 8].delta;
+      int di1 = current_index + offsets_[i-1].index_delta;
+      int di2 = current_index + offsets_[(i+1) % 8].index_delta;
       if ((
         (*citymap_)[di1] & WALL) && (
         (*citymap_)[di2] & WALL)) continue;
     }
-    out_tuples_.emplace_back(ni, cost);  
+    out_tuples_.emplace_back(current_x + delta_x, current_y + delta_y, ni, cost);  
   }
 }
 
-std::vector<std::tuple<int, double>>& ChildrenTuples::get_tuples(int x, int y) {
+std::vector<std::tuple<int, int, int, double>>& ChildrenTuples::get_tuples(int x, int y) {
   out_tuples_.clear();
   children(y * width_ + x);
   return out_tuples_;
 
 }
 
-std::vector<std::tuple<int, double>>& ChildrenTuples::get_tuples(int current_index) {
+std::vector<std::tuple<int, int, int, double>>& ChildrenTuples::get_tuples(int current_index) {
   out_tuples_.clear();
   children(current_index);
   return out_tuples_;

@@ -59,11 +59,11 @@ public:
   explicit ChildrenTuples(const int width, const int height, const std::vector<uint8_t>& citymap);
   void children(int current_index);
   void children(int x, int y);
-  std::vector<std::tuple<int, double>>& get_tuples(int x, int y);
-  std::vector<std::tuple<int, double>>& get_tuples(int current_index);
+  std::vector<std::tuple<int, int, int, double>>& get_tuples(int x, int y);
+  std::vector<std::tuple<int, int, int, double>>& get_tuples(int current_index);
 private:
-  const std::array<Offset, 8> offsets_;
-  std::vector<std::tuple<int, double>> out_tuples_;
+  const std::array<NodeOffset, 8> offsets_;
+  std::vector<std::tuple<int, int, int, double>> out_tuples_;
 
 };
 
