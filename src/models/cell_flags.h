@@ -1,7 +1,9 @@
 #pragma once
 #include <cstdint>
 
+/// Bit flags used with internal map representation in bits.
 enum CellFlags : std::uint8_t {
+  
   WALL      = 1u << 7,
   START     = 1u << 6,
   GOAL      = 1u << 5,

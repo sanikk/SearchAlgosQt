@@ -58,9 +58,7 @@ void FileSelection::choose_map_file() {
 
 void FileSelection::set_map_file(std::filesystem::path& filepath) {
   try {
-    auto ret = scenario_service.set_map_file(filepath);
-    //if (scenario_service.set_map_file(filepath)) {
-    if (ret) {
+    if (scenario_service.set_map_file(filepath)) {
       map_file_label->setText(QString::fromUtf8(filepath.filename().u8string().c_str()));
       emit map_file_changed();
     }

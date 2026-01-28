@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 
-#include <iostream>
 
 std::ifstream read_file(const std::filesystem::path &filename) {
   std::ifstream f(filename);

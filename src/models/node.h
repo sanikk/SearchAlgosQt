@@ -1,9 +1,12 @@
 #pragma once
 #include <functional>
 
+/// Simple struct to represent a single Node on the map.
 struct Node {
   double cost;
-  int x, y, index;
+  int x, y;
+  /// (x,y) as a single int
+  int index;
 
   Node(int i_x, int i_y, int i_index, int i_cost) 
     : x(i_x), y(i_y), index(i_index), cost(i_cost) {}

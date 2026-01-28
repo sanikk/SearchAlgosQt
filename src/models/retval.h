@@ -4,18 +4,17 @@
 #include <optional>
 #include <chrono>
 
+/// Simple Return Value struct. Returned from Searches.
 struct RetVal {
+  RetVal(bool i_found=false) : found(i_found), route(std::vector<std::pair<int, int>>()) {}
+  RetVal(double i_cost, std::vector<std::pair<int, int>> i_route) : found(true), cost(i_cost), route(i_route) {}
+
   bool found;
   std::optional<double> cost;
   std::optional<std::chrono::duration<double>> timing;
-  //std::optional<double> timing;
   std::vector<std::pair<int, int>> route;
 
-  RetVal(bool i_found=false) : found(i_found), route(std::vector<std::pair<int, int>>()) {}
-  // RetVal(double i_cost, std::vector<int> i_route, int map_size) : found(true), cost(i_cost), route(pair_route(i_route, map_size)) {}
-  RetVal(double i_cost, std::vector<std::pair<int, int>> i_route) : found(true), cost(i_cost), route(i_route) {}
-
-
+  // TODO: dev stuff, remove this
   friend std::string operator<<(std::ostream& os, const RetVal& obj) {
     std::ostringstream oss;
     oss << "Return value found:" << obj.found;

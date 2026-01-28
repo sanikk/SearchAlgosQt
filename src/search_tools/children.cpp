@@ -1,4 +1,5 @@
 #include "children.h"
+#include "cell_flags.h"
 #include "conversions.h"
 
 void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {

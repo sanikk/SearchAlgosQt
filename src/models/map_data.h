@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cstdint>
 #include <vector>
 
-class MapData {
+/// For transporting the uint8_t map and it's size in one package.
+struct MapData {
 
 public:
   MapData(int width = 0, int height = 0) : width(width), height(height) { map_data.assign(width * height, 0); }
