@@ -5,11 +5,11 @@
 #include <sstream>
 #include <string>
 
-
-std::ifstream read_file(const std::filesystem::path &filename) {
-  std::ifstream f(filename);
+/// Filereader internal function that reads the file at 'filepath'
+std::ifstream read_file(const std::filesystem::path &filepath) {
+  std::ifstream f(filepath);
   if (!f) {
-    throw std::invalid_argument(filename.string());
+    throw std::invalid_argument(filepath.string());
   }
   return f;
 }

@@ -3,19 +3,26 @@
 #include <vector>
 #include <filesystem>
 
+/// Handles the scenario and map info.
 class ScenarioService {
 
 public:
   ScenarioService(int width = 0, int height = 0);
-  Scenario& get_scenario(const int index);
-  std::vector<int> get_bucket_list();
+
+  Scenario& get_scenario(int index);
   std::vector<Scenario> get_bucket_scenarios(int bucket);
-  std::vector<uint8_t>& get_map();
-  std::vector<Scenario> get_all_scenarios();
+
   bool set_map_file(const std::filesystem::path& i_map_file);
   bool set_scenario_file(const std::filesystem::path& i_scenario_file);
-  std::tuple<int, int> get_map_size();
+
+  // Simple getters
+  std::vector<Scenario> get_all_scenarios() { return scenarios; }
+  std::vector<int> get_bucket_list() { return bucket_list; }
+  std::vector<uint8_t>& get_map() { return citymap; }
+  std::tuple<int, int> get_map_size() { return { width, height }; }
   int get_map_width() { return width; }
+  
+  /// Clears the saved citymap and scenarios.
   void clear();
 
 private:
