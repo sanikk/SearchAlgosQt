@@ -8,7 +8,7 @@ struct Node {
   /// (x,y) as a single int
   int index;
 
-  Node(int i_x, int i_y, int i_index, int i_cost) 
+  Node(int i_x, int i_y, int i_index, double i_cost) 
     : x(i_x), y(i_y), index(i_index), cost(i_cost) {}
   Node(int i_x, int i_y, int i_index) : x(i_x), y(i_y), index(i_index) {}
   Node() {}
