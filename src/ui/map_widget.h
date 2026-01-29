@@ -1,8 +1,4 @@
 #pragma once
-//#include "models.h"
-//#include "scenario.h"
-//#include "retval.h"
-//#include <optional>
 
 #include <QWidget>
 #include <QPainter>
@@ -29,13 +25,6 @@ class MapWidget : public QWidget {
     Q_OBJECT
 public:
     MapWidget(int size = 0, QWidget* parent = nullptr);
-    //void setMap(std::vector<std::string>  citymap);
-    //void setMap();
-    //void setScenario(Scenario i_scenario);
-    //void showHideFringe();
-    //void showHideAstar();
-    //bool showFringe;
-    //bool showAstar;
 
     bool searching;
     void start_search();
@@ -43,30 +32,15 @@ public:
 
 
 public slots:
-//     void fringeVisit(int x, int y, int value);
-//     void fringeExpand(int x, int y, int value);
-//     void fringeFinished(RetVal ret);
-//     void astarVisit(int x, int y, int value);
-//     void astarExpand(int x, int y, int value);
-//     void astarFinished(RetVal ret);
     void draw_pixel(int x, int y, int color_index);
     void render_map(std::vector<int> map_data, int map_size);
-
 
 protected:
     void paintEvent(QPaintEvent* ev) override;
 
 private:
     QImage img;
-//    int size;
-
-    //int colorPixel(uint8_t byte);
-
     int map_scale = 5;
 
-    //void clear_storage();
-    //void clear_scenario();
-    //void clear_fringe();
-    //void clear_astar();
 };
 

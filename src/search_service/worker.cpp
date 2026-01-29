@@ -7,19 +7,16 @@
 #include <queue>
 
 #include <QThread>
-//#include <QDebug>
-
-
-WorkerRunner::WorkerRunner() {}
 
 
 void WorkerRunner::run_astar(int startx, int starty, int goalx, int goaly,
-                             int width, int height,
+                             int map_width, int map_height,
                              const std::vector<uint8_t>& citymap, 
-                             SearchService* search_service) {
+                             SearchService* search_service) 
+{
 
   QThread* thread = new QThread;
-  AstarWorker* worker = new AstarWorker{startx, starty, goalx, goaly, width, height, citymap};
+  AstarWorker* worker = new AstarWorker{startx, starty, goalx, goaly, map_width, map_height, citymap};
   worker->moveToThread(thread);
 
   connect(thread, &QThread::started, worker, &AstarWorker::run);
@@ -35,12 +32,12 @@ void WorkerRunner::run_astar(int startx, int starty, int goalx, int goaly,
 }
 
 void WorkerRunner::run_fringe(int startx, int starty, int goalx, int goaly,
-                              int width, int height,
+                              int map_width, int map_height,
                               const std::vector<uint8_t>& citymap, 
                               SearchService* search_service) {
 
   QThread* thread = new QThread;
-  FringeWorker* worker = new FringeWorker{startx, starty, goalx, goaly, width, height, citymap};
+  FringeWorker* worker = new FringeWorker{startx, starty, goalx, goaly, map_width, map_height, citymap};
   worker->moveToThread(thread);
 
   connect(thread, &QThread::started, worker, &FringeWorker::run);
@@ -60,9 +57,9 @@ void WorkerRunner::run_fringe(int startx, int starty, int goalx, int goaly,
 // WORKER
 
 Worker::Worker(int startx, int starty, int goalx, int goaly, 
-               int width, int height, const std::vector<uint8_t>& i_citymap)
+               int map_width, int map_height, const std::vector<uint8_t>& i_citymap)
 : startx(startx), starty(starty), goalx(goalx), goaly(goaly), citymap(i_citymap), 
-        width(width), height(height) {
+        map_width(map_width), map_height(map_height) {
 }
 
 
@@ -72,9 +69,9 @@ Worker::Worker(int startx, int starty, int goalx, int goaly,
 
 
 AstarWorker::AstarWorker(int startx, int starty, int goalx, int goaly,
-                         int width, int height,
+                         int map_width, int map_height,
                          const std::vector<uint8_t>& i_citymap)
-: Worker(startx, starty, goalx, goaly, width, height, i_citymap) {
+: Worker(startx, starty, goalx, goaly, map_width, map_height, i_citymap) {
 }
 
 void AstarWorker::run() {
@@ -83,9 +80,9 @@ void AstarWorker::run() {
 }
 
 void AstarWorker::astar_with_signals() {
-  ChildrenNodes children = ChildrenNodes(width, height, citymap);
-  Node start_node{startx, starty, starty * width + startx};
-  Node goal_node{goalx, goaly, goaly * width + goalx};
+  ChildrenNodes children = ChildrenNodes(map_width, map_height, citymap);
+  Node start_node{startx, starty, starty * map_width + startx};
+  Node goal_node{goalx, goaly, goaly * map_width + goalx};
   start_node.cost = SearchTools::heuristics(start_node, goal_node);
 
   std::priority_queue<Node, std::vector<Node>, std::greater<Node>> heap;
@@ -108,7 +105,7 @@ void AstarWorker::astar_with_signals() {
       std::vector<std::pair<int, int>> route;
       int current_index = current_node.index;
       while (current_index != -1) {
-        route.push_back(int2xy(current_index, width));
+        route.push_back(int2xy(current_index, map_width));
         current_index = camefrom[current_index];
       }
       std::reverse(route.begin(), route.end());
@@ -138,9 +135,9 @@ void AstarWorker::astar_with_signals() {
 // FRINGE
 
 FringeWorker::FringeWorker(int startx, int starty, int goalx, int goaly,
-                           int width, int height,
+                           int map_width, int map_height,
                            const std::vector<uint8_t>& i_citymap)
-: Worker(startx, starty, goalx, goaly, width, height, i_citymap) {
+: Worker(startx, starty, goalx, goaly, map_width, map_height, i_citymap) {
 }
 
 void FringeWorker::run() {
@@ -150,9 +147,9 @@ void FringeWorker::run() {
 
 void FringeWorker::fringe_with_signals() {
     // INIT
-    ChildrenTuples children = ChildrenTuples(width, height, citymap);
-    int start_index = starty * width + startx;
-    int goal_index = goaly * width + goalx;
+    ChildrenTuples children = ChildrenTuples(map_width, map_height, citymap);
+    int start_index = starty * map_width + startx;
+    int goal_index = goaly * map_width + goalx;
     std::deque<int> now = {start_index};
     std::deque<int> later = {};
     
@@ -175,7 +172,7 @@ void FringeWorker::fringe_with_signals() {
             int current = now.back();
             now.pop_back();
             const auto [g_score, parent] = cache[current];
-            const auto[nx, ny] = int2xy(current, width);
+            const auto[nx, ny] = int2xy(current, map_width);
 
             emit expand_node(nx, ny);
             // qDebug() << "expand " << nx << "," << ny;
@@ -196,7 +193,7 @@ void FringeWorker::fringe_with_signals() {
                     route.push_back(current);
                     current = std::get<1>(cache[current]);
                 }
-                emit found_goal(RetVal(g_score, pair_route(route, width)));
+                emit found_goal(RetVal(g_score, pair_route(route, map_width)));
                 return;
             }
 

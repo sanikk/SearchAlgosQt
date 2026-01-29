@@ -1,7 +1,9 @@
 #include "search_service.h"
 #include "worker.h"
 #include "conversions.h"
+#include "astar_search.h"
 
+//#include <QDebug>
 
 SearchService::SearchService(
     ScenarioService& i_scenario_service)
@@ -52,10 +54,6 @@ std::vector<int> SearchService::get_map_frame(bool show_astar, bool show_fringe)
   return returnable;
 }
 
-void SearchService::set_map() {
-  clear_storage();
-}
-
 void SearchService::reset_counters() {
   astar_visits = 0;
   astar_expands = 0;
@@ -79,10 +77,10 @@ void SearchService::clear_scenario() {
   }
 }
 
-void SearchService::load_scenario(int index) {
-  Scenario& scen = scenario_service.get_scenario(index);
+void SearchService::load_scenario(int scenario_index) {
+  Scenario& scenario = scenario_service.get_scenario(scenario_index);
   clear_scenario();
-  set_start_goal(scen);
+  set_start_goal(scenario);
 }
 
 void SearchService::set_start_goal(Scenario& scenario) {
@@ -100,14 +98,14 @@ void SearchService::set_start_goal(Scenario& scenario) {
 
 void SearchService::run_astar(int scenario_index) {
   Scenario& scenario = scenario_service.get_scenario(scenario_index);
-  //const std::vector<std::string>& citymap = scenario_service.get_map();
+  auto [width, height] = scenario_service.get_map_size();
   auto start = std::chrono::high_resolution_clock::now();
-//  RetVal ret = astar_search(scenario.start_x, 
-//                            scenario.start_y, scenario.goal_x, scenario.goal_y, citymap);
+  RetVal ret = astar_search(scenario.start_x, 
+                            scenario.start_y, scenario.goal_x, scenario.goal_y, width, height, citymap);
   auto end = std::chrono::high_resolution_clock::now();
-//  ret.timing = end - start; 
-//  if (ret.found) {
-//  }
+  ret.timing = end - start; 
+  //if (ret.found) {
+  //}
 }
 
 void SearchService::run_fringe(int scenario_index) {
@@ -125,12 +123,13 @@ void SearchService::run_fringe(int scenario_index) {
 std::vector<RetVal> SearchService::run_astar_for_bucket(int bucket_index) {
   std::vector<RetVal> retvals;
   std::vector<Scenario> scenario_list = scenario_service.get_bucket_scenarios(bucket_index);
+  auto [width, height] = scenario_service.get_map_size();
   for (Scenario& scenario : scenario_list) {
     auto start = std::chrono::high_resolution_clock::now();
-    //RetVal ret = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, scenario_service.get_map());
+    RetVal ret = astar_search(scenario.start_x, scenario.start_y, scenario.goal_x, scenario.goal_y, width, height, scenario_service.get_map());
     auto end = std::chrono::high_resolution_clock::now();
-    //ret.timing = end - start; 
-    //retvals.push_back(ret);
+    ret.timing = end - start;
+    retvals.push_back(ret);
   }
   return retvals;
 }
@@ -177,8 +176,7 @@ void SearchService::run_fringe_thread(const int scenario_index) {
 }
 
 void SearchService::visit_astar_slot(int x, int y) {
-  auto[width, _] = scenario_service.get_map_size();
-  uint8_t& cell = citymap[xy2int(x,y,width)];
+  uint8_t& cell = citymap[xy2int(x,y,scenario_service.get_map_width())];
   cell |= VISIT_A;
   astar_visits++;
   if (!(cell & EXPAND_A)) {
@@ -187,11 +185,10 @@ void SearchService::visit_astar_slot(int x, int y) {
 }
 
 void SearchService::expand_astar_slot(int x, int y) {
-  auto[width, _] = scenario_service.get_map_size();
-    uint8_t& cell = citymap[xy2int(x,y,width)];
-    cell |= EXPAND_A;
-    astar_expands++;
-    emit expand_astar_signal(x, y);
+  uint8_t& cell = citymap[xy2int(x,y,scenario_service.get_map_width())];
+  cell |= EXPAND_A;
+  astar_expands++;
+  emit expand_astar_signal(x, y);
 }
 
 void SearchService::found_astar_slot(RetVal ret) {
@@ -200,8 +197,7 @@ void SearchService::found_astar_slot(RetVal ret) {
 }
 
 void SearchService::visit_fringe_slot(int x, int y) {
-  auto[width, _] = scenario_service.get_map_size();
-  uint8_t& cell = citymap[xy2int(x,y,width)];
+  uint8_t& cell = citymap[xy2int(x,y,scenario_service.get_map_width())];
   cell |= VISIT_F;
   fringe_visits++;
   if (!(cell & EXPAND_F)) {
@@ -210,8 +206,7 @@ void SearchService::visit_fringe_slot(int x, int y) {
 }
 
 void SearchService::expand_fringe_slot(int x, int y) {
-  auto[width, _] = scenario_service.get_map_size();
-  uint8_t& cell = citymap[xy2int(x,y,width)];
+  uint8_t& cell = citymap[xy2int(x,y,scenario_service.get_map_width())];
   cell |= EXPAND_F;
   fringe_expands++;
   emit expand_fringe_signal(x, y);

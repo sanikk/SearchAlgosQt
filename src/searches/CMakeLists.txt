@@ -1,9 +1,8 @@
 add_library(searches STATIC
-    searches.h
     astar_search.cpp astar_search.h
     fringe_search.cpp fringe_search.h
-    dll.cpp dll.h
-    fringe_with_dll.cpp fringe_with_dll.h
+#    dll.cpp dll.h
+#    fringe_with_dll.cpp fringe_with_dll.h
 )
 # from my experiments limiting the visibility of searches to search_service.
 # see also the src/search_service/CMakeLists.txt on how to make this work.
