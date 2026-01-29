@@ -38,18 +38,18 @@ struct Offset {
 struct NodeOffset {
   int index_delta, x_delta, y_delta;
   double cost;
-  NodeOffset(int index_delta, int x_delta, int y_delta, double cost) 
+  NodeOffset(int x_delta, int y_delta, int index_delta, double cost) 
   : index_delta(index_delta), x_delta(x_delta), y_delta(y_delta), cost(cost) {};
 };
 
 class Children {
 
 public:
-  explicit Children(const int width, const int heigth, const std::vector<uint8_t>& citymap) : width_(width), heigth_(heigth), citymap_(&citymap) {}
+  explicit Children(const int width, const int height, const std::vector<uint8_t>& citymap) : width_(width), height_(height), citymap_(&citymap) {}
 
 protected:
   const int width_;
-  const int heigth_;
+  const int height_;
   const std::vector<uint8_t>* citymap_;
 };
 
@@ -72,7 +72,7 @@ class ChildrenNodes : public Children {
 public:
   explicit ChildrenNodes(const int width, const int height, const std::vector<uint8_t>& citymap);
   void children(Node node);
-  std::vector<Node>& get_nodes(Node current);
+  std::vector<Node> get_nodes(Node current);
 private:
   const std::array<NodeOffset, 8> offsets_;
   std::vector<Node> out_nodes_;

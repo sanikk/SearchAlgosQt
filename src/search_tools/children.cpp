@@ -2,6 +2,7 @@
 #include "cell_flags.h"
 #include "conversions.h"
 
+
 void SearchTools::children(int x, int y, const std::vector<std::string>& citymap, std::vector<Node>& node_list) {
   int map_size = citymap.size();
   for (int i=0;i < 8;i++) {
@@ -49,7 +50,6 @@ void SearchTools::children(int x, int y, const std::vector<std::string>& citymap
       if (citymap[dy1][dx1] != '.' && citymap[dy2][dx2] != '.') continue;
     }
     node_list.emplace_back(nx, ny, cost);  
-    //node_list.emplace_back(nx, ny, ny * citymap.size() + nx, cost);  
   }
 }
 
@@ -69,15 +69,17 @@ ChildrenNodes::ChildrenNodes(const int width,
     {1, 1, width_ + 1, DIAG},
     {1, 0, 1, 1.0},
     {1, -1, -width_+1, DIAG}
-  }}) {}
+  }}) 
+{
+}
 
 void ChildrenNodes::children(Node current) {
   for (int i=0;i < 8;i++) {
 
     if (current.x < 1 && (i == 1 || i == 2 || i == 3)) continue; 
     if (current.x > width_ - 2 && (i==5 || i == 6 || i == 7)) continue;
-    if (current.y < 1 && (i == 3 || i == 4 || i == 5)) continue;
-    if (current.y > heigth_ - 2 && (i == 7 || i == 0 || i == 1)) continue;
+    if (current.y < 1 && (i == 7 || i == 0 || i == 1)) continue;
+    if (current.y > height_ - 2 && (i == 3 || i == 4 || i == 5)) continue;
     
     NodeOffset current_offset = offsets_[i];
     int ni = current.index + current_offset.index_delta;
@@ -92,28 +94,28 @@ void ChildrenNodes::children(Node current) {
     out_nodes_.emplace_back(current.x + current_offset.x_delta,
                             current.y + current_offset.y_delta,
                             ni, 
-                            current_offset.cost);  
+                            current_offset.cost);
   }
 }
 
-std::vector<Node>& ChildrenNodes::get_nodes(Node current) {
+std::vector<Node> ChildrenNodes::get_nodes(Node current) {
   out_nodes_.clear();
   ChildrenNodes::children(current);
   return out_nodes_;
   
 }
-ChildrenTuples::ChildrenTuples(const int width, const int heigth, const std::vector<uint8_t>& citymap) : Children(width, heigth, citymap),
+ChildrenTuples::ChildrenTuples(const int width, const int height, const std::vector<uint8_t>& citymap) : Children(width, height, citymap),
   offsets_(std::array<NodeOffset, 8>{{
 
 
-    {0, -1, -width_, 1.0},
-    {-1, -1, -width_ - 1, DIAG},
+    {0, -1, -width, 1.0},
+    {-1, -1, -width - 1, DIAG},
     {-1, 0, -1, 1.0},
-    {-1, 1, width_ - 1, DIAG},
-    {0, 1, width_, 1.0},
-    {1, 1, width_ + 1, DIAG},
+    {-1, 1, width - 1, DIAG},
+    {0, 1, width, 1.0},
+    {1, 1, width + 1, DIAG},
     {1, 0, 1, 1.0},
-    {1, -1, -width_+1, DIAG}
+    {1, -1, -width+1, DIAG}
 
   }}) {}
 
@@ -123,7 +125,7 @@ void ChildrenTuples::children(int current_index) {
   bool on_right = col > width_ - 2;
   int row = current_index / width_;
   bool on_top = row < 1;
-  bool on_bottom = row > heigth_ - 2;
+  bool on_bottom = row > height_ - 2;
   auto [current_x, current_y] = int2xy(current_index, width_);
   for (int i=0;i < 8;i++) {
     if (on_left && (i == 1 || i == 2 || i == 3)) continue; 
@@ -132,6 +134,7 @@ void ChildrenTuples::children(int current_index) {
     if (on_bottom && (i == 7 || i == 0 || i == 1)) continue;
     const auto& [delta_x, delta_y, delta_index, cost] = offsets_[i];
     int ni = current_index + delta_index;
+     
     if (
       (*citymap_)[ni] & WALL) {
       continue;
@@ -144,6 +147,7 @@ void ChildrenTuples::children(int current_index) {
         (*citymap_)[di2] & WALL)) continue;
     }
     out_tuples_.emplace_back(current_x + delta_x, current_y + delta_y, ni, cost);  
+
   }
 }
 
